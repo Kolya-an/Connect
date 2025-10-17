@@ -7,6 +7,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -19,15 +20,17 @@ class PacientsTable
                 TextColumn::make('user.name')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('user.email')
-                    ->searchable(),
                 TextColumn::make('second_name')
+                    ->searchable(),
+                TextColumn::make('user.email')
                     ->searchable(),
                 TextColumn::make('birthday')
                     ->date()
                     ->sortable(),
-                TextColumn::make('photo')
-                    ->searchable(),
+                ImageColumn::make('photo')
+                    ->disk('public_uploads')
+                    ->visibility('public')
+                    ->imageSize(40),
                 TextColumn::make('phone')
                     ->searchable(),
                 TextColumn::make('city')

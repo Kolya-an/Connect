@@ -7,6 +7,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Infolists\Components\ImageEntry;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -19,18 +20,18 @@ class DoctorsTable
                 TextColumn::make('user.name')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('user.email')
-                    ->searchable(),
                 TextColumn::make('second_name')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('user.email')
+                    ->searchable(),
                 TextColumn::make('birthday')
                     ->date()
                     ->sortable(),
-                /*ImageEntry::make('photo')
+                ImageColumn::make('photo')
                     ->disk('public_uploads')
                     ->visibility('public')
-                    ->imageSize(40),*/
+                    ->imageSize(40),
                 TextColumn::make('phone')
                     ->searchable(),
                 TextColumn::make('city')
