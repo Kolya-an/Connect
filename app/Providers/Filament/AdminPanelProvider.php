@@ -6,6 +6,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -31,6 +32,11 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Connect Cosmetology')
             ->brandLogo(asset('image/logo.png'))
             ->brandLogoHeight('50px')
+            ->navigationGroups([
+                NavigationGroup::make()
+                ->label('Користувачі')
+                ->collapsed()
+            ])
             ->colors([
                 'primary' => Color::Amber,
             ])

@@ -14,6 +14,7 @@ class User extends Authenticatable implements FilamentUser
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,6 +24,8 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'active',
+        'role',
     ];
 
     /**
@@ -48,9 +51,22 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+
     public function canAccessPanel(Panel $panel): bool
     {
         // TODO: Implement canAccessPanel() method.
         return str_ends_with($this->role, 'admin') && $this->hasVerifiedEmail();
     }
+    public function doctor()
+    {
+        return $this->hasOne(Doctor::class);
+    }
+
+    public function patient()
+    {
+        return $this->hasOne(Pacient::class);
+    }
+
+
+
 }
