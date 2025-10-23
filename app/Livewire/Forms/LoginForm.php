@@ -5,11 +5,13 @@ namespace App\Livewire\Forms;
 use App;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginForm extends Form
 {
@@ -76,4 +78,6 @@ class LoginForm extends Form
         // Устанавливаем язык для валидации и сообщений
         App::setLocale('uk');
     }
+
+
 }

@@ -83,9 +83,18 @@
                 @enderror
             </label>
 
-        <button type="submit" class="btn rose_btn">{{__('Зареєструватись')}}</button>
+
+        <x-primary-button class="btn rose_btn">
+            {{ __('Зареєструватись') }}
+        </x-primary-button>
     </form>
-    <p class="or">{{ __('Або') }}</p>
-    <a class="btn google_btn">{{__('Вхід за допомогою Google')}}</a>
-    <a class="btn facebook_btn">{{__('Вхід за допомогою Facebook')}}</a>
+    @if($type === 'doctor')
+        <p class="or">{{ __('Або') }}</p>
+        <a href="{{ route('social.redirect', 'google') }}?role=doctor" class="btn google_btn">{{__('Вхід за допомогою Google')}}</a>
+        <a href="{{ route('social.redirect', 'facebook') }}?role=doctor" class="btn facebook_btn">{{__('Вхід за допомогою Facebook')}}</a>
+    @else
+        <p class="or">{{ __('Або') }}</p>
+        <a href="{{ route('social.redirect', 'google') }}?role=patient" class="btn google_btn">{{__('Вхід за допомогою Google')}}</a>
+        <a href="{{ route('social.redirect', 'facebook') }}?role=patient" class="btn facebook_btn">{{__('Вхід за допомогою Facebook')}}</a>
+    @endif
 </div>

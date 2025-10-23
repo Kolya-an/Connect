@@ -61,8 +61,8 @@ new #[Layout('layouts.guest')] class extends Component
         </x-primary-button>
     </form>
     <p class="or">{{ __('Або') }}</p>
-    <a class="btn google_btn">{{__('Вхід за допомогою Google')}}</a>
-    <a class="btn facebook_btn">{{__('Вхід за допомогою Facebook')}}</a>
+    <a href="{{ route('social.redirect', 'google') }}" class="btn google_btn">{{__('Вхід за допомогою Google')}}</a>
+    <a href="{{ route('social.redirect', 'facebook') }}" class="btn facebook_btn">{{__('Вхід за допомогою Facebook')}}</a>
     @if (Route::has('password.request'))
         <a href="{{ route('password.request') }}" wire:navigate class="forgot_link">{{ __('Забули пароль?') }}</a>
     @endif
