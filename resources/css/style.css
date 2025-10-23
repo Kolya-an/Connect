@@ -886,6 +886,9 @@ p.platform-action-title {
     cursor: pointer;
     background: #ffffff;
 }
+.window .search_field {
+    opacity: 1;
+}
 .search_field.search_field_city {
     background: #ffffff url(../images/loc.png) no-repeat 16px center;
 }
@@ -2581,4 +2584,12 @@ p.client_address span {
     max-width: 64px;
     display: none;
     transition: opacity 0.5s ease-in-out;
+}
+.error-message {
+    z-index: 999999;
+    position: relative;
+    background: #fff;
+    list-style-type: none;
+    padding: 5px;
+    border: 1px solid red;
 }

@@ -47,7 +47,7 @@ class PacientForm
                             ->hidden(fn ($operation) => $operation === 'edit')
                             ->dehydrated(fn ($state) => filled($state)),
                     ]),
-                Section::make('Doctor Information')
+                Section::make('doctor Information')
                     ->schema([
                         TextInput::make('second_name'),
                         DatePicker::make('birthday')

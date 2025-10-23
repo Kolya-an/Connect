@@ -34,6 +34,8 @@ class RegisterPage extends Component
             'password' => 'required|min:6|confirmed',
         ];
 
+
+
         /*if ($this->type === 'doctor') {
             $rules['specialization'] = 'required|min:2';
         }*/
@@ -83,7 +85,20 @@ class RegisterPage extends Component
 
         Auth::login($user);
 
-        return redirect()->route('home');
+        //return redirect()->route('home');
+        return $this->redirectByRole($user);
+    }
+
+    protected function redirectByRole($user)
+    {
+        switch ($user->role) {
+            case 'doctor': // Доктор
+                return redirect()->route('doctor.dashboard');
+            case 'patient': // Пациент
+                return redirect()->route('patient.dashboard');
+            default:
+                return redirect()->route('home');
+        }
     }
     public function render()
     {

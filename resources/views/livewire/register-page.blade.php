@@ -9,19 +9,19 @@
             <x-text-input wire:model="name" type="text"
                           placeholder="{{__('Ваше ім’я')}}"
                           required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            <x-input-error :messages="$errors->get('name')" class="mt-2" class="error-message" />
         </div>
         <div class="search_field search_field_input">
             <x-text-input wire:model="second_name" type="text"
                           placeholder="{{__('Ваше прізвище')}}"
                           required autocomplete="second_name" />
-            <x-input-error :messages="$errors->get('second_name')" class="mt-2" />
+            <x-input-error :messages="$errors->get('second_name')" class="mt-2" class="error-message" />
         </div>
         <div class="search_field search_field_input">
             <x-text-input wire:model="email" type="email"
                           placeholder="{{__('Ваш e-mail')}}"
                           required autocomplete="email" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" class="error-message" />
         </div>
         <div class="search_field search_field_input">
             {{--<input wire:model="phone" type="tel" placeholder="{{__('Ваш номер телефону')}}">
@@ -29,7 +29,7 @@
             <x-text-input wire:model="phone" type="tel"
                           placeholder="{{__('Ваш номер телефону')}}"
                           required />
-            <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+            <x-input-error :messages="$errors->get('phone')" class="mt-2" class="error-message" />
         </div>
         @if($type === 'doctor')
             <div class="search_field search_field_sex">
@@ -63,7 +63,7 @@
                           placeholder="{{__('Ваш пароль')}}"
                           required autocomplete="new-password" />
 
-            <x-input-error :messages="$errors->get('password')" />
+            <x-input-error :messages="$errors->get('password')" class="error-message" />
         </div>
 
             <div class="search_field search_field_input">
@@ -72,15 +72,16 @@
                               type="password" placeholder="{{__('Повторіть пароль')}}"
                               name="password_confirmation" required autocomplete="new-password" />
 
-                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" class="error-message" />
             </div>
             <label class="_flex-display _align-center more_filter_checkbox">
-                <input wire:model="accept_terms" id="check_discount" type="checkbox" name="discount">
+                <input wire:model="accept_terms" id="check_discount" type="checkbox" name="discount" class="form-check-input @error('accept_terms') is-invalid @enderror">
                 <span class="checkmark"></span>
                 <span class="check_title">Я приймаю <a href="#">правила сайту</a></span>
-                @error('accept_terms')
+               @error('accept_terms')
                 <div class="text-danger small mt-1">{{ $message }}</div>
                 @enderror
+
             </label>
 
 

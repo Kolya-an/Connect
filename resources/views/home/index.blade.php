@@ -1,6 +1,7 @@
 @extends('layouts.base')
 @section('page.title','Головна - Connect')
 @section('content')
+<main>
 <div id="home_search">
     <div class="container">
         <div class="home_search_block">
@@ -651,4 +652,5 @@
         </div>
     </div>
 </div>
+</main>
 @endsection

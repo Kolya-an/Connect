@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class Pacient extends Model
 {
+    //use HasFactory;
     protected $fillable = [
         'second_name',
         'birthday',
@@ -21,6 +23,8 @@ class Pacient extends Model
         'email',
         'password',
     ];
+
+
 
     public function user()
     {

@@ -51,9 +51,6 @@
                     <livewire:auth-modal />
                 @endguest
                 @auth
-                    <a href="#" class="_flex-display _align-center cab_btn">
-                        <img src="{{Vite::asset('resources/images/cabimg.png')}}"><span>Особистий кабінет</span>
-                    </a>
                         <livewire:header-component />
                 @endauth
                 @guest

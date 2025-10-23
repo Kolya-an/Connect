@@ -76,8 +76,24 @@ class SocialiteController extends Controller
 
         // Log the user into the application
         Auth::login($user, true);
+        return $this->redirectByRole($user);
 
-        return redirect()->intended('/'); // Add your dashboard link
+
+        //return redirect()->intended('/'); // Add your dashboard link
+        //return redirect()->intended($user->role . '/dashboard');
+        //return redirect()->route($user->role . '.dashboard');
+    }
+
+    protected function redirectByRole($user)
+    {
+        switch ($user->role) {
+            case 'doctor': // Доктор
+                return redirect()->route('doctor.dashboard');
+            case 'patient': // Пациент
+                return redirect()->route('patient.dashboard');
+            default:
+                return redirect()->route('home');
+        }
     }
 
     /**

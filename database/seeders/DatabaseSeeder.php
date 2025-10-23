@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        User::factory()->create([
+        /*User::factory()->create([
             'name' => 'Pac',
             'email' => 'pac@sss.ss',
             'password' => '11111111',
@@ -35,12 +35,13 @@ class DatabaseSeeder extends Seeder
             'email' => 'doc@sss.ss',
             'password' => '11111111',
             'role' => 'doctor',
-        ]);
+        ]);*/
         /*Doctor::factory()->create([
             'user_id' => 3,
         ]);
         Pacient::factory()->create([
             'user_id' => 2,
         ]);*/
+
     }
 }

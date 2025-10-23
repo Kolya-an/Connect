@@ -47,7 +47,7 @@ new #[Layout('layouts.guest')] class extends Component
                             placeholder="{{__('Пароль')}}"
                             required autocomplete="current-password" />
 
-            <x-input-error :messages="$errors->get('form.password')" />
+            <x-input-error :messages="$errors->get('form.password')" class="error-message" />
         </div>
 
         <!-- Remember Me -->

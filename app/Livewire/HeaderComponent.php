@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class HeaderComponent extends Component
 {
+
     public function logout()
     {
         Auth::logout();
@@ -15,6 +16,12 @@ class HeaderComponent extends Component
 
         return redirect('/');
     }
+
+    /*public function role()
+    {
+        $role = session('social_role', 'patient');
+        return $role;
+    }*/
 
     public function render()
     {
