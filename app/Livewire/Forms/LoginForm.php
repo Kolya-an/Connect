@@ -73,11 +73,16 @@ class LoginForm extends Form
         return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
     }
 
-    public function mount()
+    public function login()
     {
-        // Устанавливаем язык для валидации и сообщений
-        App::setLocale('uk');
+        try {
+            $this->form->authenticate();
+            session()->regenerate();
+            return redirect()->intended('/');
+        } catch (\Throwable $e) {
+            logger()->error('Login error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            throw $e; // щоб бачити 500 з текстом
+        }
     }
-
 
 }

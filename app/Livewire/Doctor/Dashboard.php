@@ -3,44 +3,61 @@
 namespace App\Livewire\Doctor;
 
 use Livewire\Component;
+use App\Models\Doctor;
+use Illuminate\Support\Facades\Auth;
 
 
 class Dashboard extends Component
 {
-//public $appointments;
-//public $todayAppointments;
+    public $step = 1;
+    public $doctorId;
 
-public function mount()
-{
-//$this->loadAppointments();
-}
+    // Общие данные
+    public $phone;
 
-public function loadAppointments()
-{
-/*$this->appointments = Appointment::where('doctor_id', auth()->id())
-->with('patient')
-->orderBy('appointment_date', 'desc')
-->take(5)
-->get();
+    public function mount()
+    {
+        $doctor = Doctor::where('user_id', Auth::id())->first();
+        if ($doctor) {
+            $this->doctorId = $doctor->id;
+            $this->phone = $doctor->phone;
+        }
+    }
 
-$this->todayAppointments = Appointment::where('doctor_id', auth()->id())
-->whereDate('appointment_date', today())
-->with('patient')
-->get();*/
-}
+    public function saveStep($data)
+    {
+        // Обновляем свойства родителя
+        foreach ($data as $key => $value) {
+            $this->$key = $value;
+        }
 
-public function completeAppointment($appointmentId)
-{
-/*$appointment = Appointment::find($appointmentId);
-$appointment->update(['status' => 'completed']);
+        $doctor = Doctor::updateOrCreate(
+            //['id' => $this->doctorId],
+            [
+                'user_id' => Auth::id(),
+                //'phone' => $this->phone,
+            ]
+        );
 
-$this->loadAppointments();
-$this->dispatchBrowserEvent('appointment-completed');*/
-}
+        $this->doctorId = $doctor->id;
+    }
 
-public function render()
-{
-return view('livewire.doctor.dashboard')
-->layout('doctor.index');
-}
+    public function setStep($stepNumber)
+    {
+        $this->step = $stepNumber;
+    }
+
+
+    public function render()
+    {
+
+        try {
+            return view('livewire.doctor.dashboard')
+                ->layout('doctor.index');
+        } catch (\Exception $e) {
+            \Log::error('Livewire Doctor Dashboard Error: ' . $e->getMessage());
+            return view('home.index');
+        }
+
+    }
 }

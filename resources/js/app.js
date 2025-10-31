@@ -191,7 +191,7 @@ $(document).ready(function() {
     $(".form_text_login").on("click", function() {
         $("#register_window").addClass('_display_none');
         $("#login_window").removeClass('_display_none');
-    });*/
+    });
     $(".add_city").on("click", function() {
         $("#add_city").removeClass('_display_none');
     });
@@ -200,7 +200,7 @@ $(document).ready(function() {
     });
     $(".add_area").on("click", function() {
         $("#add_area").removeClass('_display_none');
-    });
+    });*/
     $(".add_service").on("click", function() {
         $("#add_service").removeClass('_display_none');
     });

@@ -19,8 +19,13 @@ new #[Layout('layouts.guest')] class extends Component
         $this->form->authenticate();
 
         Session::regenerate();
-
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        $user = auth()->user();
+        if ($user->role === 'doctor') {
+            $this->redirectIntended(default: route('doctor.dashboard', absolute: false), navigate: true);
+        } else {
+            // По умолчанию пациент
+            $this->redirectIntended(default: route('patient.dashboard', absolute: false), navigate: true);
+        }
     }
 }; ?>
 
@@ -52,7 +57,7 @@ new #[Layout('layouts.guest')] class extends Component
 
         <!-- Remember Me -->
         <label class="_flex-display _align-center more_filter_checkbox">
-            <input wire:model="form.remember" id="check_discount" type="checkbox" name="remember">
+            <input wire:model="form.remember" id="check_remember" type="checkbox" name="remember">
             <span class="checkmark"></span>
             <span class="check_title">{{ __('Запам’ятати мене') }}</span>
         </label>

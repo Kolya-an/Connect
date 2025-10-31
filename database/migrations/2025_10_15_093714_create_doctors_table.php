@@ -26,6 +26,8 @@ return new class extends Migration
             $table->json('services')->nullable();
             $table->json('location')->nullable();
             $table->enum('sex', ['male', 'female', 'nonbinary'])->default('female');
+            $table->json('education_images')->nullable();
+            $table->json('extra_images')->nullable();
             $table->timestamps();
         });
     }

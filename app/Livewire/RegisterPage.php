@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class RegisterPage extends Component
 {
     public $type = 'patient'; // patient | doctor
+    public bool $accept_terms = false;
 
     // Общие поля
     public $name;

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Doctor;
 use App\Models\Pacient;
+use App\Models\Service;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,14 +24,17 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        /*User::factory()->create([
-            'name' => 'Pac',
-            'email' => 'pac@sss.ss',
-            'password' => '11111111',
-            'role' => 'patient',
+        Service::factory()->create([
+            'name' => 'Процедура 1',
+        ]);
+        Service::factory()->create([
+            'name' => 'Процедура 2',
+        ]);
+        Service::factory()->create([
+            'name' => 'Процедура 3',
         ]);
 
-        User::factory()->create([
+        /*User::factory()->create([
             'name' => 'Doc',
             'email' => 'doc@sss.ss',
             'password' => '11111111',

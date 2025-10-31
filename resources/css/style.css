@@ -2071,6 +2071,11 @@ a.about_photo span.about_photo_title {
 .window .search_field {
     margin-bottom: 8px;
     padding: 8px 16px;
+    position: relative;
+}
+.window .search_field .text-red-600 {
+    top: 25px;
+    position: absolute;
 }
 .window .search_field input {
     width: 100%;
@@ -2158,6 +2163,7 @@ a.forgot_link {
     background: rgba(251, 251, 251, 1);
     width: 164px;
     height: 152px;
+    overflow: hidden;
 }
 .spec_register_photo img {
     overflow: hidden;
@@ -2232,6 +2238,13 @@ input[type="radio"]:checked + span {
     max-width: 300px;
     margin-top: 16px;
     padding: 8px 16px;
+}
+.spec-register .add_service_bottom .search_field_input {
+    width: calc(100% - 91px);
+    margin: 0;
+}
+.add_info_window .add_service_bottom .add_service_nobg select {
+    padding: 0;
 }
 .spec-register .search_field_input input {
     border-radius: 12px;
@@ -2364,9 +2377,13 @@ textarea.add_desc {
 .search_field.search_field_for {
     padding: 0;
     width: 81px;
+    margin: 0;
 }
 .search_field.search_field_for select {
     opacity: 0.6;
+}
+.rose_btn.submit_window {
+    margin-top: 8px;
 }
 .add_price_block {
     width: calc(100% - 91px);

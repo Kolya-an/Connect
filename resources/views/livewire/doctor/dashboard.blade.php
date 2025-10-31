@@ -1,46 +1,51 @@
-<div>
-    <div class="mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Doctor Dashboard</h2>
-        <p class="text-gray-600">Welcome back, Dr. {{ auth()->user()->name }}</p>
+<div class="container">
+    <div class="_flex-display _justify-content-center _align-center select_cats">
+        <button wire:click="setStep(1)" class="btn {{ $step === 1 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Крок 1: Особиста інформація')}}</button>
+        <button wire:click="setStep(2)" class="btn {{ $step === 2 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Крок 2: Послуги')}}</button>
+        <button wire:click="setStep(3)" class="btn {{ $step === 3 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Крок 3: Розклад')}}</button>
+        <button wire:click="setStep(4)" class="btn {{ $step === 4 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Крок 4: Фото робіт - До/після')}}</button>
+        <button wire:click="setStep(5)" class="btn {{ $step === 5 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Крок 5: Акції та знижки')}}</button>
     </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Today's Appointments -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-lg font-semibold mb-4">Today's Appointments</h3>
-           {{-- @if($todayAppointments->count() > 0)
-                <div class="space-y-3">
-                    @foreach($todayAppointments as $appointment)
-                        <div class="border-l-4 border-blue-500 pl-4 py-2">
-                            <p class="font-medium">{{ $appointment->patient->name }}</p>
-                            <p class="text-sm text-gray-600">{{ $appointment->appointment_date->format('H:i') }}</p>
-                            <button wire:click="completeAppointment({{ $appointment->id }})"
-                                    class="mt-2 bg-green-500 text-white px-3 py-1 rounded text-sm">
-                                Complete
-                            </button>
-                        </div>
-                    @endforeach
+    @if($step === 1)
+        <div class="spec_register_wrapper">
+            <div class="_flex-display _justify-content-between spec_register1">
+                <div class="spec_register1_left">
+                    @livewire('doctor.avatar-upload')
+                    @livewire('doctor.personal1')
                 </div>
-            @else
-                <p class="text-gray-500">No appointments today</p>
-            @endif--}}
-        </div>
-
-        <!-- Recent Appointments -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-lg font-semibold mb-4">Recent Appointments</h3>
-            <div class="space-y-3">
-                {{--@foreach($appointments as $appointment)
-                    <div class="border-b pb-3">
-                        <p class="font-medium">{{ $appointment->patient->name }}</p>
-                        <p class="text-sm text-gray-600">{{ $appointment->appointment_date->format('M d, Y H:i') }}</p>
-                        <span class="inline-block px-2 py-1 text-xs rounded
-                            {{ $appointment->status === 'scheduled' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
-                            {{ $appointment->status }}
-                        </span>
-                    </div>
-                @endforeach--}}
+                <div class="spec_register1_right">
+                    <h5>{{__('Ваша Спеціальність')}}</h5>
+                    @livewire('doctor.type')
+                    @livewire('doctor.doctor-education')
+                    @livewire('doctor.extra')
+                    @livewire('doctor.description')
+                    <button wire:click="setStep(2)" class="rose_btn register_next">{{__('Далі')}}</button>
+                </div>
             </div>
         </div>
-    </div>
+    @elseif($step === 2)
+        @livewire('doctor.doctor-services')
+        <div class="_flex-display _align-center spec_register_buttons">
+            <a wire:click="setStep(1)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
+            <a wire:click="setStep(3)" class="rose_btn register_next">{{__('Далі')}}</a>
+        </div>
+    @elseif($step === 3)
+        <div class="_flex-display _align-center spec_register_buttons">
+            <a wire:click="setStep(2)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
+            <a wire:click="setStep(4)" class="rose_btn register_next">{{__('Далі')}}</a>
+        </div>
+    @elseif($step === 4)
+        @livewire('doctor.before-after')
+        <div class="_flex-display _align-center spec_register_buttons">
+            <a wire:click="setStep(3)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
+            <a wire:click="setStep(5)" class="rose_btn register_next">{{__('Далі')}}</a>
+        </div>
+    @elseif($step === 5)
+        @livewire('doctor.promotions')
+        <div class="_flex-display _align-center spec_register_buttons">
+            <a wire:click="setStep(4)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
+            <a href="#" class="rose_btn register_next">{{__('Зберегти та перейти в особістий кабінет')}}</a>
+        </div>
+    @endif
+
 </div>
