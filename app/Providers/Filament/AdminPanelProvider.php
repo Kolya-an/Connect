@@ -34,8 +34,8 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('50px')
             ->navigationGroups([
                 NavigationGroup::make()
-                ->label('Користувачі')
-                ->collapsed()
+                    ->label('Користувачі')
+                    ->collapsed()
             ])
             ->colors([
                 'primary' => Color::Amber,

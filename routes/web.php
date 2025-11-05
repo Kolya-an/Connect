@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\SocialiteController;
+//use App\Http\Controllers\DoctorController;
+use App\Livewire\DoctorProfile;
 use App\Livewire\RegisterPage;
+use App\Livewire\UserView;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Doctor\Dashboard as DoctorDashboard;
@@ -15,9 +18,9 @@ Route::view('/', 'home.index')->name('home');
     ->middleware(['auth', 'verified'])
     ->name('dashboard');*/
 
-Route::view('profile', 'profile')
+/*Route::view('profile', 'profile')
     ->middleware(['auth'])
-    ->name('profile');
+    ->name('profile');*/
 
 Route::get('/register', RegisterPage::class)->name('register');
 
@@ -38,5 +41,9 @@ Route::middleware(['auth', 'role:patient'])->prefix('patient')->group(function (
 
 Route::get('/doctor/dashboard', DoctorDashboard::class)->name('doctor.dashboard');
 Route::get('/patient/dashboard', PatientDashboard::class)->name('patient.dashboard');
+
+Route::get('/doctors/{id}', DoctorProfile::class)->name('doctor.profile');
+Route::get('/users/{id}', UserView::class)->name('user.profile');
+
 
 require __DIR__.'/auth.php';

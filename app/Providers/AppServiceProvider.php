@@ -19,11 +19,11 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    /*public function boot(): void
     {
         App::setLocale('uk');
         Filament::serving(function () {
             Filament::setLocale('uk');
         });
-    }
+    }*/
 }

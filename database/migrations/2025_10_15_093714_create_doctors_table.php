@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('area')->nullable();
             $table->text('desc')->nullable();
-            $table->json('services')->nullable();
+            $table->float('rating', precision: 1)->nullable();
+            $table->json('types')->nullable();
             $table->json('location')->nullable();
             $table->enum('sex', ['male', 'female', 'nonbinary'])->default('female');
             $table->json('education_images')->nullable();

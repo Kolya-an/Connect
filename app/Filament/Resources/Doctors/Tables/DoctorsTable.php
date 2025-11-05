@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -18,34 +19,50 @@ class DoctorsTable
         return $table
             ->columns([
                 TextColumn::make('user.name')
+                    ->label("Ім'я")
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('second_name')
+                    ->label('Прізвище')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('user.email')
-                    ->searchable(),
-                TextColumn::make('birthday')
-                    ->date()
-                    ->sortable(),
                 ImageColumn::make('photo')
+                    ->label('Фото')
                     ->disk('public_uploads')
                     ->visibility('public')
                     ->imageSize(40),
+                TextColumn::make('user.email')
+                    ->label('Email')
+                    ->searchable(),
+                TextColumn::make('birthday')
+                    ->label('Дата народження')
+                    ->date()
+                    ->sortable(),
                 TextColumn::make('phone')
+                    ->label('Телефон')
                     ->searchable(),
                 TextColumn::make('city')
-                    ->searchable(),
-                TextColumn::make('experience')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('address')
+                    ->label('Місто')
                     ->searchable(),
                 TextColumn::make('area')
+                    ->label('Район/Метро')
                     ->searchable(),
+                TextColumn::make('address')
+                    ->label('Адреса')
+                    ->searchable(),
+                TextColumn::make('experience')
+                    ->label('Досвід')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('rating')
+                    ->label('Рейтинг')
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('sex')
+                    ->label('Стать')
                     ->sortable(),
                 TextColumn::make('created_at')
+                    ->label('Зареєстровано')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -54,6 +71,7 @@ class DoctorsTable
                 //
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])

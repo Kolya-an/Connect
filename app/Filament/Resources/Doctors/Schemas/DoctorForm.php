@@ -23,7 +23,7 @@ class DoctorForm
                 Section::make()
                     ->schema([
                         TextInput::make('user.name')
-                            ->label('User Name')
+                            ->label("Ім'я")
                             ->required()
                             ->maxLength(255)
                             ->afterStateHydrated(function (TextInput $component, $record) {
@@ -33,8 +33,10 @@ class DoctorForm
                                     $component->state('');
                                 }
                             }),
-                        TextInput::make('second_name'),
+                        TextInput::make('second_name')
+                            ->label('Прізвище'),
                         TextInput::make('user.email')
+                            ->label('Email')
                             ->email()
                             ->required()
                             ->maxLength(255)
@@ -46,9 +48,11 @@ class DoctorForm
                                 }
                             }),
                         TextInput::make('phone')
+                            ->label('Телефон')
                             ->tel()
-                        ->mask('+38 099 999 99 99'),
+                            ->mask('+38 099 999 99 99'),
                         TextInput::make('user.password')
+                            ->label('Пароль')
                             ->password()
                             ->required()
                             ->maxLength(255)
@@ -59,9 +63,11 @@ class DoctorForm
                 Section::make()
                     ->schema([
                         DatePicker::make('birthday')
+                            ->label('Дата народження')
                             ->native(false)
                             ->closeOnDateSelection(),
                         FileUpload::make('photo')
+                            ->label('Фото')
                             ->directory('doctor/' . date('Y') . '/' . date('m'))
                             ->visibility('public')
                             ->image()
@@ -76,22 +82,34 @@ class DoctorForm
                     ]),
                 Section::make()
                     ->schema([
-                        TextInput::make('city'),
-                        TextInput::make('area'),
-                        TextInput::make('address'),
+                        TextInput::make('city')
+                            ->label('Місто'),
+                        TextInput::make('area')
+                            ->label('Район/Метро'),
+                        TextInput::make('address')
+                            ->label('Адреса'),
                         TextInput::make('experience')
+                            ->label('Досвід')
                             ->numeric(),
+                        TextInput::make('rating')
+                            ->label('Рейтинг')
+                            ->numeric()
+                            ->step(0.1)
+                            ->minValue(0)
+                            ->maxValue(5),
                         Textarea::make('desc')
+                            ->label('Опис')
                             ->columnSpanFull(),
                         //TextInput::make('location'),
                         Select::make('sex')
+                            ->label('Стать')
                             ->options(['male' => 'Male', 'female' => 'Female', 'nonbinary' => 'Nonbinary'])
                             ->default('female')
                             ->required(),
                     ]),
                 Section::make()
                     ->schema([
-                        Repeater::make('services')
+                        Repeater::make('types')
                             ->label('Спеціалізації')
                             ->simple(
                                 TextInput::make('value')

@@ -47,5 +47,4 @@
             <a href="#" class="rose_btn register_next">{{__('Зберегти та перейти в особістий кабінет')}}</a>
         </div>
     @endif
-
 </div>

@@ -24,7 +24,7 @@ class Doctor extends Model
         'address',
         'area',
         'desc',
-        'services',
+        'types',
         'location',
         'sex',
         'education_images',
@@ -34,7 +34,7 @@ class Doctor extends Model
     protected function casts(): array
     {
         return [
-            'services' => 'array',
+            'types' => 'array',
             'education_images' => 'array',
             'extra_images' => 'array',
         ];
@@ -49,6 +49,11 @@ class Doctor extends Model
     {
         return $this->hasOne(Education::class);
     }
+    public function educations()
+    {
+        return $this->belongsToMany(Education::class)
+            ->withPivot(['title', 'period', 'desc']);
+    }
     public function extra()
     {
         return $this->hasOne(Extra::class);
@@ -56,13 +61,8 @@ class Doctor extends Model
     public function services()
     {
         return $this->belongsToMany(Service::class)
-            ->withPivot(['price', 'prefix'])
-            ->withTimestamps();
+            ->withPivot(['price', 'prefix']);
     }
 
-    public function photos()
-    {
-        return $this->hasMany(DoctorPhoto::class);
-    }
 
 }

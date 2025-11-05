@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
-    @vite(['resources/css/app.css', 'resources/css/style.css', 'resources/css/media.css', 'resources/js/app.js'])
+    @vite(['resources/css/style.css', 'resources/css/media.css', 'resources/js/app.js'])
             <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 
@@ -51,7 +51,14 @@
                     <livewire:auth-modal />
                 @endguest
                 @auth
-                        <livewire:header-component />
+                        @if(in_array(Auth::user()->role, ['doctor', 'patient']))
+                            <livewire:header-component />
+                        @endif
+                        @if(in_array(Auth::user()->role, ['admin']))
+                            <a class="_flex-display _align-center cab_btn" style="cursor: default">
+                                <img src="{{Vite::asset('resources/images/cab.png')}}">
+                            </a>
+                        @endif
                 @endauth
                 @guest
                     <a class="_flex-display _align-center cab_btn" style="cursor: default">

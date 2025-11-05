@@ -15,7 +15,7 @@ class Type extends Component
         $this->user = Auth::user();
 
         if ($this->user->doctor) {
-            $this->types = $this->user->doctor->services ?? [];
+            $this->types = $this->user->doctor->types ?? [];
         }
     }
     public function addType()

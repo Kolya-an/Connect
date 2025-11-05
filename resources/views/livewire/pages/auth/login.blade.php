@@ -22,7 +22,7 @@ new #[Layout('layouts.guest')] class extends Component
         $user = auth()->user();
         if ($user->role === 'doctor') {
             $this->redirectIntended(default: route('doctor.dashboard', absolute: false), navigate: true);
-        } else {
+        } elseif ($user->role === 'patient'){
             // По умолчанию пациент
             $this->redirectIntended(default: route('patient.dashboard', absolute: false), navigate: true);
         }
