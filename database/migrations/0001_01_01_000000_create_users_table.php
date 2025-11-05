@@ -21,11 +21,6 @@ return new class extends Migration
             $table->enum('role', ['admin', 'doctor', 'patient'])->default('patient');
             $table->rememberToken();
             $table->timestamps();
-            /*$table->string('second_name')->nullable();
-            $table->date('birthday')->nullable();
-            $table->string('photo')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('city')->nullable();*/
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
