@@ -18,6 +18,7 @@ class BeforeAfter extends Component
     public $photo;
     public $procedure;
     public $product;
+    public $list;
     public $confirmDeleteModal = false;
     public $photoToDelete = null;
 

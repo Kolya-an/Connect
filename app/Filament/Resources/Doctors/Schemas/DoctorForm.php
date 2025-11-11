@@ -9,10 +9,12 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Models\Service;
+
 
 class DoctorForm
 {
@@ -121,8 +123,95 @@ class DoctorForm
                             ->addActionLabel('Додати')
                             ->reorderableWithButtons()
                             ->columnSpanFull(),
-
+                        Select::make('services_sync')
+                            ->label('Послуги')
+                            ->multiple()
+                            ->options(Service::pluck('name', 'id'))
+                            ->preload()
+                            ->searchable()
+                            ->columnSpanFull()
+                            ->afterStateUpdated(function ($state, $record) {
+                                if ($record && $record->exists) {
+                                    $record->services()->sync($state);
+                                }
+                            })
                     ]),
+                Section::make('Фото до/після')
+                    ->schema([
+                        Grid::make()
+                            ->columns(1)
+                            ->schema([
+                        Repeater::make('photos')
+                            ->columnSpan(1)
+                            ->label('Фото до/після')
+                            ->relationship('photos')
+                            ->collapsed()
+                            ->addActionLabel('Додати фото')
+                            ->reorderableWithButtons()
+                            ->itemLabel(function (array $state): ?string {
+                                $hasPhoto = false;
+                                $photoValue = $state['photo'] ?? null;
+
+                                // Проверяем разные форматы FileUpload
+                                if ($photoValue) {
+                                    if (is_array($photoValue) && !empty($photoValue)) {
+                                        $hasPhoto = true;
+                                    } elseif (is_string($photoValue) && $photoValue !== '') {
+                                        $hasPhoto = true;
+                                    }
+                                }
+
+                                if ($hasPhoto) {
+                                    $label = '📷';
+                                    if (!empty($state['procedure'] ?? '')) {
+                                        $label .= ' • ' . $state['procedure'];
+                                    }
+                                    return $label;
+                                }
+
+                                if (!empty($state['procedure'] ?? '')) {
+                                    return '🔧 ' . $state['procedure'];
+                                }
+
+                                if (!empty($state['product'] ?? '')) {
+                                    return '💊 ' . $state['product'];
+                                }
+
+                                return '🆕 Новий елемент';
+                            })
+                            ->schema([
+                                Grid::make(1) // обёртка для карточки
+                                ->columnSpan(2) // важный момент: занимает половину родителя
+                                ->schema([
+                                    Grid::make(3)->schema([
+                                        // Превью фото
+                                        FileUpload::make('photo')
+                                            ->label('Фото')
+                                            ->image()
+                                            ->directory('doctor/' . date('Y') . '/' . date('m'))
+                                            ->required()
+                                            ->columnSpan(1),
+
+                                        // Поля справа
+                                        Grid::make(2)->schema([
+                                            TextInput::make('procedure')
+                                                ->label('Процедура')
+                                                ->columnSpan(2),
+                                            TextInput::make('product')
+                                                ->label('Продукт')
+                                                ->columnSpan(2),
+                                            Toggle::make('list')
+                                                ->label('Показувати')
+                                                ->default(false)
+                                                ->columnSpan(2),
+                                        ])->columnSpan(2),
+                                    ])
+                                ]),
+                            ])
+                            ]),
+                    ])
+                    ->columnSpanFull()
+                ->collapsed()
             ]);
     }
 

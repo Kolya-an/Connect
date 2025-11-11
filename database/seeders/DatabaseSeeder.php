@@ -25,13 +25,40 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Service::factory()->create([
-            'name' => 'Процедура 1',
+            'name' => 'Якість шкіри',
         ]);
         Service::factory()->create([
-            'name' => 'Процедура 2',
+            'name' => 'Контурна пластика',
         ]);
         Service::factory()->create([
-            'name' => 'Процедура 3',
+            'name' => 'Ботулінотерапія',
+        ]);
+Service::factory()->create([
+            'name' => 'Колагеностимуляція',
+        ]);
+        Service::factory()->create([
+            'name' => 'Апаратна косметологія',
+        ]);
+        Service::factory()->create([
+            'name' => 'Чистки та базовий догляд',
+        ]);
+Service::factory()->create([
+            'name' => 'Anti-age програми',
+        ]);
+        Service::factory()->create([
+            'name' => 'Лікування проблемної шкіри',
+        ]);
+        Service::factory()->create([
+            'name' => 'Догляд за тілом',
+        ]);
+Service::factory()->create([
+            'name' => 'Дерматологія',
+        ]);
+        Service::factory()->create([
+            'name' => 'Підліткова косметологія',
+        ]);
+        Service::factory()->create([
+            'name' => 'Навчання косметологів',
         ]);
 
         /*User::factory()->create([

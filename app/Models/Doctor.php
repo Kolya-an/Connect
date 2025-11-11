@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\Service;
 
 class Doctor extends Model
 {
@@ -29,6 +30,7 @@ class Doctor extends Model
         'sex',
         'education_images',
         'extra_images',
+        'rating'
     ];
 
     protected function casts(): array
@@ -60,9 +62,12 @@ class Doctor extends Model
     }
     public function services()
     {
-        return $this->belongsToMany(Service::class)
+        return $this->belongsToMany(Service::class, 'doctor_service')
             ->withPivot(['price', 'prefix']);
+
     }
-
-
+    public function photos()
+    {
+        return $this->hasMany(DoctorPhoto::class);
+    }
 }

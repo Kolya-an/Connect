@@ -25,8 +25,8 @@
             </div>
             <div class="header_menu">
                 <ul class="_width100 _flex-display _justify-content-between _align-center">
-                    <li><a href="/search.php">Мапа косметологів</a></li>
-                    <li class="submenu"><a class="submenu_a" href="#">Обрати процедуру <span><svg width="15" height="19"
+                    <li><a href="/search.php">{{__('Мапа косметологів')}}</a></li>
+                    <li class="submenu"><a class="submenu_a" href="#">{{__('Обрати процедуру')}} <span><svg width="15" height="19"
                                                                                                   viewBox="0 0 15 19"
                                                                                                   fill="none"
                                                                                                   xmlns="http://www.w3.org/2000/svg">
@@ -34,15 +34,11 @@
                           d="M8.21906 14.5423C8.03153 14.7298 7.77723 14.8351 7.51206 14.8351C7.2469 14.8351 6.99259 14.7298 6.80506 14.5423L1.14806 8.8853C1.05255 8.79306 0.976369 8.68271 0.92396 8.56071C0.871551 8.4387 0.843965 8.30748 0.842811 8.17471C0.841657 8.04193 0.866959 7.91025 0.91724 7.78735C0.967521 7.66445 1.04177 7.5528 1.13567 7.45891C1.22956 7.36502 1.34121 7.29076 1.46411 7.24048C1.587 7.1902 1.71868 7.1649 1.85146 7.16605C1.98424 7.16721 2.11546 7.19479 2.23747 7.2472C2.35947 7.29961 2.46982 7.37579 2.56206 7.4713L7.51206 12.4213L12.4621 7.4713C12.6507 7.28915 12.9033 7.18835 13.1655 7.19063C13.4277 7.19291 13.6785 7.29808 13.8639 7.48348C14.0493 7.66889 14.1545 7.91971 14.1567 8.1819C14.159 8.4441 14.0582 8.6967 13.8761 8.8853L8.21906 14.5423Z"
                           fill="black"/>
                     </svg></span></a>
-                        <ul class="ul_submenu">
-                            <li><a href="#">Процедура1</a></li>
-                            <li><a href="#">Процедура2</a></li>
-                            <li><a href="#">Процедура3</a></li>
-                        </ul>
+                        <livewire:header-service />
                     </li>
-                    <li><a href="/about.php">Про сервіс</a></li>
-                    <li><a href="/photobank.php">Фотобанк</a></li>
-                    <li><a href="#">Новини</a></li>
+                    <li><a href="{{route('about')}}">{{__('Про сервіс')}}</a></li>
+                    <li><a href="{{route('photobank')}}">{{__('Фотобанк')}}</a></li>
+                    <li><a href="{{route('news')}}">{{__('Новини')}}</a></li>
                 </ul>
             </div>
             <div class="_flex-display _justify-content-between _align-center header_button">
@@ -73,12 +69,25 @@
             </div>
             <div class="_flex-display _align-center header_mob_buttons">
                 <div class="_flex-display _justify-content-between _align-center header_button">
-                    <a href="#" class="btn white_btn login_btn _display_none">Вхід</a>
-                    <a href="#" class="btn rose_btn register_btn _display_none">Реєстрація</a>
-                    <a href="#" class="_flex-display _align-center cab_btn">
-                        <img class="_display_none" src="{{Vite::asset('resources/images/cab.png')}}">
-                        <img class="_display_non" src="{{Vite::asset('resources/images/cabimg.png')}}">
-                    </a>
+                    @guest
+                        <livewire:login-modal />
+                        <livewire:auth-modal />
+                    @endguest
+                    @auth
+                        @if(in_array(Auth::user()->role, ['doctor', 'patient']))
+                            <livewire:header-component />
+                        @endif
+                        @if(in_array(Auth::user()->role, ['admin']))
+                            <a class="_flex-display _align-center cab_btn" style="cursor: default">
+                                <img src="{{Vite::asset('resources/images/cab.png')}}">
+                            </a>
+                        @endif
+                    @endauth
+                    @guest
+                        <a class="_flex-display _align-center cab_btn" style="cursor: default">
+                            <img src="{{Vite::asset('resources/images/cab.png')}}">
+                        </a>
+                    @endguest
                 </div>
                 <div class="menu-toggle">
                     <svg width="30" height="25" viewBox="0 0 30 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -102,8 +111,8 @@
     </div>
     <div class="header_menu">
         <ul class="_width100 _flex-display _justify-content-between _align-center">
-            <li><a href="/search.php">Мапа косметологів</a></li>
-            <li class="submenu"><a class="submenu_a" href="#">Обрати процедуру <span><svg width="15" height="19"
+            <li><a href="/search.php">{{__('Мапа косметологів')}}</a></li>
+            <li class="submenu"><a class="submenu_a" href="#">{{__('Обрати процедуру')}} <span><svg width="15" height="19"
                                                                                           viewBox="0 0 15 19"
                                                                                           fill="none"
                                                                                           xmlns="http://www.w3.org/2000/svg">
@@ -111,15 +120,11 @@
                           d="M8.21906 14.5423C8.03153 14.7298 7.77723 14.8351 7.51206 14.8351C7.2469 14.8351 6.99259 14.7298 6.80506 14.5423L1.14806 8.8853C1.05255 8.79306 0.976369 8.68271 0.92396 8.56071C0.871551 8.4387 0.843965 8.30748 0.842811 8.17471C0.841657 8.04193 0.866959 7.91025 0.91724 7.78735C0.967521 7.66445 1.04177 7.5528 1.13567 7.45891C1.22956 7.36502 1.34121 7.29076 1.46411 7.24048C1.587 7.1902 1.71868 7.1649 1.85146 7.16605C1.98424 7.16721 2.11546 7.19479 2.23747 7.2472C2.35947 7.29961 2.46982 7.37579 2.56206 7.4713L7.51206 12.4213L12.4621 7.4713C12.6507 7.28915 12.9033 7.18835 13.1655 7.19063C13.4277 7.19291 13.6785 7.29808 13.8639 7.48348C14.0493 7.66889 14.1545 7.91971 14.1567 8.1819C14.159 8.4441 14.0582 8.6967 13.8761 8.8853L8.21906 14.5423Z"
                           fill="black"/>
                     </svg></span></a>
-                <ul class="ul_submenu">
-                    <li><a href="#">Процедура1</a></li>
-                    <li><a href="#">Процедура2</a></li>
-                    <li><a href="#">Процедура3</a></li>
-                </ul>
+                <livewire:header-service />
             </li>
-            <li><a href="/about.php">Про сервіс</a></li>
-            <li><a href="/photobank.php">Фотобанк</a></li>
-            <li><a href="#">Новини</a></li>
+            <li><a href="{{route('about')}}">{{__('Про сервіс')}}</a></li>
+            <li><a href="{{route('photobank')}}">{{__('Фотобанк')}}</a></li>
+            <li><a href="{{route('news')}}">{{__('Новини')}}</a></li>
         </ul>
     </div>
 </div>

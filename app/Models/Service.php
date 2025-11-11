@@ -8,9 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Service extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'price', 'header', 'footer'];
+
+    protected function casts(): array
+    {
+        return [
+            'header' => 'boolean',
+            'footer' => 'boolean',
+        ];
+    }
     public function doctors()
     {
-        return $this->hasOne(Doctor::class);
+        //return $this->hasOne(Doctor::class);
+        return $this->belongsToMany(Doctor::class, 'doctor_service')
+            ->withPivot(['name', 'price', 'prefix']);
     }
 }

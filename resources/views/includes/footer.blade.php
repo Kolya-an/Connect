@@ -27,30 +27,13 @@
                     </a>
                 </div>
             </div>
-            <div class="footer_proc">
-                <h6>Обрати процедуру</h6>
-                <ul>
-                    <li><a href="#">Якість шкіри</a></li>
-                    <li><a href="#">Контурна пластика</a></li>
-                    <li><a href="#">Ботулінотерапія</a></li>
-                    <li><a href="#">Колагеностимуляція</a></li>
-                    <li><a href="#">Апаратна косметологія</a></li>
-                    <li><a href="#">Чистки та базовий догляд</a></li>
-                    <li><a href="#">Anti-age програми</a></li>
-                    <li><a href="#">Лікування проблемної шкіри</a></li>
-                    <li><a href="#">Догляд за тілом </a></li>
-                    <li><a href="#">Дерматологія</a></li>
-                    <li><a href="#">Підліткова косметологія</a></li>
-                    <li><a href="#">Навчання косметологів</a></li>
-                </ul>
-            </div>
+            <livewire:footer-service />
             <div class="footer_menu">
                 <ul>
-                    <li><a href="/search.php">Мапа косметологів</a></li>
-                    <li><a href="/about.php">Про сервіс</a></li>
-                    <li><a href="/photobank.php">Фотобанк</a></li>
-                    <li><a href="/news.php">Новини</a></li>
-                    <li><a href="#">Корисні статті</a></li>
+                    <li><a href="/search.php">{{__('Мапа косметологів')}}</a></li>
+                    <li><a href="{{route('about')}}">{{__('Про сервіс')}}</a></li>
+                    <li><a href="{{route('photobank')}}">{{__('Фотобанк')}}</a></li>
+                    <li><a href="{{route('news')}}">{{__('Новини')}}</a></li>
                 </ul>
             </div>
             <div class="_flex-display _justify-content-between footer_right">
@@ -79,16 +62,16 @@
                 </div>
                 <div class="footer_subscribe">
                     <div class="footer_subscribe_block">
-                        <p>Підписатись <br>на новини</p>
+                        <p>{{__('Підписатись')}} <br>{{__('на новини')}}</p>
                         <form>
                             <input type="email" class="subscribe_email" value="" placeholder="E-mail">
-                            <button class="btn rose_btn send_button" type="submit">Надіслати</button>
+                            <button class="btn rose_btn send_button" type="submit">{{__('Надіслати')}}</button>
                         </form>
                     </div>
                 </div>
                 <div class="_flex-display _align-center footer_links">
-                    <a href="#">Privacy policy</a>
-                    <a href="#">Cookie policy</a>
+                    <a href="#">{{__('Privacy policy')}}</a>
+                    <a href="#">{{__('Cookie policy')}}</a>
                 </div>
             </div>
         </div>

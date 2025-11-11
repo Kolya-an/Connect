@@ -535,6 +535,7 @@ p.home_banner_title span {
 .top_docs_preview.doc_number_one {
     background: #FFEDED;
     max-width: 385px;
+    width: 385px;
 }
 .doc_number_one_image {
     width: 100%;
@@ -571,6 +572,7 @@ p.spec_doc {
 }
 .top_docs-spec {
     margin-top: 10px;
+    height: 51px;
 }
 .top_docs-spec p {
     font-size: 16px;
@@ -671,6 +673,7 @@ p.spec_doc {
 .platform-about-text p {
     font-size: 16px;
     line-height: 120%;
+    margin: 0;
 }
 .platform-modal-rose {
     width: calc(37% - 10px);
@@ -811,11 +814,14 @@ p.platform-action-title {
     line-height: 160%;
 }
 .article-image img {
+    height: 100%;
     width: 100%;
+    object-fit: cover;
 }
 .first-article .article-image img {
     height: 100%;
     width: auto;
+    object-fit: cover;
 }
 .article p {
     color: #696969;
@@ -830,6 +836,7 @@ p.platform-action-title {
 }
 .article h5 {
     margin-bottom: 0;
+    width: calc(100% - 46px);
 }
 .search_content {
     position: relative;
@@ -1440,9 +1447,9 @@ ul.pagination li.pagination_current a {
     margin-top: 23px;
     list-style-type: disc;
 }
-.grey ul li, .about_spec_page .page_banner_block p, .about_spec_page .page_banner_block ul li {
+/*.grey ul li, .about_spec_page .page_banner_block p, .about_spec_page .page_banner_block ul li {
     margin-bottom: 0;
-}
+}*/
 .grey_img {
     width: calc(25% - 10px);
     border-radius: 20px;
@@ -1661,14 +1668,19 @@ a.about_photo span.about_photo_title {
     width: calc(33% - 10px);
 }
 .photo_item_img {
-    height: 467px;
+    /*height: 467px;*/
     border-radius: 20px;
     overflow: hidden;
+    display: block;
 }
 .photo_item_img img {
-    width: 100%;
-    height: auto;
+    /*width: 100%;
+    height: auto;*/
     border-radius: 20px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 .news_item_title {
     gap: 10px;
@@ -2256,6 +2268,9 @@ input[type="radio"]:checked + span {
     padding: 0;
     height: 26px;
 }
+.spec-register .window .search_field_input input {
+    padding-left: 35px;
+}
 #search select.search_sex {
     padding-left: 0;
 }
@@ -2614,4 +2629,9 @@ p.client_address span {
     list-style-type: none;
     padding: 5px;
     border: 1px solid red;
+}
+
+
+.page_banner_block b {
+    color: #F396A2;
 }

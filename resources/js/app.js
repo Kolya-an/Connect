@@ -20,11 +20,9 @@ $(document).ready(function() {
         loop: true,
         slidesPerView: 1,
         spaceBetween: 0,
-        centeredSlides: true,
-        // Responsive breakpoints
+
         breakpoints: {
-            // when window width is >= 320px
-            390: {
+            320: {
                 slidesPerView: 1,
                 spaceBetween: 0
             },
@@ -33,6 +31,10 @@ $(document).ready(function() {
                 spaceBetween: 10
             },
             768: {
+                slidesPerView: 3,
+                spaceBetween: 20
+            },
+            1024: {
                 slidesPerView: 3,
                 spaceBetween: 20
             }
@@ -176,31 +178,6 @@ $(document).ready(function() {
     $("#window_appointment #window_close").on("click", function() {
         $("#window_appointment").addClass('_display_none');
     });
-    /*$(".login_btn").on("click", function() {
-        $("#login_window").removeClass('_display_none');
-    });
-    $("#login_window #window_close").on("click", function() {
-        $("#login_window").addClass('_display_none');
-    });
-    $(".register_btn").on("click", function() {
-        $("#register_window").removeClass('_display_none');
-    });
-    $("#register_window #window_close").on("click", function() {
-        $("#register_window").addClass('_display_none');
-    });
-    $(".form_text_login").on("click", function() {
-        $("#register_window").addClass('_display_none');
-        $("#login_window").removeClass('_display_none');
-    });
-    $(".add_city").on("click", function() {
-        $("#add_city").removeClass('_display_none');
-    });
-    $(".add_address").on("click", function() {
-        $("#add_address").removeClass('_display_none');
-    });
-    $(".add_area").on("click", function() {
-        $("#add_area").removeClass('_display_none');
-    });*/
     $(".add_service").on("click", function() {
         $("#add_service").removeClass('_display_none');
     });
@@ -219,21 +196,6 @@ $(document).ready(function() {
     $(".add_action_btn, .spec_action_edit_btn").on("click", function() {
         $("#add_action").removeClass('_display_none');
     });
-    /*$(".window_close").on("click", function() {
-        $(this).closest(".screen").addClass("_display_none");
-    });
-    $(".reg_doc_btn").on("click", function() {
-        $("#register_client").addClass('_display_none');
-        $("#register_doctor").removeClass('_display_none');
-        $(this).removeClass('white_rose_btn').addClass('rose_btn');
-        $(".reg_pac_btn").removeClass('rose_btn').addClass('white_rose_btn');
-    });
-    $(".reg_pac_btn").on("click", function() {
-        $("#register_doctor").addClass('_display_none');
-        $("#register_client").removeClass('_display_none');
-        $(this).removeClass('white_rose_btn').addClass('rose_btn');
-        $(".reg_doc_btn").removeClass('rose_btn').addClass('white_rose_btn');
-    });*/
     $(window).scroll(function() {
         if ($(this).scrollTop() > 300) { // если прокрутили больше 300px
             $('#btn_top').fadeIn(); // плавно показать
