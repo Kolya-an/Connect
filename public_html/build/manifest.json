@@ -1,14 +1,150 @@
 {
-  "resources/css/app.css": {
-    "file": "assets/app-tj5QN1iG.css",
-    "src": "resources/css/app.css",
+  "resources/css/media.css": {
+    "file": "assets/media-C-u2xWwJ.css",
+    "src": "resources/css/media.css",
     "isEntry": true,
     "names": [
-      "app.css"
+      "media.css"
     ]
   },
+  "resources/css/style.css": {
+    "file": "assets/style-CfOC6sqx.css",
+    "src": "resources/css/style.css",
+    "isEntry": true,
+    "names": [
+      "style.css"
+    ]
+  },
+  "resources/fonts/Gilroy-Bold.ttf": {
+    "file": "assets/Gilroy-Bold-sm1PNH13.ttf",
+    "src": "resources/fonts/Gilroy-Bold.ttf"
+  },
+  "resources/fonts/Gilroy-Bold.woff": {
+    "file": "assets/Gilroy-Bold-CJrcQqXP.woff",
+    "src": "resources/fonts/Gilroy-Bold.woff"
+  },
+  "resources/fonts/Gilroy-Bold.woff2": {
+    "file": "assets/Gilroy-Bold-Kg0-gz10.woff2",
+    "src": "resources/fonts/Gilroy-Bold.woff2"
+  },
+  "resources/fonts/Gilroy-ExtraBold.ttf": {
+    "file": "assets/Gilroy-ExtraBold-bUaqQUyg.ttf",
+    "src": "resources/fonts/Gilroy-ExtraBold.ttf"
+  },
+  "resources/fonts/Gilroy-ExtraBold.woff": {
+    "file": "assets/Gilroy-ExtraBold-FEWSg8Xa.woff",
+    "src": "resources/fonts/Gilroy-ExtraBold.woff"
+  },
+  "resources/fonts/Gilroy-ExtraBold.woff2": {
+    "file": "assets/Gilroy-ExtraBold-D2UA7Ta5.woff2",
+    "src": "resources/fonts/Gilroy-ExtraBold.woff2"
+  },
+  "resources/fonts/Gilroy-Medium.woff": {
+    "file": "assets/Gilroy-Medium-BbZyvxD-.woff",
+    "src": "resources/fonts/Gilroy-Medium.woff"
+  },
+  "resources/fonts/Gilroy-Medium.woff2": {
+    "file": "assets/Gilroy-Medium-D0B9IZRR.woff2",
+    "src": "resources/fonts/Gilroy-Medium.woff2"
+  },
+  "resources/fonts/Gilroy-Regular.ttf": {
+    "file": "assets/Gilroy-Regular-eCFN1h-s.ttf",
+    "src": "resources/fonts/Gilroy-Regular.ttf"
+  },
+  "resources/fonts/Gilroy-Regular.woff": {
+    "file": "assets/Gilroy-Regular-Df3OKIrZ.woff",
+    "src": "resources/fonts/Gilroy-Regular.woff"
+  },
+  "resources/fonts/Gilroy-Regular.woff2": {
+    "file": "assets/Gilroy-Regular-B4GrOypx.woff2",
+    "src": "resources/fonts/Gilroy-Regular.woff2"
+  },
+  "resources/fonts/Gilroy-SemiBold.ttf": {
+    "file": "assets/Gilroy-SemiBold-BpRPs99R.ttf",
+    "src": "resources/fonts/Gilroy-SemiBold.ttf"
+  },
+  "resources/fonts/Gilroy-SemiBold.woff": {
+    "file": "assets/Gilroy-SemiBold-BUXwVBlP.woff",
+    "src": "resources/fonts/Gilroy-SemiBold.woff"
+  },
+  "resources/fonts/Gilroy-SemiBold.woff2": {
+    "file": "assets/Gilroy-SemiBold-Dt1ldoW7.woff2",
+    "src": "resources/fonts/Gilroy-SemiBold.woff2"
+  },
+  "resources/images/about_photo.png": {
+    "file": "assets/about_photo-2ab-z6Hy.png",
+    "src": "resources/images/about_photo.png"
+  },
+  "resources/images/date.png": {
+    "file": "assets/date-Dv9zy1b9.png",
+    "src": "resources/images/date.png"
+  },
+  "resources/images/doctor_right_actions.png": {
+    "file": "assets/doctor_right_actions-Ce8g9YWm.png",
+    "src": "resources/images/doctor_right_actions.png"
+  },
+  "resources/images/doctor_right_prices_actions.png": {
+    "file": "assets/doctor_right_prices_actions-U_w2JcYj.png",
+    "src": "resources/images/doctor_right_prices_actions.png"
+  },
+  "resources/images/fb_btn.png": {
+    "file": "assets/fb_btn-CBR-F-jP.png",
+    "src": "resources/images/fb_btn.png"
+  },
+  "resources/images/google_btn.png": {
+    "file": "assets/google_btn-Dveh_z5a.png",
+    "src": "resources/images/google_btn.png"
+  },
+  "resources/images/grey_about_photo.png": {
+    "file": "assets/grey_about_photo-DmUocZ-p.png",
+    "src": "resources/images/grey_about_photo.png"
+  },
+  "resources/images/grey_about_spec.png": {
+    "file": "assets/grey_about_spec-5b1a-swL.png",
+    "src": "resources/images/grey_about_spec.png"
+  },
+  "resources/images/loc.png": {
+    "file": "assets/loc-DDm3AI7L.png",
+    "src": "resources/images/loc.png"
+  },
+  "resources/images/maria.png": {
+    "file": "assets/maria-BnZYYLgi.png",
+    "src": "resources/images/maria.png"
+  },
+  "resources/images/more_filter.png": {
+    "file": "assets/more_filter-DVDvQysj.png",
+    "src": "resources/images/more_filter.png"
+  },
+  "resources/images/more_images.png": {
+    "file": "assets/more_images-DOVqYOIg.png",
+    "src": "resources/images/more_images.png"
+  },
+  "resources/images/platform-modal-rose1.png": {
+    "file": "assets/platform-modal-rose1-CdDUAwwL.png",
+    "src": "resources/images/platform-modal-rose1.png"
+  },
+  "resources/images/platform-modal-rose2.png": {
+    "file": "assets/platform-modal-rose2-BtjGujcR.png",
+    "src": "resources/images/platform-modal-rose2.png"
+  },
+  "resources/images/radius.png": {
+    "file": "assets/radius-nod4MdDk.png",
+    "src": "resources/images/radius.png"
+  },
+  "resources/images/search.png": {
+    "file": "assets/search-wmeCQ1vi.png",
+    "src": "resources/images/search.png"
+  },
+  "resources/images/select.png": {
+    "file": "assets/select-CLt24AxT.png",
+    "src": "resources/images/select.png"
+  },
+  "resources/images/sex.png": {
+    "file": "assets/sex-CeCwUscs.png",
+    "src": "resources/images/sex.png"
+  },
   "resources/js/app.js": {
-    "file": "assets/app-CIhcsrbj.js",
+    "file": "assets/app-D9gMxokc.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
