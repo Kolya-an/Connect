@@ -91,6 +91,11 @@
                     </ul>
                 </div>
             @endif
+            @if($search)
+                <button wire:click="save" class="rose_btn" style="padding: 5px 10px; border-radius: 20px">
+                    {{__('Зберегти введене')}}
+                </button>
+            @endif
         </div>
     </div>
 @endif

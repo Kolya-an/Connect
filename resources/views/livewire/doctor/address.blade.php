@@ -22,6 +22,7 @@
             </button>
         </div>
     </div>
+
     <button wire:click="$set('showAddressModal', true)" class="btn white_rose_btn add_btn add_address">
         <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.000000" height="14.000000" fill="none">
             <rect id="ic:round-plus" width="14.000000" height="14.000000" x="0.000000" y="0.000000" fill="rgb(255,255,255)" fill-opacity="0" />
@@ -51,26 +52,77 @@
                     </svg>
                 </button>
             </div>
+
             <div class="search_field search_field_input">
                 <input
-                    id="add_address"
-                    class="add_address"
+                    id="add_address_input"
+                    class="add_address w-full p-3 border border-gray-300 rounded"
                     type="text"
-                    placeholder="{{__('Введіть адресу..')}}"
+                    placeholder="{{__('Введіть назву вулиці...')}}"
                     wire:model.live="search"
+                    wire:keydown.enter="saveCustomAddress"
+                    wire:keydown.escape="$set('showAddressModal', false)"
+                    autofocus
                 />
+                @if($isLoading)
+                    <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+                    </div>
+                @endif
             </div>
-            <ul>
-                @forelse ($filteredAddresses as $item)
-                    <li wire:click="selectAddress('{{ $item }}')"
-                        class="px-3 py-1 hover:bg-blue-100 cursor-pointer">
-                        {{ $item }}
-                    </li>
-                @empty
-                    <li class="px-3 py-2 text-gray-500">{{__('Не знайдено')}}</li>
-                @endforelse
-            </ul>
-            @error('address') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+            <div x-data
+                 x-on:search-debounced.window="setTimeout(() => { @this.performSearch() }, 300)">
+            </div>
+            <div class="max-h-64 overflow-y-auto">
+                @if($isLoading)
+                    <div class="text-center py-4">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+                        <div class="text-gray-500 mt-2">Пошук вулиць...</div>
+                    </div>
+                @elseif(count($suggestions) > 0)
+                    <div class="border border-gray-300 rounded-md">
+                        <div class="bg-gray-50 px-4 py-2 text-sm text-gray-600 border-b">
+                            Знайдено {{ count($suggestions) }} вулиць
+                        </div>
+                        <ul class="divide-y divide-gray-200">
+                            @foreach($suggestions as $index => $suggestion)
+                                <li wire:click="selectAddress({{ $index }})"
+                                    class="px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors duration-150">
+                                    <div class="font-medium text-gray-800">
+                                        {{ $suggestion['display_name'] }}
+                                    </div>
+                                    @if(isset($suggestion['street_name']))
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            {{ $suggestion['street_name'] }}
+                                        </div>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @elseif($search && strlen($search) >= 2 && !$isLoading)
+                    <div class="text-center py-6 text-gray-500">
+                        <div class="mb-2">Вулиць за запитом "{{ $search }}" не знайдено</div>
+                        <button wire:click="saveCustomAddress"
+                                class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition-colors">
+
+                            Використати цю назву
+                        </button>
+                    </div>
+                @elseif(!$search)
+                    <div class="text-center py-8 text-gray-400">
+                        ✏️ Введіть назву вулиці для пошуку
+                    </div>
+                @endif
+            </div>
+
+
+
+            @if (session()->has('message'))
+                <div class="mt-3 p-3 bg-green-100 text-green-700 rounded text-sm">
+                    {{ session('message') }}
+                </div>
+            @endif
         </div>
     </div>
 @endif

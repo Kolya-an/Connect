@@ -46,5 +46,9 @@ return [
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
         'redirect' => env('FACEBOOK_REDIRECT_URI'),
     ],
+    'openstreetmap' => [
+        'base_url' => 'https://nominatim.openstreetmap.org/',
+        'timeout' => 10,
+    ],
 
 ];

@@ -8,51 +8,54 @@ use Illuminate\Support\Facades\Auth;
 class Areas extends Component
 {
     public $areaStep = 1;
-
     public $user;
-    public $area;
-
+    public $area;   // выбранное значение
+    public $search = ''; // текст из поля
     public $showAreaModal = false;
+
     public $allAreas = [
-        'Голосiївський', 'Дарницький', 'Деснянський', 'Днiпровський', 'Оболонський'
+        'Голосіївський', 'Дарницький', 'Деснянський', 'Дніпровський', 'Оболонський',
+        'Святошинський', 'Солом’янський', 'Подільський', 'Печерський', 'Шевченківський'
     ];
+
     public $allMetros = [
-        'Арсенальна', 'Політех', 'Хрещатик', 'Олімпійський', 'Славутич'
+        'Академмістечко', 'Житомирська', 'Святошин', 'Нивки', 'Берестейська', 'Шулявська',
+        'Політехнічний інститут', 'Вокзальна', 'Університет', 'Театральна', 'Хрещатик', 'Арсенальна',
+        'Дніпро', 'Лівобережна', 'Чернігівська', 'Дарниця', 'Християнська', 'Лісова',
+        'Героїв Дніпра', 'Мінська', 'Оболонь', 'Почайна', 'Тараса Шевченка', 'Контрактова площа',
+        'Майдан Незалежності', 'Площа Льва Толстого', 'Олімпійська', 'Палац Україна', 'Либідська',
+        'Деміївська', 'Голосіївська', 'Васильківська', 'Виставковий центр', 'Іподром', 'Теремки',
+        'Сирець', 'Дорогожичі', 'Лук’янівська', 'Золоті ворота', 'Театральна', 'Кловська', 'Печерська',
+        'Дружби народів', 'Видубичі', 'Славутич', 'Осокорки', 'Позняки', 'Харківська', 'Вирлиця', 'Бортничі'
     ];
-    public $search = '';
+
     public function mount()
     {
         $this->user = Auth::user();
 
-        $user = Auth::user();
-
-        if ($user->doctor) {
-            $this->area = $user->doctor->area;
+        if ($this->user->doctor) {
+            $this->area = $this->user->doctor->area;
         }
     }
-    public function updatedSearch()
-    {
-        // Этот метод заставляет Livewire перерендерить компонент при каждом изменении поля поиска
-    }
+
     public function selectArea($areaName)
     {
         $this->area = $areaName;
+        $this->search = '';
         $this->showAreaModal = false;
-        $this->search = '';
-        $this->save();
     }
-    public function clearArea()
-    {
-        $this->area = '';
-        $this->search = '';
-    }
+
+    // Сохраняем то, что в поле
     public function save()
     {
         $user = Auth::user();
 
-        $data = [
-            'area' => $this->area,
-        ];
+        // Если поле не пустое, сохраняем его; иначе выбранную область
+        $areaToSave = $this->search ?: $this->area;
+
+        if (!$areaToSave) return;
+
+        $data = ['area' => $areaToSave];
 
         if ($user->doctor) {
             $user->doctor->update($data);
@@ -60,29 +63,29 @@ class Areas extends Component
             $user->doctor()->create($data);
         }
 
+        $this->area = $areaToSave; // сохраняем выбранное значение
+        $this->search = ''; // очищаем поле поиска
+        $this->showAreaModal = false;
+
         session()->flash('message', 'Інформацію оновлено!');
-    }
-    public function resetArea()
-    {
-        $this->area = '';
-        $this->showAreaModal = true; // открываем модалку, если нужно
     }
     public function setAreaStep($areaStepNumber)
     {
         $this->areaStep = $areaStepNumber;
     }
+
     public function render()
     {
         $filteredAreas = collect($this->allAreas)
-            ->filter(function ($areas) {
-                return stripos($areas, $this->search) !== false;
-            })
-            ->values();
+            ->filter(fn($area) => stripos($area, $this->search) !== false)
+            ->values()
+            ->take(5);
+
         $filteredMetros = collect($this->allMetros)
-            ->filter(function ($metros) {
-                return stripos($metros, $this->search) !== false;
-            })
-            ->values();
+            ->filter(fn($metro) => stripos($metro, $this->search) !== false)
+            ->values()
+            ->take(5);
+
         return view('livewire.doctor.areas', [
             'filteredAreas' => $filteredAreas,
             'filteredMetros' => $filteredMetros,

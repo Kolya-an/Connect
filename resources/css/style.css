@@ -246,6 +246,9 @@ input:focus, select:focus {
     border: none !important;   /* если нужен совсем без рамки */
     box-shadow: none !important; /* в некоторых браузерах */
 }
+input#photo-input {
+    display: none;
+}
 .btn {
     display: flex;
     justify-content: center;
