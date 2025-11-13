@@ -233,13 +233,19 @@
                                     </svg></a>
                             </div>
                             <div class="_flex-display _justify-content-between _align-center platform-action-bottom">
-                                <div class="platform-action-image"><img src="{{ asset('image/platform-action-image.png') }}" alt="" /></div>
+                                <div class="platform-action-image"><img src="{{ asset('uploads/' . $promotion->doctor->photo) }}" alt="" /></div>
                                 <div class="platform-action-text">
-                                    <p class="platform-action-title">-20% на першу процедуру</p>
-                                    <p>Збільшення губ, Біоревіталізація, Чистка, Пілінг</p>
+                                    <p class="platform-action-title">{{ $promotion->title }}</p>
+                                    <p>{{ $promotion->description }}</p>
                                     <div class="fio_doc_spec">
-                                        <p class="fio_doc">Некрасова Анна</p>
-                                        <p class="spec_doc">Лікар дермовенеролог, косметолог</p>
+                                        <p class="fio_doc">{{ $promotion->doctor->second_name }} {{ $promotion->doctor->user?->name }}</p>
+                                        @if ($promotion?->doctor?->types)
+                                            <p class="spec_doc">
+                                                @foreach ($promotion->doctor->types as $type)
+                                                    {{$type}}{{ $loop->last ? '' : ', ' }}
+                                                @endforeach
+                                            </p>
+                                        @endif
                                     </div>
                                     <div class="_flex-display _justify-content-between _align-center top_docs-rating_city">
                                         <div class="_flex-display _align-center top_docs-rating"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">

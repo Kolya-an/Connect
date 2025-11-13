@@ -16,10 +16,13 @@ class Homepage extends Component
     public $service_block;
     public $doctor;
     public $doctors;
+    public $promotion;
     public $doctors_ids;
     public function mount()
     {
-        $this->settings = HomepageSetting::first();
+        $this->settings = HomepageSetting::with([
+            'promotion.doctor.user',
+        ])->first();
 
         if (!$this->settings) {
             $this->settings = null;
@@ -28,6 +31,7 @@ class Homepage extends Component
             $this->service_block = collect();
             $this->doctor = null;
             $this->doctors_ids = collect();
+            $this->promotion = null;
             return;
         }
 
@@ -87,10 +91,15 @@ class Homepage extends Component
             ? array_map('intval', $this->settings->doctors_ids)
             : [];
 
+
+
+
 // Загружаем докторов с услугами, если есть хотя бы один ID
         $this->doctors = $this->doctors_ids
             ? Doctor::with('services')->whereIn('id', $this->doctors_ids)->get()
             : collect();
+
+        $this->promotion = $this->settings->promotion;
     }
     public function render()
     {

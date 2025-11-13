@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Doctor;
+use App\Models\DoctorPromotion;
 use App\Models\Service;
 use Filament\Actions\Action;
 use Filament\Forms;
@@ -178,7 +179,27 @@ class HomepageSettings extends Page
                     ->searchable()
                     ->preload()
                     ->required()
-                    ->dehydrateStateUsing(fn ($state) => $state)
+                    ->dehydrateStateUsing(fn ($state) => $state),
+
+                Select::make('promotion_id')
+                    ->label('Акція лікаря')
+                    ->options(function () {
+                        return DoctorPromotion::with(['doctor.user'])
+                            ->get()
+                            ->mapWithKeys(function ($promotion) {
+                                $doctor = $promotion->doctor;
+                                $user = $doctor?->user;
+                                $title = $promotion->title ?? '—';
+                                $secondName = $doctor?->second_name ?? '—';
+                                $userName = $user?->name ?? '—';
+
+                                return [
+                                    $promotion->id => "{$title} — {$secondName} {$userName}"
+                                ];
+                            });
+                    })
+                    ->searchable()
+                    ->required(),
             ]);
 
     }

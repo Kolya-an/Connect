@@ -2,7 +2,7 @@
     <div class="container">
         <div class="_flex-display _justify-content-between _align-stretch footer">
             <div class="_flex-display _justify-content-between footer_left">
-                <div class="footer_logo"><a href="{{route('home')}}"><img src="{{Vite::asset('resources/images/footer_logo.png')}}" alt="Logo"/></a></div>
+                <div class="footer_logo"><a href="{{route('home')}}"><img src="{{asset('image/footer_logo.png')}}" alt="Logo"/></a></div>
                 <div class="_flex-display _align-center footer_share _minwidth769">
                     <a href="#">
                         <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -78,6 +78,6 @@
     </div>
 </footer>
 
-<div id="btn_top"><img src="{{Vite::asset('resources/images/top.png')}}"/></div>
+<div id="btn_top"><img src="{{asset('image/top.png')}}"/></div>
 </body>
 </html>

@@ -21,7 +21,7 @@
     <div class="container">
         <div class="_flex-display _justify-content-between _align-center header">
             <div class="header_logo">
-                <a href="{{route('home')}}"><img src="{{Vite::asset('resources/images/logo.png')}}" alt="Logo"/></a>
+                <a href="{{route('home')}}"><img src="{{asset('image/logo.png')}}" alt="Logo"/></a>
             </div>
             <div class="header_menu">
                 <ul class="_width100 _flex-display _justify-content-between _align-center">
@@ -52,20 +52,20 @@
                         @endif
                         @if(in_array(Auth::user()->role, ['admin']))
                             <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                                <img src="{{Vite::asset('resources/images/cab.png')}}">
+                                <img src="{{asset('image/cab.png')}}">
                             </a>
                         @endif
                 @endauth
                 @guest
                     <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                        <img src="{{Vite::asset('resources/images/cab.png')}}">
+                        <img src="{{asset('image/cab.png')}}">
                     </a>
                 @endguest
             </div>
         </div>
         <div class="_flex-display _justify-content-between _align-center header_mob">
             <div class="header_logo">
-                <a href="/"><img src="{{Vite::asset('resources/images/logomob.png')}}"/></a>
+                <a href="/"><img src="{{asset('image/logomob.png')}}"/></a>
             </div>
             <div class="_flex-display _align-center header_mob_buttons">
                 <div class="_flex-display _justify-content-between _align-center header_button">
@@ -79,13 +79,13 @@
                         @endif
                         @if(in_array(Auth::user()->role, ['admin']))
                             <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                                <img src="{{Vite::asset('resources/images/cab.png')}}">
+                                <img src="{{asset('image/cab.png')}}">
                             </a>
                         @endif
                     @endauth
                     @guest
                         <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                            <img src="{{Vite::asset('resources/images/cab.png')}}">
+                            <img src="{{asset('image/cab.png')}}">
                         </a>
                     @endguest
                 </div>

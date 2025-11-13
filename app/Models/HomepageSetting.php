@@ -22,6 +22,7 @@ class HomepageSetting extends Model
         'manual_procedure_ids',
         'doctor_id',
         'doctors_ids',
+        'promotion_id',
     ];
     protected $casts = [
         'manual_news_ids' => 'array',
@@ -29,4 +30,8 @@ class HomepageSetting extends Model
         'manual_procedure_ids' => 'array',
         'doctors_ids' => 'array',
     ];
+    public function promotion()
+    {
+        return $this->belongsTo(DoctorPromotion::class, 'promotion_id');
+    }
 }

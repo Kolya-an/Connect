@@ -44,7 +44,7 @@
         @livewire('doctor.promotions')
         <div class="_flex-display _align-center spec_register_buttons">
             <a wire:click="setStep(4)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
-            <a href="#" class="rose_btn register_next">{{__('Зберегти та перейти в особістий кабінет')}}</a>
+            <a href="#" class="rose_btn register_next">{{__('Перейти в особістий кабінет')}}</a>
         </div>
     @endif
 </div>
