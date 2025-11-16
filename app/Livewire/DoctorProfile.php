@@ -20,6 +20,9 @@ class DoctorProfile extends Component
     public function setStep($stepNumber)
     {
         $this->step = $stepNumber;
+        if ($this->step === 2) {
+            $this->dispatch('reinit-swipers');
+        }
     }
     public function render()
     {

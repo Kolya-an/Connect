@@ -70,4 +70,8 @@ class Doctor extends Model
     {
         return $this->hasMany(DoctorPhoto::class);
     }
+    public function schedules()
+    {
+        return $this->hasMany(DoctorSchedule::class);
+    }
 }

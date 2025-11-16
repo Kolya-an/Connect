@@ -264,7 +264,7 @@ input#photo-input {
 header {
     width: 100%;
     box-sizing: border-box;
-    z-index: 999999;
+    /*z-index: 999999;*/
     position: relative;
     background: #fff;
 }
@@ -302,7 +302,7 @@ a.submenu_a span {
 }
 .rose_btn {
     background: #F396A2;
-    color: #fff;
+    color: #fff !important;
     border: 1px solid #F396A2;
     cursor: pointer;
 }
@@ -2059,7 +2059,7 @@ a.about_photo span.about_photo_title {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.85);
     z-index: 1000000;
 }
 .window {
@@ -2087,6 +2087,7 @@ a.about_photo span.about_photo_title {
 }
 .window form {
     margin-top: 16px;
+    width: 100%;
 }
 .window .search_field {
     margin-bottom: 8px;

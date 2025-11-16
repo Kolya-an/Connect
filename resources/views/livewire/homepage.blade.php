@@ -132,7 +132,7 @@
                 @endif
                 <div class="doc_carousel">
 
-                    <div class="swiper">
+                    <div class="swiper swiper-home">
                         <div class="swiper-wrapper">
                              {{--початок циклу--}}
                             @foreach($doctors as $doctor_item)

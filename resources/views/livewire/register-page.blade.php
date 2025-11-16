@@ -79,7 +79,7 @@
                 <span class="checkmark"></span>
                 <span class="check_title">Я приймаю <a href="#">правила сайту</a></span>
                @error('accept_terms')
-                <div class="text-danger small mt-1">{{ $message }}</div>
+                    <div class="text-danger small mt-1">{{ $message }}</div>
                 @enderror
 
             </label>

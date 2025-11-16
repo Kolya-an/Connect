@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Illuminate\Http\Request;
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -90,13 +91,17 @@ class RegisterPage extends Component
         return $this->redirectByRole($user);
     }
 
-    protected function redirectByRole($user)
+    protected function redirectByRole(Request $request,$user)
     {
         switch ($user->role) {
             case 'doctor': // Доктор
                 return redirect()->route('doctor.dashboard');
             case 'patient': // Пациент
+                if (session()->has('_previous.url')) {
+                    return redirect(session('_previous.url'));
+                }
                 return redirect()->route('patient.dashboard');
+
             default:
                 return redirect()->route('home');
         }

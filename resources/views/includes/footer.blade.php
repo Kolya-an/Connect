@@ -79,5 +79,6 @@
 </footer>
 
 <div id="btn_top"><img src="{{asset('image/top.png')}}"/></div>
+@stack('scripts')
 </body>
 </html>

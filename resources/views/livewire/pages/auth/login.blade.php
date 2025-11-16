@@ -20,11 +20,19 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
         $user = auth()->user();
+        $previousUrl = session('_previous.url');
+
         if ($user->role === 'doctor') {
-            $this->redirectIntended(default: route('doctor.dashboard', absolute: false), navigate: true);
-        } elseif ($user->role === 'patient'){
-            // По умолчанию пациент
-            $this->redirectIntended(default: route('patient.dashboard', absolute: false), navigate: true);
+            // Если есть предыдущий URL, используем его, иначе - дефолтный
+            $this->redirectIntended(
+                default: $previousUrl ?: route('doctor.dashboard', absolute: false),
+                navigate: true
+            );
+        } elseif ($user->role === 'patient') {
+            $this->redirectIntended(
+                default: $previousUrl ?: route('patient.dashboard', absolute: false),
+                navigate: true
+            );
         }
     }
 }; ?>
@@ -34,7 +42,9 @@ new #[Layout('layouts.guest')] class extends Component
     <!-- Session Status -->
     <x-auth-session-status :status="session('status')" />
 
-    <form wire:submit="login" id="login">
+    <form wire:submit.prevent="login" id="login">
+        @csrf
+        <input type="hidden" name="return_to_booking" value="1">
         <!-- Email Address -->
         <div class="search_field search_field_input">
             <x-text-input wire:model="form.email" id="email" class="search_field search_field_input" type="email" name="email"

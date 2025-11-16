@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Auth;
 
 class HeaderComponent extends Component
 {
+    public bool $isDoctor;
+    public function mount()
+    {
+        $this->isDoctor = Auth::check() && Auth::user()->role === 'doctor';
+    }
     public function logout()
     {
         Auth::logout();

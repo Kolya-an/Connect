@@ -90,17 +90,17 @@
         </div>
         <div class="spec_content">
             <div class="_flex-display _justify-content-center _align-center select_cats">
-                <button wire:click="setStep(1)" class="btn {{ $step === 1 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Процедури')}}</button>
-                <button wire:click="setStep(2)" class="btn {{ $step === 2 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Запис на прийом')}}</button>
+                <button wire:click="setStep(1)" class="btn {{ $step === 1 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Запис на прийом')}}</button>
+                <button wire:click="setStep(2)" class="btn {{ $step === 2 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Процедури')}}</button>
                 <button wire:click="setStep(3)" class="btn {{ $step === 3 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Про лікаря')}}</button>
                 <button wire:click="setStep(4)" class="btn {{ $step === 4 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Фото')}}</button>
                 <button wire:click="setStep(5)" class="btn {{ $step === 5 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Відгуки')}}</button>
                 <button wire:click="setStep(6)" class="btn {{ $step === 6 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Акції та знижки')}}</button>
             </div>
             @if($step === 1)
-                @livewire('doctor.view-types', ['id' => $doctor->id])
+                @livewire('doctor.booking', ['id' => $doctor->id])
             @elseif($step === 2)
-
+                @livewire('doctor.view-types', ['id' => $doctor->id])
             @elseif($step === 3)
                 @livewire('doctor.view-education', ['id' => $doctor->id])
             @elseif($step === 4)

@@ -78,10 +78,12 @@ class LoginForm extends Form
         try {
             $this->form->authenticate();
             session()->regenerate();
+
             return redirect()->intended('/');
+
         } catch (\Throwable $e) {
             logger()->error('Login error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
-            throw $e; // щоб бачити 500 з текстом
+            throw $e;
         }
     }
 

@@ -13,8 +13,6 @@ class ViewTypes extends Component
     use WithPagination;
     public function mount($id)
     {
-        /*$this->doctor = Doctor::with('services')->where('id', $id)->first();
-        $this->services = $this->doctor->services;*/
         $this->user_id = $id;
         $this->doctor = Doctor::findOrFail($id);
     }
@@ -28,6 +26,5 @@ class ViewTypes extends Component
         return view('livewire.doctor.view-types', [
             'services' => $services,
         ]);
-        //return view('livewire.doctor.view-types');
     }
 }

@@ -45,6 +45,9 @@ class Dashboard extends Component
     public function setStep($stepNumber)
     {
         $this->step = $stepNumber;
+        if ($this->step === 3) {
+            $this->dispatch('reinit-swipers');
+        }
     }
 
 
