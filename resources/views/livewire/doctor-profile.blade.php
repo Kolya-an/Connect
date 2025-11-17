@@ -106,7 +106,7 @@
             @elseif($step === 4)
                 @livewire('doctor.view-photo', ['id' => $doctor->id])
             @elseif($step === 5)
-
+                @livewire('doctor.reviews', ['id' => $doctor->id])
             @elseif($step === 6)
                 @livewire('doctor.view-promotions', ['id' => $doctor->id])
             @endif

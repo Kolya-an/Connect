@@ -9,41 +9,24 @@
     </button>
     <div class="_flex-display _align-stretch photo_list_block">
         @forelse($photos as $item)
-            <div wire:click="confirmDelete({{ $item->id }})" class="photo_item">
-                <a class="photo_item_img"><img src="{{ asset('uploads/'.$item->photo) }}" alt="{{ $item->procedure }}"></a>
+            <div class="photo_item">
+                <a wire:click="deletePhoto({{ $item->id }})" class="photo_item_img">
+                    <img src="{{ asset('uploads/'.$item->photo) }}" alt="{{ $item->procedure }}">
+                    <div class="_flex-display _justify-content-center _align-center delete_image _display_none">
+                        <svg width="23" height="29" viewBox="0 0 23 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.58333 25.3333C1.58333 26.1732 1.91696 26.9786 2.51083 27.5725C3.10469 28.1664 3.91015 28.5 4.75 28.5H17.4167C18.2565 28.5 19.062 28.1664 19.6558 27.5725C20.2497 26.9786 20.5833 26.1732 20.5833 25.3333V6.33333H1.58333V25.3333ZM4.75 9.5H17.4167V25.3333H4.75V9.5ZM16.625 1.58333L15.0417 0H7.125L5.54167 1.58333H0V4.75H22.1667V1.58333H16.625Z" fill="white"/>
+                        </svg>
+                    </div>
+                </a>
                 <p><b>{{__('Процедура:')}}</b> {{ $item->procedure }}</p>
                 <p><b>{{__('Препарат:')}}</b> {{ $item->product }}</p>
-                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100
-                        flex items-center justify-center text-white text-sm font-medium
-                        transition-opacity duration-300">
-                    🗑️ {{__('Натисни, щоб видалити')}}
-                </div>
+
             </div>
         @empty
             <p>{{__('Фото поки що немає')}}</p>
         @endforelse
     </div>
-    @if($confirmDeleteModal)
-        <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div class="bg-white rounded-2xl shadow-xl p-6 w-80 text-center">
-                <h2 class="text-lg font-semibold mb-3 text-gray-800">Видалити фото?</h2>
-                <p class="text-sm text-gray-500 mb-6">Цю дію неможливо скасувати.</p>
 
-                <div class="flex justify-center gap-4">
-                    <button
-                        wire:click="deletePhoto"
-                        class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        Так, видалити
-                    </button>
-                    <button
-                        wire:click="$set('confirmDeleteModal', false)"
-                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-colors">
-                        Скасувати
-                    </button>
-                </div>
-            </div>
-        </div>
-    @endif
     @if($showAddModal)
         <div id="add_photo" class="_flex-display _justify-content-center _align-center screen">
             <div class="window add_info_window">

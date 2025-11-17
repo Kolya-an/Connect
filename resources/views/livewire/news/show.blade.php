@@ -33,7 +33,7 @@
 
                     @case('image_text')
                         <div class="article_image_text">
-                            <img src="{{ asset('uploads/' . $block['data']['url']) }}" >
+                            <img src="{{ asset('uploads/' . $block['data']['image']) }}" >
                             <div class="article_image_text_text">
                                 {!! $block['data']['content'] !!}
                             </div>

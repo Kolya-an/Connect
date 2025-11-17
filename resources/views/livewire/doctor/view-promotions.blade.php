@@ -13,7 +13,7 @@
             </div>
         </div>
     @empty
-        <p>Акції відсутні</p>
+        <p>{{__('Акції відсутні')}}</p>
     @endforelse
     @if($promotions->hasPages())
         <ul class="_flex-display _justify-content-center _align-center pagination">

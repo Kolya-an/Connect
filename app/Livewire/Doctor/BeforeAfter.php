@@ -73,15 +73,10 @@ class BeforeAfter extends Component
 
         session()->flash('message', 'Фото успішно додано!');
     }
-    public function confirmDelete($id)
-    {
-        $this->photoToDelete = $id;
-        $this->confirmDeleteModal = true;
-    }
 
-    public function deletePhoto()
+    public function deletePhoto($id)
     {
-        $photo = DoctorPhoto::find($this->photoToDelete);
+        $photo = DoctorPhoto::find($id);
 
         if ($photo) {
             $path = public_path('uploads/' . $photo->photo);
@@ -91,8 +86,6 @@ class BeforeAfter extends Component
             $photo->delete();
         }
 
-        $this->confirmDeleteModal = false;
-        $this->photoToDelete = null;
         $this->loadPhotos();
 
         session()->flash('message', 'Фото успішно видалено!');

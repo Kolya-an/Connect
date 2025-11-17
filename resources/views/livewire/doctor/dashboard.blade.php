@@ -1,10 +1,13 @@
 <div class="container">
     <div class="_flex-display _justify-content-center _align-center select_cats">
-        <button wire:click="setStep(1)" class="btn {{ $step === 1 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Крок 1: Особиста інформація')}}</button>
-        <button wire:click="setStep(2)" class="btn {{ $step === 2 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Крок 2: Послуги')}}</button>
-        <button wire:click="setStep(3)" class="btn {{ $step === 3 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Крок 3: Розклад')}}</button>
-        <button wire:click="setStep(4)" class="btn {{ $step === 4 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Крок 4: Фото робіт - До/після')}}</button>
-        <button wire:click="setStep(5)" class="btn {{ $step === 5 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Крок 5: Акції та знижки')}}</button>
+        <button wire:click="setStep(1)" class="btn {{ $step === 1 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Особиста інформація')}}</button>
+        <button wire:click="setStep(2)" class="btn {{ $step === 2 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Процедури')}}</button>
+        <button wire:click="setStep(3)" class="btn {{ $step === 3 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Графік роботи')}}</button>
+        <button wire:click="setStep(4)" class="btn {{ $step === 4 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Мої записи')}}</button>
+        <button wire:click="setStep(5)" class="btn {{ $step === 5 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Пацієнти')}}</button>
+        <button wire:click="setStep(6)" class="btn {{ $step === 6 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Фото')}}</button>
+        <button wire:click="setStep(7)" class="btn {{ $step === 7 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Акції та знижки')}}</button>
+        <button wire:click="setStep(8)" class="btn {{ $step === 8 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Підтримка')}}</button>
     </div>
     @if($step === 1)
         <div class="spec_register_wrapper">
@@ -31,22 +34,39 @@
         </div>
     @elseif($step === 3)
         @livewire('doctor.appointments')
-
         <div class="_flex-display _align-center spec_register_buttons">
             <a wire:click="setStep(2)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
             <a wire:click="setStep(4)" class="rose_btn register_next">{{__('Далі')}}</a>
         </div>
     @elseif($step === 4)
-        @livewire('doctor.before-after')
+
         <div class="_flex-display _align-center spec_register_buttons">
             <a wire:click="setStep(3)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
             <a wire:click="setStep(5)" class="rose_btn register_next">{{__('Далі')}}</a>
         </div>
     @elseif($step === 5)
-        @livewire('doctor.promotions')
+
         <div class="_flex-display _align-center spec_register_buttons">
             <a wire:click="setStep(4)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
-            <a href="#" class="rose_btn register_next">{{__('Перейти в особістий кабінет')}}</a>
+            <a wire:click="setStep(6)" class="rose_btn register_next">{{__('Далі')}}</a>
+        </div>
+    @elseif($step === 6)
+        @livewire('doctor.before-after')
+        <div class="_flex-display _align-center spec_register_buttons">
+            <a wire:click="setStep(5)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
+            <a wire:click="setStep(7)" class="rose_btn register_next">{{__('Далі')}}</a>
+        </div>
+    @elseif($step === 7)
+        @livewire('doctor.promotions')
+        <div class="_flex-display _align-center spec_register_buttons">
+            <a wire:click="setStep(6)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
+            <a wire:click="setStep(8)" class="rose_btn register_next">{{__('Далі')}}</a>
+        </div>
+    @elseif($step === 8)
+
+        <div class="_flex-display _align-center spec_register_buttons">
+            <a wire:click="setStep(7)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
+            {{--<a href="#" class="rose_btn register_next">{{__('Перейти в особістий кабінет')}}</a>--}}
         </div>
     @endif
 </div>

@@ -87,7 +87,7 @@ class History extends Component
             ->with(['doctor.user'])
             ->orderBy('date')
             ->orderBy('hour')
-            ->paginate(2); // Пагинация здесь
+            ->paginate(5); // Пагинация здесь
 
         return view('livewire.patient.history', [
             'appointments' => $appointments

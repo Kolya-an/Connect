@@ -187,7 +187,7 @@
             @if(!$isFiltered)
                 <!-- Начальное отображение - сгруппированные фото без пагинации -->
                 @forelse($initialPhotosByProcedure as $procedure => $photos)
-                    <h4 wire:click="filterByProcedure('{{ $procedure }}')" style="cursor: pointer; color: blue; text-decoration: underline;">
+                    <h4 wire:click="filterByProcedure('{{ $procedure }}')" style="cursor: pointer">
                         {{ $procedure }}
                     </h4>
                     <div class="_flex-display _justify-content-between _align-stretch photo_list_block">
