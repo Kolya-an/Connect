@@ -39,13 +39,13 @@
             <a wire:click="setStep(4)" class="rose_btn register_next">{{__('Далі')}}</a>
         </div>
     @elseif($step === 4)
-
+        @livewire('doctor.my-appointments', ['doctorId' => $doctorId])
         <div class="_flex-display _align-center spec_register_buttons">
             <a wire:click="setStep(3)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
             <a wire:click="setStep(5)" class="rose_btn register_next">{{__('Далі')}}</a>
         </div>
     @elseif($step === 5)
-
+        @livewire('doctor.patients', ['doctorId' => $doctorId])
         <div class="_flex-display _align-center spec_register_buttons">
             <a wire:click="setStep(4)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
             <a wire:click="setStep(6)" class="rose_btn register_next">{{__('Далі')}}</a>

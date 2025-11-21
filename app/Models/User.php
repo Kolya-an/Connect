@@ -90,7 +90,11 @@ class User extends Authenticatable implements FilamentUser
     // (опционально)
     public function getRoleNameAttribute(): string
     {
-        return ucfirst($this->role ?? 'user');
+        return ucfirst($this->role ?? 'patient');
+    }
+    public function doctorPatient()
+    {
+        return $this->hasOne(DoctorPatients::class);
     }
 
 }

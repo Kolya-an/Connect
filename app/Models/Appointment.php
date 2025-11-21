@@ -13,6 +13,8 @@ class Appointment extends Model
         'hour',
         'status',
         'cause',
+        'information',
+        'service_id'
     ];
 
     protected $casts = [
@@ -29,5 +31,9 @@ class Appointment extends Model
     public function review()
     {
         return $this->hasOne(Review::class);
+    }
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
     }
 }

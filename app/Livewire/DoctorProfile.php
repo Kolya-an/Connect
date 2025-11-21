@@ -15,7 +15,7 @@ class DoctorProfile extends Component
     {
         $this->user = $id;
         $this->doctor = $this->user->doctor;
-
+        $this->user->load('doctor.promotions');
     }
     public function setStep($stepNumber)
     {

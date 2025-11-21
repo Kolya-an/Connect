@@ -30,6 +30,8 @@ class Doctor extends Model
         'sex',
         'education_images',
         'extra_images',
+        'plate',
+        'active',
         'rating'
     ];
 
@@ -73,5 +75,9 @@ class Doctor extends Model
     public function schedules()
     {
         return $this->hasMany(DoctorSchedule::class);
+    }
+    public function promotions()
+    {
+        return $this->hasMany(DoctorPromotion::class);
     }
 }

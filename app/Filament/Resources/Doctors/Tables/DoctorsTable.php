@@ -10,6 +10,7 @@ use Filament\Actions\ViewAction;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class DoctorsTable
@@ -61,6 +62,10 @@ class DoctorsTable
                 TextColumn::make('sex')
                     ->label('Стать')
                     ->sortable(),
+                ToggleColumn::make('active')
+                    ->label('Активна?'),
+                TextColumn::make('plate')
+                    ->label('Плашка'),
                 TextColumn::make('created_at')
                     ->label('Зареєстровано')
                     ->dateTime()

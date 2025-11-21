@@ -61,6 +61,7 @@ class DoctorForm
                             ->dehydrated(fn ($state) => filled($state))
                             ->hidden(fn ($operation) => $operation === 'edit')
                         ,
+
                     ]),
                 Section::make()
                     ->schema([
@@ -134,7 +135,11 @@ class DoctorForm
                                 if ($record && $record->exists) {
                                     $record->services()->sync($state);
                                 }
-                            })
+                            }),
+                        Toggle::make('active')
+                            ->label('Активна?'),
+                        TextInput::make('plate')
+                            ->label('Плашка'),
                     ]),
                 Section::make('Фото до/після')
                     ->schema([
@@ -178,6 +183,7 @@ class DoctorForm
                                 }
 
                                 return '🆕 Новий елемент';
+
                             })
                             ->schema([
                                 Grid::make(1) // обёртка для карточки

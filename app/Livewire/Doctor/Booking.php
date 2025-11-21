@@ -4,6 +4,8 @@ namespace App\Livewire\Doctor;
 
 use App\Models\Appointment;
 use App\Models\Doctor;
+use App\Models\DoctorService;
+use App\Models\Service;
 use App\Models\User;
 use App\Models\DoctorSchedule;
 use Carbon\Carbon;
@@ -22,13 +24,19 @@ class Booking extends Component
     public $workingHours = [];
     public $formattedDate;
     public $showLoginModal = false;
+
+    public $search = '';
+    public $selectedServiceId;
+    public $showSuggestions = false;
+
+    protected $listeners = ['serviceSelected'];
     public function mount($id)
     {
         //dd(session());
 
 
         $this->doctorId = $id;
-        $this->doctor = Doctor::with('user')->findOrFail($id);
+        $this->doctor = Doctor::with(['user', 'services'])->findOrFail($id);
         $this->user = auth()->user(); // если пользователь залогинен
         $this->workingHours = $this->generateWorkingHours();
 
@@ -82,7 +90,7 @@ class Booking extends Component
     public function getDatesForDisplay()
     {
         $dates = [];
-        for ($i = 0; $i < 14; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             $date = now()->addDays($i);
             $dates[] = [
                 'date' => $date->format('Y-m-d'),
@@ -151,11 +159,15 @@ class Booking extends Component
     // Запись на прием
     public function bookAppointment()
     {
-       // dd($this->doctorId);
+        if (!$this->selectedServiceId) {
+            $this->dispatch('alert', message: 'Оберіть послугу!');
+            return;
+        }
         // создаем запись в appointments
         Appointment::create([
             'user_id' => Auth::id(),
             'doctor_id' => $this->doctorId,
+            'service_id' => $this->selectedServiceId,
             'date' => $this->selectedDate,
             'hour' => $this->selectedHour,
             'status' => 'booking',
@@ -175,11 +187,58 @@ class Booking extends Component
         $this->loadSchedules();
     }
 
+    public function updatedSearch($value)
+    {
+        $this->showSuggestions = !empty($value);
+
+        // Опционально: автоматически выбирать первую услугу при поиске
+        if ($this->services->isNotEmpty()) {
+            $this->selectedServiceId = $this->services->first()->id;
+        }
+    }
+
+    public function selectService($serviceId)
+    {
+        $service = $this->doctor->services->find($serviceId);
+        if ($service) {
+            $this->selectedServiceId = $serviceId;
+            $this->search = $service->name;
+            $this->showSuggestions = false;
+        }
+    }
+
+    public function resetSearch()
+    {
+        $this->showSuggestions = false;
+    }
+
+    public function serviceSelected($serviceId)
+    {
+        $this->selectService($serviceId);
+    }
+
+    public function getServicesProperty()
+    {
+        $services = $this->doctor->services;
+
+        if ($this->search) {
+            $services = $services->filter(function($service) {
+                return str_contains(
+                    mb_strtolower($service->name),
+                    mb_strtolower($this->search)
+                );
+            });
+        }
+
+        return $services;
+    }
+
     public function render()
     {
 
         return view('livewire.doctor.booking', [
             'dates' => $this->getDatesForDisplay(),
+            'services' => $this->services,
         ]);
     }
 }

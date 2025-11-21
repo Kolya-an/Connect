@@ -3,6 +3,7 @@
 namespace App\Livewire\Doctor;
 
 use App\Models\Doctor;
+use App\Models\DoctorPhoto;
 use App\Models\Education;
 use App\Models\Extra;
 use Livewire\Component;
@@ -15,9 +16,11 @@ class ViewEducation extends Component
     public $description;
     public $education_images =[];
     public $extra_images =[];
+    public $photoId;
 
     public function mount($id)
     {
+        $this->photoId = $id;
         $this->doctor = Doctor::findOrFail($id);
         $this->educations = Education::where('doctor_id', $id)->get();
         $this->extras = Extra::where('doctor_id', $id)->get();
@@ -29,6 +32,11 @@ class ViewEducation extends Component
 
     public function render()
     {
-        return view('livewire.doctor.view-education');
+        $photos = DoctorPhoto::where('doctor_id', $this->photoId)
+            ->orderByDesc('created_at')
+            ->paginate(2);
+        return view('livewire.doctor.view-education', [
+            'photos' => $photos,
+        ]);
     }
 }

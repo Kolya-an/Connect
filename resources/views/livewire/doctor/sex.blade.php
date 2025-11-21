@@ -8,8 +8,4 @@
         <input type="radio" wire:model="sex" wire:change="updateSex('male')" value="male">
         <span></span> {{__('Чоловік')}}
     </label>
-    <label class="custom-radio">
-        <input type="radio" wire:model="sex" wire:change="updateSex('nonbinary')" value="nonbinary">
-        <span></span> {{__('Небінарна особістість')}}
-    </label>
 </div>

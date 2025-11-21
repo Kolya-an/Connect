@@ -55,7 +55,7 @@
         </div>
     </div>
     @if($showModal)
-        <div wire:click="closeModal" id="window_appointment" class="_flex-display _justify-content-center _align-center screen">
+        <div id="window_appointment" class="_flex-display _justify-content-center _align-center screen">
             <div class="window login_appointment_window">
                 <div class="_flex-display _justify-content-between _align-center window_top">
                     <h4>{{__('Записатись на прийом')}}</h4>
@@ -78,9 +78,6 @@
                     </div>
                 </div>
                 <p class="p_rose">{{__('Ваш запис')}}:</p>
-                @php
-                    //dd($this->getTimeSlotsForDisplay($selectedDate));
-                @endphp
                 @if($doctor->types)
                     <p><b>{{__('Спеціаліст')}}:</b>
                         @foreach($doctor->types as $type)
@@ -91,7 +88,39 @@
                 <p><b>{{__('ПІБ')}}:</b> {{ $doctor->second_name ?? '' }} {{ $doctor->user->name ?? '-' }}</p>
                 <p><b>{{__('Дата')}}:</b> {{ $selectedDate }}</p>
                 <p><b>{{__('Час')}}:</b> {{ $selectedHour }}</p>
-                <p><b>{{__('Адреса')}}:</b> {{ $doctor->city ?? '' }},  {{ $doctor->address ?? '' }}</p>
+                <p><b>{{__('Адреса')}}:</b> {{ $doctor->city ?? '' }},  {{ $doctor->address ?? '' }}
+                <div class="position-relative">
+                    <input
+                        type="text"
+                        wire:model="search"
+                        wire:keydown.escape="resetSearch"
+                        list="servicesList"
+                        class="form-control"
+                        placeholder="Пошук послуги..."
+                        autocomplete="off"
+                    />
+
+                    <datalist id="servicesList">
+                        @foreach($services as $service)
+                            <option value="{{ $service->name }}">
+                        @endforeach
+                    </datalist>
+
+                    <!-- Опционально: выпадающий список -->
+                    @if($search && $services->isNotEmpty())
+                        <div class="autocomplete-suggestions">
+                            @foreach($services as $service)
+                                <div
+                                    class="autocomplete-suggestion"
+                                    wire:click="selectService({{ $service->id }})"
+                                >
+                                    {{ $service->name }}
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
                 <p>&nbsp;</p>
                 <a wire:click="bookAppointment" class="btn rose_btn">{{__('Записатись')}}</a>
             </div>

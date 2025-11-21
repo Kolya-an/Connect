@@ -63,11 +63,6 @@
                                 <option value="5">5 км</option>
                                 <option value="10">10 км</option>
                                 <option value="15">15 км</option>
-                                <option value="20">20 км</option>
-                                <option value="25">25 км</option>
-                                <option value="30">30 км</option>
-                                <option value="35">35 км</option>
-                                <option value="40">40 км</option>
                             </select>
                         </div>
                         <button type="submit" class="btn rose_btn">{{__('Знайти')}}</button>
@@ -127,7 +122,9 @@
                             </div>
                         @endif
                         <a href="/doctors/{{$doctor->user->id}}" class="btn rose_btn doc_more">{{__('Докладніше про лікаря')}}</a>
-                        <div class="doc-plate rose-plate">{{__('№1 у києві')}}</div>
+                        @if($doctor->plate)
+                            <div class="doc-plate rose-plate">{{$doctor->plate}}</div>
+                        @endif
                     </div>
                 @endif
                 <div class="doc_carousel">
@@ -175,7 +172,9 @@
                                     </div>
                                 @endif
                                 <a href="/doctors/{{$doctor_item->user->id}}" class="btn rose_btn doc_more">{{__('Докладніше про лікаря')}}</a>
-                                <div class="doc-plate">{{__('TOП Лікар')}}</div>
+                                @if($doctor_item->plate)
+                                    <div class="doc-plate">{{$doctor_item->plate}}</div>
+                                @endif
                             </div>
                          {{--Кінець циклу--}}
                             @endforeach

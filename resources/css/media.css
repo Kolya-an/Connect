@@ -31,6 +31,10 @@
     .search_content {
         min-height: 888px;
     }
+    .spec_review.my_appointment .spec_review_left {
+        display: grid;
+        grid-template-columns: auto 1fr;
+    }
 }
 @media screen and (max-width: 768px) {
     ._minwidth769, .header {
