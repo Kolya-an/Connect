@@ -21,7 +21,7 @@ class ViewTypes extends Component
         $services = $this->doctor
             ->services()
             ->orderBy('name') // можно по любому полю
-            ->paginate(1); // 👈 количество на страницу
+            ->paginate(20); // 👈 количество на страницу
 
         return view('livewire.doctor.view-types', [
             'services' => $services,

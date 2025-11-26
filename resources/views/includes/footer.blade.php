@@ -30,7 +30,7 @@
             <livewire:footer-service />
             <div class="footer_menu">
                 <ul>
-                    <li><a href="/search.php">{{__('Мапа косметологів')}}</a></li>
+                    <li><a href="{{route('map')}}">{{__('Мапа косметологів')}}</a></li>
                     <li><a href="{{route('about')}}">{{__('Про сервіс')}}</a></li>
                     <li><a href="{{route('photobank')}}">{{__('Фотобанк')}}</a></li>
                     <li><a href="{{route('news')}}">{{__('Новини')}}</a></li>
@@ -79,6 +79,10 @@
 </footer>
 
 <div id="btn_top"><img src="{{asset('image/top.png')}}"/></div>
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+@livewireScripts
 @stack('scripts')
 </body>
 </html>

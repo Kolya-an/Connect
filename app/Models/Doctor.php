@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Service;
+use App\Services\GeocodingService;
 
 class Doctor extends Model
 {
@@ -32,7 +34,9 @@ class Doctor extends Model
         'extra_images',
         'plate',
         'active',
-        'rating'
+        'rating',
+        'latitude',
+        'longitude'
     ];
 
     protected function casts(): array
@@ -42,6 +46,20 @@ class Doctor extends Model
             'education_images' => 'array',
             'extra_images' => 'array',
         ];
+    }
+    protected static function booted()
+    {
+        static::saving(function (Doctor $doctor) {
+            if ($doctor->isDirty('city') || $doctor->isDirty('address')) {
+                $full = trim($doctor->address . ', ' . $doctor->city);
+                $coords = GeocodingService::geocode($full);
+
+                if ($coords) {
+                    $doctor->latitude = $coords['lat'];
+                    $doctor->longitude = $coords['lng'];
+                }
+            }
+        });
     }
 
     public function user()
@@ -80,4 +98,7 @@ class Doctor extends Model
     {
         return $this->hasMany(DoctorPromotion::class);
     }
+
+
+
 }

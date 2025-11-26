@@ -8,6 +8,7 @@
     <!-- Scripts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
     @vite(['resources/css/style.css', 'resources/css/media.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
             <!--[if lt IE 9]>
@@ -25,7 +26,7 @@
             </div>
             <div class="header_menu">
                 <ul class="_width100 _flex-display _justify-content-between _align-center">
-                    <li><a href="/search.php">{{__('Мапа косметологів')}}</a></li>
+                    <li><a href="{{route('map')}}">{{__('Мапа косметологів')}}</a></li>
                     <li class="submenu"><a class="submenu_a" href="#">{{__('Обрати процедуру')}} <span><svg width="15" height="19"
                                                                                                   viewBox="0 0 15 19"
                                                                                                   fill="none"
@@ -111,7 +112,7 @@
     </div>
     <div class="header_menu">
         <ul class="_width100 _flex-display _justify-content-between _align-center">
-            <li><a href="/search.php">{{__('Мапа косметологів')}}</a></li>
+            <li><a href="{{route('map')}}">{{__('Мапа косметологів')}}</a></li>
             <li class="submenu"><a class="submenu_a" href="#">{{__('Обрати процедуру')}} <span><svg width="15" height="19"
                                                                                           viewBox="0 0 15 19"
                                                                                           fill="none"

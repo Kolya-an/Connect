@@ -158,7 +158,7 @@
 
                         @error('medical') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
 
-                        <!-- Service рейтинг -->
+                        <!-- Services рейтинг -->
                         <div class="_flex-display _justify-content-between _align-center">
                            <div><p class="client_address" style="margin:0"> {{__('Оцінка сервісу')}}:</p></div>
                             <div class="_flex-display _justify-content-end _align-center" style="gap:20px">

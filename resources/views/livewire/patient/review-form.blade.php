@@ -33,7 +33,7 @@
 
             @error('medical') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
 
-            <!-- Service рейтинг -->
+            <!-- Services рейтинг -->
             <div class="mt-4">
                 <div class="font-semibold mb-1">Оцінка сервісу:</div>
                 <div class="flex space-x-1">

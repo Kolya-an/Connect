@@ -100,15 +100,27 @@
                             @endforeach
                         </ul>
                     </div>
-                @elseif($search && strlen($search) >= 2 && !$isLoading)
+                {{--@elseif($search && strlen($search) >= 2 && !$isLoading)
                     <div class="text-center py-6 text-gray-500">
                         <div class="mb-2">Вулиць за запитом "{{ $search }}" не знайдено</div>
-                        <button wire:click="saveCustomAddress"
+                        <button wire:click="saveAddress"
                                 class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition-colors">
-
                             Використати цю назву
                         </button>
                     </div>
+                @elseif(!$search)
+                    <div class="text-center py-8 text-gray-400">
+                        ✏️ Введіть назву вулиці для пошуку
+                    </div>--}}
+                @endif
+                @if($search && strlen($search) >= 2 && !$isLoading)
+                <div class="text-center py-6 text-gray-500">
+                    <div class="mb-2">Вулиць за запитом "{{ $search }}" не знайдено</div>
+                    <button wire:click="saveAddress"
+                            class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition-colors">
+                        Використати цю назву
+                    </button>
+                </div>
                 @elseif(!$search)
                     <div class="text-center py-8 text-gray-400">
                         ✏️ Введіть назву вулиці для пошуку

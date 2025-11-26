@@ -91,6 +91,8 @@ class DoctorForm
                             ->label('Район/Метро'),
                         TextInput::make('address')
                             ->label('Адреса'),
+                        /*TextInput::make('latitude')->readOnly(),
+                        TextInput::make('longitude')->readOnly(),*/
                         TextInput::make('experience')
                             ->label('Досвід')
                             ->numeric(),
@@ -127,6 +129,7 @@ class DoctorForm
                         Select::make('services_sync')
                             ->label('Послуги')
                             ->multiple()
+                            ->relationship('services', 'name')
                             ->options(Service::pluck('name', 'id'))
                             ->preload()
                             ->searchable()

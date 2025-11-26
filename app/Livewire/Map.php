@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use App\Models\Doctor;
 
-class TestPage extends Component
+class Map extends Component
 {
     public $radius = 5;
     public $city;
@@ -146,10 +146,10 @@ class TestPage extends Component
     public function emitDoctors()
     {
         if (!$this->userLat || !$this->userLng) {
-        //dd($this->userLat);
+            //dd($this->userLat);
             // Если координат нет, отправляем пустой массив и возвращаемся
             $this->dispatch('updateMapMarkers', doctors: []);
-             //dd('Dispatched empty markers because coordinates are missing.');// Для отладки:
+            //dd('Dispatched empty markers because coordinates are missing.');// Для отладки:
             return;
         }
         //dd($this->userLat);
@@ -174,7 +174,7 @@ class TestPage extends Component
             ->get();
 
         $this->doctorsList = $doctors;
-     //   $this->dispatch('markersReady');
+        //   $this->dispatch('markersReady');
         //$this->dispatch('updateMapMarkers');
         //dd($doctors->toArray());
         $this->dispatch('updateMapMarkers', doctors: $this->doctorsList);
@@ -188,10 +188,10 @@ class TestPage extends Component
         }
         return [];
     }
-    public function render() {
-        return view('livewire.test-page',
+    public function render()
+    {
+        return view('livewire.map',
             [ 'doctors' => $this->doctorsList ])
-            ->layout('livewire.pages.map');
+        ->layout('livewire.pages.map');
     }
 }
-

@@ -4,10 +4,12 @@ use App\Http\Controllers\Auth\SocialiteController;
 //use App\Http\Controllers\DoctorController;
 use App\Livewire\DoctorProfile;
 use App\Livewire\Homepage;
+use App\Livewire\Map;
 use App\Livewire\News\Index;
 use App\Livewire\News\Show;
 use App\Livewire\Photobank;
 use App\Livewire\RegisterPage;
+use App\Livewire\TestPage;
 use App\Livewire\UserView;
 use App\Livewire\AboutPage;
 use App\Models\User;
@@ -59,5 +61,9 @@ Route::get('/news/', Index::class)->name('news');
 
 Route::get('/about', AboutPage::class)->name('about');
 Route::get('/photobank', Photobank::class)->name('photobank');
+Route::get('/map', Map::class)->name('map');
+Route::get('/test', TestPage::class)->name('test');
+
+
 
 require __DIR__.'/auth.php';

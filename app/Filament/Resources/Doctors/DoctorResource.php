@@ -16,6 +16,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
+use App\Services\GeocodingService;
 
 class DoctorResource extends Resource
 {
@@ -59,5 +60,25 @@ class DoctorResource extends Resource
         return static::getModel()::count();
     }
 
+    public static function beforeSave($record, array $data): void
+    {
+        if (!empty($data['city']) && !empty($data['address'])) {
+
+            $full = $data['address'] . ', ' . $data['city'];
+
+            $coords = GeocodingService::geocode($full);
+
+            // якщо координати знайдені — оновлюємо
+            if ($coords) {
+                $record->latitude = $coords['lat'];
+                $record->longitude = $coords['lng'];
+            }
+        }
+    }
+
+    public static function beforeCreate($record, array $data): void
+    {
+        self::beforeSave($record, $data);
+    }
 
 }

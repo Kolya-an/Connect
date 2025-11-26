@@ -900,6 +900,7 @@ p.platform-action-title {
     width: 50%;
     border-radius: 30px 0 0 30px;
     overflow: hidden;
+    z-index: 9;
 }
 .search_form {
     margin-top: 21px;
@@ -1258,6 +1259,8 @@ input[type="checkbox"]:checked + .checkmark::after {
 .doctor_right_price, .doctor_right_action {
     background: #fff url("../images/doctor_right_prices_actions.png") repeat-x 0 80%;
     margin-bottom: 10px;
+    flex-wrap: nowrap;
+    gap: 10px;
 }
 .doctor_right_action {
     background: rgba(210, 239, 140, 1) url("../images/doctor_right_prices_actions.png") repeat-x 0 80%;
@@ -2739,25 +2742,16 @@ p.client_address span {
     overflow-y: auto;
     z-index: 50;
     display: inline;
-    height: 100%;
-}
-
-.autocomplete-suggestion {
-    padding: 0.5rem 1rem;
+    padding: 10px 15px 0;
+    /*height: 100%;*/
     cursor: pointer;
-    border-bottom: 1px solid #f3f4f6;
-    position: absolute;
 }
-
-.autocomplete-suggestion:hover,
-.autocomplete-suggestion.highlighted {
-    background-color: #f9fafb;
+.autocomplete-suggestions ul {
+    list-style: none;
 }
-
-.autocomplete-suggestion:last-child {
-    border-bottom: none;
+.autocomplete-suggestions ul li {
+    font-size: 16px;
 }
-
 .doctor-patient-extra {
     margin-top: 20px;
 }
