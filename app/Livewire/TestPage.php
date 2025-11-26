@@ -46,12 +46,6 @@ class TestPage extends Component
                 $this->emitDoctors(); // Запускаем поиск по городу сразу
             }
         }
-//dd($this->userLng);
-        /*$this->dispatch('componentMounted', [
-            'hasCity' => !empty($this->city) && $this->city !== '',
-            'city' => $this->city
-        ]);*/
-
     }
     public function getCityCoordinates($cityName)
     {
@@ -72,7 +66,8 @@ class TestPage extends Component
                 $this->userLng = $coordinates['lng'];
                 $this->dispatch('updateMapCenter', [
                     'lat' => $this->userLat,
-                    'lng' => $this->userLng
+                    'lng' => $this->userLng,
+                    'radius' => $this->radius
                 ]);
 
             } else {
@@ -99,7 +94,8 @@ class TestPage extends Component
 
                 $this->dispatch('updateMapCenter', [
                     'lat' => $this->userLat,
-                    'lng' => $this->userLng
+                    'lng' => $this->userLng,
+                    'radius' => $this->radius
                 ]);
 
                 $this->emitDoctors();
@@ -174,9 +170,6 @@ class TestPage extends Component
             ->get();
 
         $this->doctorsList = $doctors;
-     //   $this->dispatch('markersReady');
-        //$this->dispatch('updateMapMarkers');
-        //dd($doctors->toArray());
         $this->dispatch('updateMapMarkers', doctors: $this->doctorsList);
     }
     public function getDoctorMarkersData(): array

@@ -14,11 +14,27 @@
                     const defaultLat = 50.4501;
                     const defaultLng = 30.5234;
 
+                    /**
+                     * Преобразует радиус поиска (в км) в соответствующий уровень масштабирования карты.
+                     * @param {number} radiusKm - Радиус в километрах.
+                     * @returns {number} Уровень масштабирования (zoom level).
+                     */
+                    function getZoomForRadius(radiusKm) {
+                        if (radiusKm <= 1) return 15;
+                        if (radiusKm <= 3) return 14;
+                        if (radiusKm <= 5) return 13; // Стандартный для 5 км
+                        if (radiusKm <= 10) return 12;
+                        if (radiusKm <= 25) return 11;
+                        if (radiusKm <= 50) return 10;
+                        if (radiusKm <= 100) return 9;
+                        return 7; // Для радиусов > 100 км
+                    }
+
                     // --- 1. ФУНКЦИИ КАРТЫ (Оставить как есть) ---
 
-                    function initMap(lat, lng) {
+                    function initMap(lat, lng, zoom = 13) {
                         if (mapInitialized) return;
-                        map = L.map('map').setView([lat, lng], 13);
+                        map = L.map('map').setView([lat, lng], zoom);
                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
                         markersLayer.addTo(map);
                         mapInitialized = true;
@@ -38,7 +54,7 @@
                             return;
                         }
                         markersLayer.clearLayers();
-                       
+
                         doctors.forEach(doc => {
                             const marker = L.marker([doc.latitude, doc.longitude]);
                             const info = `<b>${doc.user.name} ${doc.second_name}</b><br>Телефон: ${doc.phone}`;
@@ -51,10 +67,12 @@
                     // @this.get('userLat') возвращает текущее значение свойства $userLat из PHP.
                     const initialLat = @js($this->userLat) || defaultLat;
                     const initialLng = @js($this->userLng) || defaultLng;
+                    const initialRadius = @js($this->radius) || 5;
                     const city = @js($this->city);
+                    const initialZoom = getZoomForRadius(initialRadius);
 
                     // 2.1. Инициализация карты
-                    initMap(initialLat, initialLng);
+                    initMap(initialLat, initialLng, initialZoom);
 
                     // 2.2. Если координаты установлены городом, пропускаем геолокацию.
                     if (initialLat !== defaultLat) {
@@ -74,7 +92,7 @@
 
                         // Если город не выбран (т.е. мы начали с defaultLat/Lng), центрируем на геолокации
                         if (!city) {
-                            updateMapCenter(lat, lng);
+                            updateMapCenter(lat, lng, getZoomForRadius(initialRadius));
                         }
 
                     }, error => {
@@ -85,7 +103,9 @@
                     // --- 3. СЛУШАТЕЛИ (Оставить как есть) ---
 
                     Livewire.on('updateMapCenter', (coordinates) => {
-                        updateMapCenter(coordinates.lat, coordinates.lng, 13);
+                        const radius = coordinates.radius || 5; // Берем радиус из события, по умолчанию 5
+                        const zoom = getZoomForRadius(radius); // Вычисляем zoom
+                        updateMapCenter(coordinates.lat, coordinates.lng, 13, zoom);
                     });
 
 
