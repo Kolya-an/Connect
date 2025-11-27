@@ -16,6 +16,7 @@ class Index extends Component
     public $category;
     public $sortField = 'views'; // по умолчанию популярность
     public $sortDirection = 'desc';
+    public $showSortDropdown = false;
     public function mount($categorySlug = null)
     {
         if ($categorySlug) {
@@ -35,6 +36,17 @@ class Index extends Component
             $this->sortField = $field;
             $this->sortDirection = $field === 'title' ? 'asc' : 'desc';
         }
+        $this->showSortDropdown = false;
+    }
+    public function toggleSortDropdown()
+    {
+        $this->showSortDropdown = !$this->showSortDropdown;
+    }
+
+    // НОВИЙ МЕТОД: Закриття (використовується для @click.away)
+    public function closeSortDropdown()
+    {
+        $this->showSortDropdown = false;
     }
     public function render()
     {

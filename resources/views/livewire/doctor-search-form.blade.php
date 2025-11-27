@@ -9,14 +9,13 @@
                     id="spec_field"
                     class="spec_field"
                     type="text"
-                    placeholder="Кислотний пілінг"
+                    placeholder="{{__('Кислотний пілінг')}}"
                     wire:model="query"
                     wire:keydown="performSearch"
+                    autocomplete="off"
                 />
-
-                <!-- Выпадающий список автоподбора -->
                 @if(count($services) > 0)
-                    <div class="autocomplete-suggestions">
+                    <div class="autocomplete-suggestions" style="top:100%">
                         <ul>
                             @foreach($services as $service)
                                 <li
@@ -30,9 +29,9 @@
                     </div>
                 @endif
             </div>
-
-            <!-- Остальные поля остаются без изменений -->
-            <div class="_flex-display field_section city_field_section">
+            <div wire:key="city-search-container"
+                wire:ignore.self
+                 class="_flex-display field_section city_field_section">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M14.5 11.0005C14.5 9.61924 13.3808 8.5 12.0005 8.5C10.6192 8.5 9.5 9.61924 9.5 11.0005C9.5 12.3808 10.6192 13.5 12.0005 13.5C13.3808 13.5 14.5 12.3808 14.5 11.0005Z" stroke="#25324B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M11.9995 21.5C10.801 21.5 4.5 16.3984 4.5 11.0633C4.5 6.88664 7.8571 3.5 11.9995 3.5C16.1419 3.5 19.5 6.88664 19.5 11.0633C19.5 16.3984 13.198 21.5 11.9995 21.5Z" stroke="#25324B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -42,15 +41,32 @@
                     class="city_field"
                     type="text"
                     placeholder="Київ"
-                    wire:model="city"
+                    wire:model.live.debounce.300ms="search"
                     autocomplete="off"
+                    wire:focus="showDropdown = true"
+                    wire:blur="hideDropdown"
                 />
+                @if($showDropdown && count($filteredCities) > 0)
+                    <div class="autocomplete-suggestions" style="top:100%">
+                        <ul>
+                            @foreach($filteredCities as $item)
+                                <li
+                                wire:mousedown.prevent="selectCity('{{ $item }}')"
+                                class="autocomplete-item"
+                                >
+                                {{ $item }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </div>
             <div class="_flex-display field_section radius_field_section">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
                     <path d="M12 4.5C14.2 4.5 16 6.3 16 8.5C16 10.6 13.9 14 12 16.4C10.1 13.9 8 10.6 8 8.5C8 6.3 9.8 4.5 12 4.5ZM12 2.5C8.7 2.5 6 5.2 6 8.5C6 13 12 19.5 12 19.5C12 19.5 18 12.9 18 8.5C18 5.2 15.3 2.5 12 2.5ZM12 6.5C10.9 6.5 10 7.4 10 8.5C10 9.6 10.9 10.5 12 10.5C13.1 10.5 14 9.6 14 8.5C14 7.4 13.1 6.5 12 6.5ZM20 19.5C20 21.7 16.4 23.5 12 23.5C7.6 23.5 4 21.7 4 19.5C4 18.2 5.2 17.1 7.1 16.3L7.7 17.2C6.7 17.7 6 18.3 6 19C6 20.4 8.7 21.5 12 21.5C15.3 21.5 18 20.4 18 19C18 18.3 17.3 17.7 16.2 17.2L16.8 16.3C18.8 17.1 20 18.2 20 19.5Z" fill="black"/>
                 </svg>
                 <select wire:model="radius" id="radius_field" class="radius_field" name="radius">
+                    <option value="">---</option>
                     <option value="5">до 5 км</option>
                     <option value="15">до 15 км</option>
                     <option value="30">до 30 км</option>

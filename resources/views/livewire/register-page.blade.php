@@ -24,8 +24,6 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" class="error-message" />
         </div>
         <div class="search_field search_field_input">
-            {{--<input wire:model="phone" type="tel" placeholder="{{__('Ваш номер телефону')}}">
-            @error('phone') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror--}}
             <x-text-input wire:model="phone" type="tel"
                           placeholder="{{__('Ваш номер телефону')}}"
                           required />
@@ -34,29 +32,26 @@
         @if($type === 'doctor')
             <div class="search_field search_field_sex">
                 <select wire:model="sex" id="search_sex" class="search_sex">
-                    <option value="">Ваша стать</option>
-                    <option value="male">Чоловік</option>
-                    <option value="female">Жінка</option>
-                    <option value="nonbinary">Небінарна особистість</option>
+                    <option value="">{{__('Ваша стать')}}</option>
+                    <option value="male">{{__('Чоловік')}}</option>
+                    <option value="female">{{__('Жінка')}}</option>
                 </select>
             </div>
-            <div class="search_field search_field_city">
+            {{--<div class="search_field search_field_city">
                 <select wire:model="city" id="search_city" class="search_city">
                     <option value="Київ">Київ</option>
                 </select>
-            </div>
-            <div class="search_field search_field_experience">
+            </div>--}}
+            {{--<div class="search_field search_field_experience">
                 <select wire:model="experience" id="search_experience" class="search_experience">
                     <option value="">Досвід</option>
                     <option value="1">1</option>
                     <option value="5">5</option>
                     <option value="10">10</option>
                 </select>
-            </div>
+            </div>--}}
         @endif
         <div class="search_field search_field_input">
-            {{--<input type="password" wire:model="password" placeholder="{{__('Ваш пароль')}}">
-            @error('password') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror--}}
             <x-text-input wire:model="password"
                           type="password"
                           name="password"
@@ -77,7 +72,7 @@
             <label class="_flex-display _align-center more_filter_checkbox">
                 <input wire:model="accept_terms" id="check_discount" type="checkbox" name="discount" class="form-check-input @error('accept_terms') is-invalid @enderror">
                 <span class="checkmark"></span>
-                <span class="check_title">Я приймаю <a href="#">правила сайту</a></span>
+                <span class="check_title">{{__('Я приймаю')}} <a href="#">{{__('правила сайту')}}</a></span>
                @error('accept_terms')
                     <div class="text-danger small mt-1">{{ $message }}</div>
                 @enderror

@@ -7,14 +7,18 @@
                         @if($category)
                             {{ $category->title }}
                         @else
-                            Дізнайся про важливе. <span>Новини в світі краси, поради</span>
+                            {{__('Дізнайся про важливе')}}. <span>{{__('Новини в світі краси, поради')}}</span>
                         @endif
                     </h3>
                     <svg viewBox="0 0 587.021 7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="587.020508" height="7.000000" fill="none" customFrame="#000000">
                         <path id="Vector 1" d="M0.0102539 5.5L587.01 1.5" stroke="rgb(243,150,162)" stroke-width="3" />
                     </svg>
                 </div>
-                <div class="home_search_bg _minwidth769"><img src="" alt=""></div>
+                <div class="home_search_bg _minwidth769"><img src="{{ asset('image/news_banner_images.png') }}" alt="@if($category)
+                            {{ $category->title }}
+                        @else
+                            Новини
+                        @endif"></div>
             </div>
         </div>
     </div>
@@ -42,13 +46,20 @@
                         {{__('статтей')}}
                     @endif
                 </div>
-                <div class="sort_news">{{__('Впорядкувати за')}}: <span class="sort_news_title">{{ $sortField === 'views' ? 'популярністю' : 'назвою' }}</span> <svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10.000000" height="6.000000" fill="none" customFrame="#000000">
+                <div
+                    wire:ignore.self
+                    @click.away="closeSortDropdown()"
+                    class="sort_news">
+                    <div class="sort_news_header" wire:click="toggleSortDropdown()">{{__('Впорядкувати за')}}: <span class="sort_news_title">{{ $sortField === 'views' ? 'популярністю' : 'назвою' }}</span> <svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10.000000" height="6.000000" fill="none" customFrame="#000000">
                         <path id="Vector" d="M5.54025 5.77093C5.3994 5.9176 5.20839 6 5.00923 6C4.81007 6 4.61906 5.9176 4.47821 5.77093L0.229299 1.34511C0.157562 1.27294 0.100342 1.18661 0.0609786 1.09116C0.0216147 0.995705 0.000894977 0.893043 2.83584e-05 0.789161C-0.00083826 0.68528 0.0181658 0.582259 0.0559312 0.486109C0.0936966 0.38996 0.149467 0.302607 0.219989 0.229149C0.290511 0.15569 0.374371 0.0975976 0.466677 0.0582597C0.558983 0.0189218 0.657887 -0.000873163 0.757616 2.95397e-05C0.857345 0.000932243 0.955903 0.0225147 1.04754 0.0635176C1.13917 0.10452 1.22205 0.164122 1.29134 0.238846L5.00923 4.11154L8.72712 0.238846C8.86878 0.0963322 9.05851 0.0174745 9.25544 0.019257C9.45237 0.0210396 9.64075 0.10332 9.78001 0.248376C9.91927 0.393433 9.99826 0.589659 9.99997 0.794792C10.0017 0.999925 9.92598 1.19755 9.78916 1.34511L5.54025 5.77093Z" fill="rgb(243,150,162)" fill-rule="evenodd" />
                     </svg>
-                    <div class="sort_list _display_none">
-                        <div class="sort_list_li" wire:click="setSort('views')">{{__('популярністю')}}</div>
-                        <div class="sort_list_li" wire:click="setSort('title')">{{__('назвою')}}</div>
                     </div>
+                    @if($showSortDropdown)
+                        <div class="sort_list">
+                            <div class="sort_list_li" wire:click="setSort('views')">{{__('популярністю')}}</div>
+                            <div class="sort_list_li" wire:click="setSort('title')">{{__('назвою')}}</div>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="_flex-display _justify-content-between _align-stretch news_list_block">

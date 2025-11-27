@@ -12,8 +12,6 @@ class Photobank extends Component
     public $initialPhotosByProcedure = [];
     public $selectedProcedure = null;
     public $isFiltered = false;
-    protected $paginationTheme = 'tailwind';
-
     public function mount()
     {
         $this->loadInitialPhotos();
@@ -22,13 +20,15 @@ class Photobank extends Component
     public function loadInitialPhotos()
     {
         // Загружаем только фото с list == true для начального отображения
-        $photos = DoctorPhoto::with(['doctor.user'])
+        $photos = DoctorPhoto::with(['doctor' => function ($query) {
+            $query->withCount('reviews');
+        }, 'doctor.user'])
             ->where('list', true)
             ->get();
 
         // Группируем по процедуре
         $this->initialPhotosByProcedure = $photos->groupBy(function($item) {
-            return $item->procedure ?? 'Без процедуры';
+            return $item->procedure ?? 'Без процедури';
         })->toArray();
     }
 

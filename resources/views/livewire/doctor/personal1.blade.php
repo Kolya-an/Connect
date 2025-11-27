@@ -1,5 +1,7 @@
 <div>
     @livewire('doctor.sex')
+    @livewire('doctor.at-home')
+    @livewire('doctor.gift')
     <div class="spec_register1_left_block">
         <h5>{{__('Місто, де ви працюєте')}}</h5>
         <div class="_flex-display _align-center spec_register1_cities">
@@ -61,7 +63,7 @@
                         id="add_city"
                         class="add_city"
                         type="text"
-                        placeholder="{{__('Введіть місто..')}}"
+                        placeholder="{{__('Введіть місто...')}}"
                         wire:model.live="search"
                     />
                 </div>

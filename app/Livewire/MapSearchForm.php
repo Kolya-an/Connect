@@ -4,16 +4,31 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Service;
+use App\Models\Doctor;
 
-class DoctorSearchForm extends Component
+class MapSearchForm extends Component
 {
     public $query = '';
     public $services = [];
+    public $doctors = [];
     public $serviceId = null;
+    public $selectedDoctorId = null;
     public $radius = 5;
     public $city = '';
     public $search = '';
+    public $rating = '';
+    public $sex = '';
+    public $area = '';
+    public $areaSearch = '';
+    public $areas = [];
+    public $priceFrom;
+    public $priceTo;
+    public $discount = false;
+    public $at_home = false;
+    public $gift = false;
+
     public $showDropdown = false;
+    public $showAreaDropdown = false;
     public $allCities = [
         // Областные центры и крупные города
         'Київ', 'Харків', 'Одеса', 'Дніпро', 'Донецьк', 'Запоріжжя', 'Львів', 'Кривий Ріг',
@@ -75,15 +90,30 @@ class DoctorSearchForm extends Component
         'Яворів', 'Ялта', 'Ямпіль', 'Яремче', 'Ясинувата'
     ];
     public $service_form; // популярные сервисы
-
+    public $doctorQuery = ''; // Новое поле для ввода имени врача
+    public $doctorResults = []; // Результаты поиска врачей
+    public $showDoctorDropdown = false;
+    public $more_filter = false;
+    public $filteredAreas = [];
     public function mount()
     {
         $this->service_form = Service::take(5)->get(); // популярные сервисы
+        $this->priceFrom = request()->get('priceFrom') ?? '';
+        $this->priceTo   = request()->get('priceTo') ?? '';
+        $this->city   = request()->get('city') ?? '';
+        $this->area   = request()->get('area') ?? '';
+        $this->areaSearch = $this->area;
+        $this->discount = request()->get('discount') ?? false;
+        $this->at_home = request()->get('at_home') ?? false;
+        $this->gift = request()->get('gift') ?? false;
     }
     public function updated($property)
     {
         if ($property === 'query') {
             $this->performSearch();
+        }
+        if ($property === 'areaSearch') {
+            $this->updateAreaSuggestions();
         }
     }
 
@@ -120,15 +150,6 @@ class DoctorSearchForm extends Component
         $this->selectService($id, $name);
     }
 
-    public function searchDoctors()
-    {
-        // Перенаправление на страницу Map с параметрами
-        return redirect()->route('map', [
-            'service_id' => $this->serviceId,
-            'radius'  => $this->radius,
-            'city'    => $this->city
-        ]);
-    }
     public function updatedSearch($value)
     {
         if (trim($value) !== '' && $value !== $this->city) {
@@ -155,6 +176,128 @@ class DoctorSearchForm extends Component
         // $this->query = $cityName; // Убрано, если $query не используется
         $this->dispatch('citySelected'); // Отправляем событие, если нужно обновить карту и врачей
     }
+    public function updatedDoctorQuery($value)
+    {
+        // Очищаем выбранного доктора, если пользователь начал печатать заново
+        $this->selectedDoctorId = null;
+
+        if (strlen($value) > 1) {
+            $this->doctorResults = Doctor::where('second_name', 'like', '%' . $value . '%')
+                ->with('user')
+                ->limit(10)
+                ->get();
+
+            $this->showDoctorDropdown = true;
+        } else {
+            $this->doctorResults = [];
+            $this->showDoctorDropdown = false;
+        }
+    }
+
+    public function selectDoctor($doctorId, $doctorFullName)
+    {
+        $this->selectedDoctorId = $doctorId;
+        $this->doctorQuery = $doctorFullName; // Отображаем полное имя в поле ввода
+        $this->doctorResults = [];
+        $this->showDoctorDropdown = false;
+
+        // Опционально: можно отправить событие для фокусировки карты на этом докторе
+        // $this->dispatch('doctorSelected', doctorId: $doctorId);
+    }
+    public function searchDoctors()
+    {
+        // ПЕРЕДАЕМ ID ВРАЧА В ПАРАМЕТРЫ ПЕРЕНАПРАВЛЕНИЯ
+        return redirect()->route('map', [
+            'service_id' => $this->serviceId,
+            'radius'     => $this->radius,
+            'rating'     => $this->rating,
+            'sex'        => $this->sex,
+            'city'       => $this->city,
+            'priceFrom'  => $this->priceFrom,
+            'priceTo'    => $this->priceTo,
+            'area'       => $this->area,
+            'doctor_id'  => $this->selectedDoctorId,
+            'discount'   => $this->discount ? 1 : 0,
+            'gift'       => $this->gift ? 1 : 0,
+            'at_home'    => $this->at_home ? 1 : 0
+        ]);
+    }
+
+    public function hideDoctorDropdown()
+    {
+        $this->showDoctorDropdown = false;
+    }
+    public function openMoreFilter()
+    {
+        $this->more_filter = true;
+    }
+    public function closeMoreFilter()
+    {
+        $this->more_filter = false;
+    }
+    public function updateAreaSuggestions()
+    {
+        $searchTerm = trim($this->areaSearch);
+
+        if (strlen($searchTerm) < 2) {
+            $this->filteredAreas = [];
+            $this->showAreaDropdown = false;
+            return;
+        }
+
+        // Ищем уникальные значения area из таблицы doctors
+        $this->filteredAreas = Doctor::whereNotNull('area')
+            ->where('area', '!=', '')
+            ->where('area', 'like', '%' . $searchTerm . '%')
+            ->distinct()
+            ->pluck('area')
+            ->take(10)
+            ->toArray();
+
+        $this->showAreaDropdown = !empty($this->filteredAreas);
+    }
+    public function updatedAreaSearch($value)
+    {
+        $this->updateAreaSuggestions();
+
+        if (trim($value) === '') {
+            $this->area = '';
+        }
+    }
+
+    public function hideAreaDropdown()
+    {
+        $this->showAreaDropdown = false;
+    }
+
+    public function selectArea($areaName)
+    {
+        $this->area = $areaName;
+        $this->areaSearch = $areaName;
+        $this->showAreaDropdown = false;
+        $this->dispatch('areaSelected');
+    }
+    public function resetFilters()
+    {
+        // 1. Скидання властивостей до їхніх початкових/нульових значень
+        $this->areaSearch = '';
+        $this->sex = '';
+        $this->priceFrom = null;
+        $this->priceTo = null;
+        $this->discount = false;
+        $this->gift = false;
+        $this->at_home = false;
+
+        // 2. Додатково скидаємо пов'язані властивості
+        $this->showAreaDropdown = false;
+
+        // 3. Якщо після очищення потрібно негайно оновити список лікарів,
+        // викликайте метод, який запускає пошук (якщо він не викликається автоматично)
+        //$this->emitDoctors();
+
+        // 4. (ОПЦІЙНО) Закрити блок фільтрів після очищення
+        // $this->closeMoreFilter();
+    }
     public function render()
     {
         $filteredCities = collect($this->allCities)
@@ -164,7 +307,7 @@ class DoctorSearchForm extends Component
             })
             ->values()
             ->take(10);
-        return view('livewire.doctor-search-form', [
+        return view('livewire.map-search-form', [
             'filteredCities' => $filteredCities,
         ]);
     }

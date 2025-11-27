@@ -83,7 +83,9 @@ class Homepage extends Component
         }
         //$this->doctor = Doctor::with('services')->find($this->settings->doctor_id);
         try {
-            $this->doctor = Doctor::with('services')->find($this->settings->doctor_id);
+            $this->doctor = Doctor::with('services')
+                ->withCount('reviews')
+                ->find($this->settings->doctor_id);
         } catch (\Throwable $e) {
             //dd($e->getMessage(), $e->getTraceAsString());
         }
@@ -96,7 +98,9 @@ class Homepage extends Component
 
 // Загружаем докторов с услугами, если есть хотя бы один ID
         $this->doctors = $this->doctors_ids
-            ? Doctor::with('services')->whereIn('id', $this->doctors_ids)->get()
+            ? Doctor::with('services')
+                ->withCount('reviews')
+                ->whereIn('id', $this->doctors_ids)->get()
             : collect();
 
         $this->promotion = $this->settings->promotion;

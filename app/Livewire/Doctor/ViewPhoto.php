@@ -22,8 +22,7 @@ class ViewPhoto extends Component
     {
         $photos = DoctorPhoto::where('doctor_id', $this->photoId)
             ->orderByDesc('created_at')
-            ->take(4)
-            ->get();
+            ->paginate(5);
 
         return view('livewire.doctor.view-photo', [
             'photos' => $photos,

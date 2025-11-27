@@ -7,13 +7,12 @@
                 <p><b>{{__('Препарат')}}:</b> {{ $photo->product }}</p>
             </div>
         @empty
-            <p>Фото відсутні</p>
+            <p>{{__('Фото відсутні')}}</p>
         @endforelse
-
     </div>
     @if($photos->hasPages())
         <ul class="_flex-display _justify-content-center _align-center pagination">
-            {{-- Previous Page --}}
+             Previous Page
             @if($photos->onFirstPage())
 
             @else
@@ -24,7 +23,7 @@
                         </svg>
                     </a></li>
             @endif
-            {{-- Page Numbers --}}
+             Page Numbers
             @foreach ($photos->getUrlRange(1, $photos->lastPage()) as $page => $url)
                 @if($page === $photos->currentPage())
                     <li class="pagination_current"><a class="_flex-display _justify-content-center _align-center">{{ $page }}</a></li>
@@ -32,7 +31,7 @@
                     <li><a wire:click="gotoPage({{ $page }})" class="_flex-display _justify-content-center _align-center" href="#">{{ $page }}</a></li>
                 @endif
             @endforeach
-            {{-- Next Page --}}
+             Next Page
             @if ($photos->hasMorePages())
                 <li><a wire:click="nextPage" wire:loading.attr="disabled" class="_flex-display _justify-content-center _align-center" href="#"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16.000000" height="16.000000" fill="none">
                             <rect id="Icon / Pagination / Next" width="16.000000" height="16.000000" x="0.000000" y="0.000000" fill="rgb(255,255,255)" fill-opacity="0" />

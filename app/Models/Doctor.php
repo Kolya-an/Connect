@@ -35,6 +35,9 @@ class Doctor extends Model
         'plate',
         'active',
         'rating',
+        'at_home',
+        'gift',
+        'share',
         'latitude',
         'longitude'
     ];
@@ -99,6 +102,17 @@ class Doctor extends Model
         return $this->hasMany(DoctorPromotion::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasManyThrough(
+            Review::class,    // Финальная модель (Отзывы)
+            Appointment::class, // Промежуточная модель (Записи)
+            'doctor_id',                  // appointments.doctor_id (связывает appointments с Doctor)
+            'appointment_id',             // reviews.appointment_id (связывает reviews с Appointment)
+            'id',                         // doctor.id (локальный ключ)
+            'id'
+        );
+    }
 
 
 }

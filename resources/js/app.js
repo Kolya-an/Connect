@@ -283,7 +283,7 @@ $(document).ready(function() {
     $("#apply_search").on("click", function() {
         $("#more_filter_block").addClass('_display_none');
     });
-    $(".area_metro_title").on("click", function() {
+    /*$(".area_metro_title").on("click", function() {
         $(".area_metro_block").toggleClass('_display_none');
     });
     $("#area_tab").on("click", function() {
@@ -297,8 +297,8 @@ $(document).ready(function() {
         $("#area_block").addClass('_display_none');
         $(this).removeClass('white_rose_btn');
         $(this).addClass('rose_btn');
-    });
-    $(".area_metro_block ul li").on("click", function() {
+    });*/
+    /*$(".area_metro_block ul li").on("click", function() {
         var area = $(this).text();
         $("#area_metro_input").val(area);
         $(".area_metro_title").text(area);
@@ -313,15 +313,15 @@ $(document).ready(function() {
         $("#check_discount").prop("checked", false);
         $("#check_gift").prop("checked", false);
         $("#check_home").prop("checked", false);
-    });
-    $(".sort_news_title").on("click", function() {
+    });*/
+    /*$(".sort_news_title").on("click", function() {
         $(".sort_list").removeClass('_display_none');
     });
     $(".sort_list_li").on("click", function() {
         var sort = $(this).text();
         $(".sort_news_title").text(sort);
         $(".sort_list").addClass('_display_none');
-    });
+    });*/
     /*$(".appointments_free").on("click", function() {
         $("#login_appointment").removeClass('_display_none');
     });
