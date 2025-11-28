@@ -26,6 +26,7 @@ class Booking extends Component
     public $showLoginModal = false;
 
     public $search = '';
+
     public $selectedServiceId;
     public $showSuggestions = false;
 
@@ -74,6 +75,7 @@ class Booking extends Component
 
         // Также диспатчим при закрытии модалки
         $this->dispatch('reinit-swiper');
+        $this->search = '';
     }
 
 

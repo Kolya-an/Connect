@@ -89,7 +89,7 @@
                 <p><b>{{__('Дата')}}:</b> {{ $selectedDate }}</p>
                 <p><b>{{__('Час')}}:</b> {{ $selectedHour }}</p>
                 <p><b>{{__('Адреса')}}:</b> {{ $doctor->city ?? '' }},  {{ $doctor->address ?? '' }}
-                <div class="position-relative">
+                <div class="search_field search_field_input">
                     <input
                         type="text"
                         wire:model="search"

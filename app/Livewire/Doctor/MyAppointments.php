@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Doctor;
 
+use App\Models\Message;
 use App\Models\User;
 use Livewire\Component;
 use App\Models\Appointment;
@@ -162,7 +163,13 @@ class MyAppointments extends Component
             'cause' => $this->cancelReason
         ]);
 
-        session()->flash('success', 'Візит успішно скасовано');
+        Message::create([
+            'doctor_id'      => $appointment->doctor_id,
+            'user_id'        => $appointment->user_id,
+            'appointment_id' => $appointment->id,
+            'status'         => 'canceled',
+        ]);
+        //session()->flash('success', 'Візит успішно скасовано');
         $this->closeModal();
     }
 
@@ -182,6 +189,12 @@ class MyAppointments extends Component
 
         $appointment->update([
             'status' => 'confirmed',
+        ]);
+        Message::create([
+            'doctor_id'      => $appointment->doctor_id,
+            'user_id'        => $appointment->user_id,
+            'appointment_id' => $appointment->id,
+            'status'         => 'confirmed',
         ]);
     }
 

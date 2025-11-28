@@ -51,19 +51,17 @@
                 <button wire:click="setStep(2)" class="btn {{ $step === 2 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Історія візитів')}}</button>
                 <button wire:click="setStep(3)" class="btn {{ $step === 3 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Акції поблизу')}}</button>
                 <button wire:click="setStep(4)" class="btn {{ $step === 4 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Сповіщення')}}</button>
-                <button wire:click="setStep(5)" class="btn {{ $step === 5 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Підтримка')}}</button>
+                {{--<button wire:click="setStep(5)" class="btn {{ $step === 5 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Підтримка')}}</button>--}}
             </div>
             @if($step === 1)
                 @livewire('patient.reception', ['id' => $user->id])
             @elseif($step === 2)
                 @livewire('patient.history', ['id' => $user->id])
             @elseif($step === 3)
-
+                @livewire('patient.action', ['id' => $user->id])
             @elseif($step === 4)
-
-            @elseif($step === 5)
-
-            @elseif($step === 6)
+                @livewire('patient.messages', ['id' => $user->id])
+            {{--@elseif($step === 5)--}}
 
             @endif
         </div>

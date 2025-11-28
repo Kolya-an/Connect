@@ -51,10 +51,10 @@ class DoctorsTable
                 TextColumn::make('address')
                     ->label('Адреса')
                     ->searchable(),
-                TextColumn::make('experience')
+                /*TextColumn::make('experience')
                     ->label('Досвід')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable(),*/
                 TextColumn::make('rating')
                     ->label('Рейтинг')
                     ->numeric()

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Doctor;
 
 class Appointment extends Model
 {
@@ -36,5 +38,19 @@ class Appointment extends Model
     {
         return $this->belongsTo(Service::class);
     }
+    public function doctorUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'doctor_id');
+    }
 
+// Связь для получения фамилии доктора (из doctors.second_name)
+    public function doctorInfo(): BelongsTo
+    {
+        return $this->belongsTo(Doctor::class, 'doctor_id');
+    }
+    /*public function doctor(): BelongsTo
+    {
+        // appointments.doctor_id -> doctors.id
+        return $this->belongsTo(Doctor::class, 'doctor_id');
+    }*/
 }

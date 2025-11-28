@@ -47,7 +47,6 @@
                     Livewire.on('updateMapMarkers', (event) => {
                         const data = event.detail || event;
                         const doctors = data.doctors;
-
                         if (!doctors || doctors.length === 0) {
                             markersLayer.clearLayers();
 
@@ -57,8 +56,19 @@
 
                         doctors.forEach(doc => {
                             const marker = L.marker([doc.latitude, doc.longitude]);
-                            const info = `<b>${doc.user.name} ${doc.second_name}</b>
-                            <br>${doc.address}<br>{{__("Рейтинг")}}: ${doc.rating}`;
+                            const giftIcon = doc.gift === 1 ? '&#127873;' : '';
+                            const hasActivePromotions = doc.promotions && doc.promotions.some(promo => {
+                                const now = new Date();
+                                const dateFrom = new Date(promo.date_from);
+                                const dateTo = new Date(promo.date_to);
+                                return now >= dateFrom && now <= dateTo;
+                            });
+
+                            const actionIcon = hasActivePromotions ? '&#37;' : '';
+
+                            const info = `<a href="/doctors/${doc.user_id}"><b>${doc.user.name} ${doc.second_name}</b></a>
+                            <br>${doc.address}<br>{{__("Рейтинг")}}: ${doc.rating}
+                            <br>${giftIcon} ${actionIcon}`;
                             marker.bindPopup(info);
                             markersLayer.addLayer(marker);
                         });

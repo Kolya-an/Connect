@@ -93,9 +93,9 @@ class DoctorForm
                             ->label('Адреса'),
                         /*TextInput::make('latitude')->readOnly(),
                         TextInput::make('longitude')->readOnly(),*/
-                        TextInput::make('experience')
+                        /*TextInput::make('experience')
                             ->label('Досвід')
-                            ->numeric(),
+                            ->numeric(),*/
                         TextInput::make('rating')
                             ->label('Рейтинг')
                             ->numeric()
