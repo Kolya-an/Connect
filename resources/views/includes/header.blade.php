@@ -5,6 +5,7 @@
     <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('page.title', config('app.name'))</title>
+    <meta name="description" content="@yield('page.description', $pageDescription ?? '')">
     <!-- Scripts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
     @vite(['resources/css/style.css', 'resources/css/media.css', 'resources/js/app.js'])

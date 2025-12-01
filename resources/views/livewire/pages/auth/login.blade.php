@@ -47,7 +47,7 @@ new #[Layout('layouts.guest')] class extends Component
         <input type="hidden" name="return_to_booking" value="1">
         <!-- Email Address -->
         <div class="search_field search_field_input">
-            <x-text-input wire:model="form.email" id="email" class="search_field search_field_input" type="email" name="email"
+            <x-text-input wire:model="form.email" id="email" type="email" name="email"
                           placeholder="{{__('Ваш e-mail')}}"
                           required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('form.email')" class="mt-2" />

@@ -21,6 +21,7 @@ class Show extends Component
             ->layout('layouts.view')
             ->layoutData([
                 'pageTitle' => $this->news->meta_title,
+                'pageDescription' => $this->news->meta_description,
             ])
             ->title($this->news->meta_title ?? $this->news->title);
     }

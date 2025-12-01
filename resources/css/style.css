@@ -280,9 +280,10 @@ input#photo-input {
 header {
     width: 100%;
     box-sizing: border-box;
-    /*z-index: 999999;*/
-    position: relative;
+    position: sticky;
     background: #fff;
+    top: 0;
+    z-index: 99;
 }
 .header {
     width: 100%;
@@ -333,6 +334,8 @@ footer {
     width: 100%;
     box-sizing: border-box;
     margin-top: 50px;
+    position: relative;
+    z-index: 99;
 }
 .footer {
     width: 100%;
@@ -865,6 +868,7 @@ p.platform-action-title {
 .search_content {
     position: relative;
     width: 100%;
+    z-index: 0;
 }
 .search_column {
     width: 600px;

@@ -84,15 +84,14 @@ class SocialiteController extends Controller
         //return redirect()->route($user->role . '.dashboard');
     }
 
-    protected function redirectByRole(Request $request, $user)
+    protected function redirectByRole($user) // <-- ИЗМЕНИТЕ ЗДЕСЬ
     {
         switch ($user->role) {
-            case 'doctor': // Доктор
+            case 'doctor':
                 return redirect()->route('doctor.dashboard');
-            case 'patient': // Пациент
-                if (session()->has('_previous.url')) {
-                    return redirect(session('_previous.url'));
-                }
+            case 'patient':
+
+
                 return redirect()->route('patient.dashboard');
             default:
                 return redirect()->route('home');

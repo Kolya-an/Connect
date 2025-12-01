@@ -47,8 +47,6 @@ Route::middleware(['auth', 'role:patient'])->prefix('patient')->group(function (
     Route::get('/dashboard', PatientDashboard::class)->name('patient.dashboard');
     Route::get('/book-appointment', PatientBookAppointment::class)->name('patient.book-appointment');
 });*/
-/*Route::post('/admin/uploads/ckeditor', [CkeditorUploadController::class, 'upload'])
-    ->name('ckeditor.upload');*/
 
 Route::get('/doctor/dashboard', DoctorDashboard::class)->name('doctor.dashboard');
 Route::get('/patient/dashboard', PatientDashboard::class)->name('patient.dashboard');
