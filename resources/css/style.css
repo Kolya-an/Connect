@@ -1663,7 +1663,7 @@ a.about_photo span.about_photo_title {
 }
 .news #photo_top .search_banner_title {
     max-width: 587px;
-    z-index: 99;
+    z-index: 9;
     position: relative;
 }
 .news .search_banner {
@@ -2121,7 +2121,7 @@ a.about_photo span.about_photo_title {
     width: 670px;
 }
 .window h4 {
-    width: calc(100% - 53px);
+    /*width: calc(100% - 53px);*/
 }
 #window_close {
     cursor: pointer;
@@ -2578,6 +2578,7 @@ textarea.add_desc_photo {
 }
 .client_reg_right {
     gap: 30px;
+    margin-bottom: 10px;
 }
 .client_reg_right h5 {
     margin-bottom: 16px;
@@ -2785,4 +2786,10 @@ p.client_address span {
 }
 .spec_about_info .photo_item {
     width: calc(50% - 10px);
+}
+#btn_reg {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 1000;
 }

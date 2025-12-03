@@ -6,19 +6,11 @@ use Livewire\Component;
 
 class LoginModal extends Component
 {
-    public $showModal = false;
+    public $modal = null; // login | register | null
 
-    protected $listeners = ['openLoginModal' => 'open'];
+    public function showLogin()    { $this->modal = 'login'; }
+    public function showRegister() { $this->modal = 'register'; }
 
-    public function open()
-    {
-        $this->showModal = true;
-    }
-
-    public function close()
-    {
-        $this->showModal = false;
-    }
     public function render()
     {
         return view('livewire.login-modal');

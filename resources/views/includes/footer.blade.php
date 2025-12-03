@@ -63,16 +63,13 @@
                 <div class="footer_subscribe">
                     <div class="footer_subscribe_block">
                         <p>{{__('Підписатись')}} <br>{{__('на новини')}}</p>
-                        <form>
-                            <input type="email" class="subscribe_email" value="" placeholder="E-mail">
-                            <button class="btn rose_btn send_button" type="submit">{{__('Надіслати')}}</button>
-                        </form>
+                        @livewire('subscribe-form')
                     </div>
                 </div>
-                <div class="_flex-display _align-center footer_links">
+                {{--<div class="_flex-display _align-center footer_links">
                     <a href="#">{{__('Privacy policy')}}</a>
                     <a href="#">{{__('Cookie policy')}}</a>
-                </div>
+                </div>--}}
             </div>
         </div>
     </div>

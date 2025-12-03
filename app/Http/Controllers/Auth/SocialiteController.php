@@ -107,62 +107,88 @@ class SocialiteController extends Controller
      */
     protected function findOrCreateUser(SocialiteUser $socialiteUser, string $provider): User
     {
-        // Normalize the provider key for database column names (e.g., 'twitter-openid' becomes 'twitter_openid_id')
         $providerKey = str_replace('-', '_', $provider);
         $providerIdField = "{$providerKey}_id";
 
-        // 1. Check if user already exists via the social provider's unique ID
-        $user = User::where($providerIdField, $socialiteUser->getId())->first();
+        // 1. Поиск пользователя по Social ID или Email (логика остается прежней)
+        $user = User::where($providerIdField, $socialiteUser->getId())
+            ->orWhere('email', $socialiteUser->getEmail())
+            ->first();
 
+        // Разделение имени на части
+        // getName() обычно возвращает полное имя (Имя Фамилия)
+        $fullName = $socialiteUser->getName() ?? $socialiteUser->getNickname() ?? 'New Social User';
+        list($firstName, $lastName) = $this->splitName($fullName);
+
+        // Если пользователь найден (уже существует или связан по email)
         if ($user) {
-            // User exists and is linked to this social account.
-            // DO NOT assign any role as per requirement.
+            // ... (логика обновления привязки остается прежней)
+
+            // ВАЖНО: Если пользователь существует, мы **не** меняем его имя/фамилию,
+            // а также **не** создаем новую запись в Doctor/Pacient.
+
+            if (!$user->{$providerIdField}) {
+                $user->update([
+                    $providerIdField => $socialiteUser->getId(),
+                ]);
+            }
+
             return $user;
         }
 
-        // 2. Check if user exists via email (for account linking)
-        $user = User::where('email', $socialiteUser->getEmail())->first();
-
-        if ($user) {
-            // User exists by email, link the social ID to the existing account.
-            // DO NOT assign any role as per requirement.
-            $user->update([
-                $providerIdField => $socialiteUser->getId(),
-            ]);
-            return $user;
-        }
+        // 3. Пользователь не существует, создаем нового.
         $role = session('social_role', 'patient');
-        // 3. User does not exist, so create a new one.
+
         $user = User::create([
-            'name' => $socialiteUser->getName() ?? $socialiteUser->getNickname() ?? 'New Social User',
+            // Сохраняем только имя в поле 'name' таблицы users
+            'name' => $firstName,
             'email' => $socialiteUser->getEmail(),
-            // Create a random password since social login is primary
             'password' => bcrypt(Str::random(24)),
             $providerIdField => $socialiteUser->getId(),
-            // You may need to verify the email address here based on provider data
             'email_verified_at' => now(),
             'role' => $role,
         ]);
 
+        // Создание связанной записи и сохранение фамилии
         if ($role == 'doctor') {
             Doctor::create([
                 'user_id' => $user->id,
+                // Сохраняем фамилию/второе имя в поле 'second_name'
+                'second_name' => $lastName,
             ]);
         }
         if ($role == 'patient') {
             Pacient::create([
                 'user_id' => $user->id,
+                // Сохраняем фамилию/второе имя в поле 'second_name'
+                'second_name' => $lastName,
             ]);
         }
 
-        // SPATIE ROLE LOGIC: Assign 'subscriber' role only on first creation
-        // IMPORTANT: Ensure the 'subscriber' role is seeded in your database!
-        // $user->assignRole('subscriber');  // this is optional if using spatie role permission package
-
         return $user;
-
     }
 
+    /**
+     * Attempts to split a full name string into first name and the rest (last name/patronymic).
+     *
+     * @param string $fullName
+     * @return array [firstName, lastName]
+     */
+    protected function splitName(string $fullName): array
+    {
+        // Удаляем лишние пробелы по краям и внутри
+        $fullName = trim(preg_replace('/\s+/', ' ', $fullName));
 
+        $parts = explode(' ', $fullName);
+        $firstName = $parts[0] ?? $fullName;
+
+        // Вся остальная часть строки считается "фамилией"
+        $lastName = count($parts) > 1 ? implode(' ', array_slice($parts, 1)) : '';
+
+        return [
+            $firstName, // Первая часть (Имя)
+            $lastName   // Все остальное (Фамилия, Отчество и т.д.)
+        ];
+    }
 
 }

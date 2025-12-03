@@ -52,7 +52,7 @@
                     <div class="page_banner_block">
                         {!! $about->second_text !!}
                         @if($about->slug !== 'about-doctor')
-                            <a class="btn rose_btn" href="#">{{__('Шукати космеолога')}}</a>
+                            <a class="btn rose_btn" href="{{route('map')}}">{{__('Шукати космеолога')}}</a>
                         @endif
                     </div>
                 @endif

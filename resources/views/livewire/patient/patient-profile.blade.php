@@ -36,10 +36,10 @@
                 <input type="radio" wire:model="sex" value="male">
                 <span></span> {{__('Чоловік')}}
             </label>
-            <label class="custom-radio">
+           {{-- <label class="custom-radio">
                 <input type="radio" wire:model="sex" value="nonbinary">
                 <span></span> {{__('Небінарна особістість')}}
-            </label>
+            </label>--}}
         </div>
     </div>
     <label class="_flex-display _align-center more_filter_checkbox">
