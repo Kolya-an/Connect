@@ -14,13 +14,13 @@ php composer.phar install --optimize-autoloader --no-dev
 
 php artisan migrate
 
-php artisan config:cash
+php artisan config:cache
 
-php artisan route:cash
+php artisan route:cache
 
-php artisan event:cash
+php artisan event:cache
 
-php artisan view:cash
+php artisan view:cache
 
 php artisan up
 
