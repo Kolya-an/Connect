@@ -8,7 +8,9 @@
     <meta name="description" content="@yield('page.description', $pageDescription ?? '')">
     <!-- Scripts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
-    @vite(['resources/css/style.css', 'resources/css/media.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/media.css') }}">
+    <script src="{{ asset('js/app.js') }}" defer></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
@@ -23,7 +25,7 @@
     <div class="container">
         <div class="_flex-display _justify-content-between _align-center header">
             <div class="header_logo">
-                <a href="{{route('home')}}"><img src="{{asset('image/logo.png')}}" alt="Logo"/></a>
+                <a href="{{route('home')}}"><img src="{{asset('images/logo.png')}}" alt="Logo"/></a>
             </div>
             <div class="header_menu">
                 <ul class="_width100 _flex-display _justify-content-between _align-center">
@@ -54,20 +56,20 @@
                         @endif
                         @if(in_array(Auth::user()->role, ['admin']))
                             <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                                <img src="{{asset('image/cab.png')}}">
+                                <img src="{{asset('images/cab.png')}}">
                             </a>
                         @endif
                 @endauth
                 @guest
                     <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                        <img src="{{asset('image/cab.png')}}">
+                        <img src="{{asset('images/cab.png')}}">
                     </a>
                 @endguest
             </div>
         </div>
         <div class="_flex-display _justify-content-between _align-center header_mob">
             <div class="header_logo">
-                <a href="/"><img src="{{asset('image/logomob.png')}}"/></a>
+                <a href="/"><img src="{{asset('images/logomob.png')}}"/></a>
             </div>
             <div class="_flex-display _align-center header_mob_buttons">
                 <div class="_flex-display _justify-content-between _align-center header_button">
@@ -81,13 +83,13 @@
                         @endif
                         @if(in_array(Auth::user()->role, ['admin']))
                             <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                                <img src="{{asset('image/cab.png')}}">
+                                <img src="{{asset('images/cab.png')}}">
                             </a>
                         @endif
                     @endauth
                     @guest
                         <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                            <img src="{{asset('image/cab.png')}}">
+                            <img src="{{asset('images/cab.png')}}">
                         </a>
                     @endguest
                 </div>

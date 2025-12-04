@@ -24,7 +24,7 @@
                     @endif
                     @if($about->slug !== 'about-doctor')
                         <div class="_flex-display home_banner_bottom">
-                            <div class="home_banner_images"><img src="{{ asset('image/home_banner_images.png') }}" alt=""></div>
+                            <div class="home_banner_images"><img src="{{ asset('images/home_banner_images.png') }}" alt=""></div>
                             <div class="home_banner_bottom_text">
                                 <div class="_flex-display rating_stars">
                                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -57,14 +57,14 @@
                     </div>
                 @endif
                 @if($about->slug === 'about-doctor')
-                    <div class="home_search_bg _minwidth769"><img src="{{ asset('image/about_spec_bg.png') }}" alt=""></div>
-                    <div class="home_search_bg_mob _maxwidth768"><img src="{{ asset('image/about_spec_bg_mob.png') }}" alt=""></div>
+                    <div class="home_search_bg _minwidth769"><img src="{{ asset('images/about_spec_bg.png') }}" alt=""></div>
+                    <div class="home_search_bg_mob _maxwidth768"><img src="{{ asset('images/about_spec_bg_mob.png') }}" alt=""></div>
                 @elseif($about->slug === 'about-user')
-                    <div class="home_search_bg _minwidth769"><img src="{{ asset('image/about_pac_bg.png') }}" alt=""></div>
-                    <div class="home_search_bg_mob _maxwidth768"><img src="{{ asset('image/about_pac_bg_mob.png') }}" alt=""></div>
+                    <div class="home_search_bg _minwidth769"><img src="{{ asset('images/about_pac_bg.png') }}" alt=""></div>
+                    <div class="home_search_bg_mob _maxwidth768"><img src="{{ asset('images/about_pac_bg_mob.png') }}" alt=""></div>
                 @else
-                    <div class="home_search_bg _minwidth769"><img src="{{ asset('image/about_bg.png') }}" alt=""></div>
-                    <div class="home_search_bg_mob _maxwidth768"><img src="{{ asset('image/about_bg_mob.png') }}" alt=""></div>
+                    <div class="home_search_bg _minwidth769"><img src="{{ asset('images/about_bg.png') }}" alt=""></div>
+                    <div class="home_search_bg_mob _maxwidth768"><img src="{{ asset('images/about_bg_mob.png') }}" alt=""></div>
                 @endif
             </div>
         </div>
@@ -81,11 +81,11 @@
         <div class="_flex-display _justify-content-between _align-stretch grey_photo">
             <div class="grey_img _maxwidth768">
                 @if($about->slug === 'about-doctor')
-                    <img src="{{ asset('image/grey_about_spec_mob.png') }}" alt="">
+                    <img src="{{ asset('images/grey_about_spec_mob.png') }}" alt="">
                 @elseif($about->slug === 'about-user')
-                    <img src="{{ asset('image/grey_about_photo_mob.png') }}" alt="">
+                    <img src="{{ asset('images/grey_about_photo_mob.png') }}" alt="">
                 @else
-                    <img src="{{ asset('image/grey_about_photo.png') }}" alt="">
+                    <img src="{{ asset('images/grey_about_photo.png') }}" alt="">
                 @endif
             </div>
             <div class="grey">
@@ -106,8 +106,8 @@
             <div class="_flex-display _justify-content-between _align-stretch about_action_rating">
                 @if($about->action_text)
                     <div class="_flex-display _justify-content-between about_action">
-                        <div class="about_action_image _minwidth769"><img src="{{ asset('image/about_action_image.png') }}" alt=""></div>
-                        <div class="about_action_image _maxwidth768"><img src="{{ asset('image/about_action_image_mob.png') }}" alt=""></div>
+                        <div class="about_action_image _minwidth769"><img src="{{ asset('images/about_action_image.png') }}" alt=""></div>
+                        <div class="about_action_image _maxwidth768"><img src="{{ asset('images/about_action_image_mob.png') }}" alt=""></div>
                         <div class="about_action_text">
                             <div class="white-plate _display_table">{{__('Акції')}}</div>
                             {!! $about->action_text !!}
@@ -153,7 +153,7 @@
         @endif
         @if((!empty($about->our_text) && strip_tags($about->our_text) !== '')|| (!empty($about->our_rose_text) && strip_tags($about->our_rose_text)))
             <div class="_flex-display _justify-content-between _align-center about_grey_photo_text">
-                <img src="{{ asset('image/about_grey_photo.png') }}" alt="">
+                <img src="{{ asset('images/about_grey_photo.png') }}" alt="">
                 <div class="about_grey_text">
                     <div class="doc-plate rose-plate _display_table">{{__('Ваша сторінка')}}</div>
                     @if(!empty($about->our_text) && strip_tags($about->our_text) !== ''){!! $about->our_text !!}@endif

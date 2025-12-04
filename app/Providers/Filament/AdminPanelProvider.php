@@ -30,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName('Connect Cosmetology')
-            ->brandLogo(asset('image/logo.png'))
+            ->brandLogo(asset('images/logo.png'))
             ->brandLogoHeight('50px')
             ->navigationGroups([
                 NavigationGroup::make()

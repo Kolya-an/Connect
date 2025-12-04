@@ -48,13 +48,13 @@ class NewsForm
                     ->relationship('categories', 'title')
                     ->preload(),
                 TextInput::make('meta_title'),
-                FileUpload::make('image')
+                FileUpload::make('images')
                     ->label('Зображення зверху')
                     ->directory('news/' . date('Y') . '/' . date('m'))
                     ->visibility('public')
                     ->image()
                     ->imageEditor()
-                    ->acceptedFileTypes(['image/png','image/jpeg'])
+                    ->acceptedFileTypes(['images/png','images/jpeg'])
                     ->imageEditorAspectRatios([
                         null,
                         '16:9',
@@ -125,7 +125,7 @@ class NewsForm
                                 Block::make('image_text')
                                     ->label('Фото + текст')
                                     ->schema([
-                                        FileUpload::make('image')
+                                        FileUpload::make('images')
                                             ->label('Фото')
                                             ->image()
                                             ->required(),

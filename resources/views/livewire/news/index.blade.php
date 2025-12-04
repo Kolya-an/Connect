@@ -14,7 +14,7 @@
                         <path id="Vector 1" d="M0.0102539 5.5L587.01 1.5" stroke="rgb(243,150,162)" stroke-width="3" />
                     </svg>
                 </div>
-                <div class="home_search_bg _minwidth769"><img src="{{ asset('image/news_banner_images.png') }}" alt="@if($category)
+                <div class="home_search_bg _minwidth769"><img src="{{ asset('images/news_banner_images.png') }}" alt="@if($category)
                             {{ $category->title }}
                         @else
                             Новини

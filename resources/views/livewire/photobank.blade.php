@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div class="_flex-display _align-center home_banner_bottom">
-                    <div class="home_banner_images"><img src="{{ asset('image/home_banner_images.png') }}" alt=""></div>
+                    <div class="home_banner_images"><img src="{{ asset('images/home_banner_images.png') }}" alt=""></div>
                     <div class="home_banner_bottom_text">
                         <div class="_flex-display rating_stars">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -31,7 +31,7 @@
                         <p><b>+3000</b> {{__('перевіренних косметологів і фахівців естетичної медицини')}}</p>
                     </div>
                 </div>
-                <div class="home_search_bg _minwidth769"><img src="{{ asset('image/photo_banner.png') }}" alt=""></div>
+                <div class="home_search_bg _minwidth769"><img src="{{ asset('images/photo_banner.png') }}" alt=""></div>
             </div>
             <div class="search_form">
                 <livewire:photo-search-form />

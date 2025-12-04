@@ -64,7 +64,7 @@ class PacientForm
                             ->visibility('public')
                             ->image()
                             ->imageEditor()
-                            ->acceptedFileTypes(['image/png','image/jpeg'])
+                            ->acceptedFileTypes(['images/png','images/jpeg'])
                             ->imageEditorAspectRatios([
                                 null,
                                 '16:9',

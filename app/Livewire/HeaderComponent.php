@@ -22,12 +22,12 @@ class HeaderComponent extends Component
             if ($this->isDoctor) {
                 // Завантажуємо доктора. Припускаємо, що поле 'photo' містить шлях.
                 $this->doctor = $user->doctor; // Припускаємо, що зв'язок вже є
-                $this->userPhotoUrl = $this->doctor->photo ?? asset('image/cabimg.png');
+                $this->userPhotoUrl = $this->doctor->photo ?? asset('images/cabimg.png');
 
             } else {
                 // Завантажуємо пацієнта. Припускаємо, що поле 'avatar' (або інше) містить шлях.
                 $this->patient = $user->patient; // Припускаємо, що зв'язок вже є
-                $this->userPhotoUrl = $this->patient->photo ?? asset('image/cabimg.png');
+                $this->userPhotoUrl = $this->patient->photo ?? asset('images/cabimg.png');
             }
         } else {
             $this->isDoctor = false;

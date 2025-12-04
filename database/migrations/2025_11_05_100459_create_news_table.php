@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->json('content')->nullable();
-            $table->string('image')->nullable();
+            $table->string('images')->nullable();
             $table->text('preview')->nullable();
             $table->boolean('status')->default(1);
             $table->timestamps();

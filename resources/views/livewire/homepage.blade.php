@@ -3,7 +3,7 @@
     <div id="home_search">
         <div class="container">
             <div class="home_search_block">
-                <div class="home_search_bg _minwidth769"><img src="{{ asset('image/home_search_bg.png') }}" alt=""></div>
+                <div class="home_search_bg _minwidth769"><img src="{{ asset('images/home_search_bg.png') }}" alt=""></div>
                 <div class="home_banner">
                     <svg width="59" height="59" viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="0.5" y="0.529785" width="58" height="58" rx="29" fill="#FFE7E8"/>
@@ -14,7 +14,7 @@
                         <path d="M1 19.4702L514 2.47021" stroke="#F396A2" stroke-width="3"/>
                     </svg>
                     <div class="_flex-display _justify-content-center home_banner_bottom">
-                        <div class="home_banner_images"><img src="{{ asset('image/home_banner_images.png') }}" alt=""></div>
+                        <div class="home_banner_images"><img src="{{ asset('images/home_banner_images.png') }}" alt=""></div>
                         <div class="home_banner_bottom_text">
                             <div class="_flex-display rating_stars">
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -36,7 +36,7 @@
                             <p><b>+3000</b> {{__('перевіренних косметологів')}}</p>
                         </div>
                     </div>
-                    <div class="home_search_bg_mob _maxwidth768"><img src="{{ asset('image/home_search_bg_mob.png') }}" alt=""></div>
+                    <div class="home_search_bg_mob _maxwidth768"><img src="{{ asset('images/home_search_bg_mob.png') }}" alt=""></div>
                 </div>
 
                 <livewire:doctor-search-form />
@@ -253,7 +253,7 @@
                                 </svg></a>
                         </div>
                         <div class="_flex-display _justify-content-between _align-center platform-action-bottom">
-                            <div class="platform-action-image"><img src="{{ asset('image/platform-action-image.png') }}" alt="" /></div>
+                            <div class="platform-action-image"><img src="{{ asset('images/platform-action-images.png') }}" alt="" /></div>
                             <div class="platform-action-text">
                                 <p class="platform-action-title">-20% на першу процедуру</p>
                                 <p>Збільшення губ, Біоревіталізація, Чистка, Пілінг</p>

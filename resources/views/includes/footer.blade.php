@@ -2,7 +2,7 @@
     <div class="container">
         <div class="_flex-display _justify-content-between _align-stretch footer">
             <div class="_flex-display _justify-content-between footer_left">
-                <div class="footer_logo"><a href="{{route('home')}}"><img src="{{asset('image/footer_logo.png')}}" alt="Logo"/></a></div>
+                <div class="footer_logo"><a href="{{route('home')}}"><img src="{{asset('images/footer_logo.png')}}" alt="Logo"/></a></div>
                 <div class="_flex-display _align-center footer_share _minwidth769">
                     <a href="#">
                         <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +75,7 @@
     </div>
 </footer>
 
-<div id="btn_top"><img src="{{asset('image/top.png')}}"/></div>
+<div id="btn_top"><img src="{{asset('images/top.png')}}"/></div>
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 

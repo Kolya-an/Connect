@@ -144,9 +144,47 @@
     "src": "resources/images/sex.png"
   },
   "resources/js/app.js": {
-    "file": "assets/app-CKfZcvX8.js",
+    "file": "assets/app-D26vZ81S.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true
+    "isEntry": true,
+    "css": [
+      "assets/style-D0jpIt4z.css",
+      "assets/media-C2Nig7xL.css"
+    ],
+    "assets": [
+      "assets/Gilroy-Regular-B4GrOypx.woff2",
+      "assets/Gilroy-Regular-Df3OKIrZ.woff",
+      "assets/Gilroy-Regular-eCFN1h-s.ttf",
+      "assets/Gilroy-Medium-D0B9IZRR.woff2",
+      "assets/Gilroy-Medium-BbZyvxD-.woff",
+      "assets/Gilroy-Bold-Kg0-gz10.woff2",
+      "assets/Gilroy-Bold-CJrcQqXP.woff",
+      "assets/Gilroy-Bold-sm1PNH13.ttf",
+      "assets/Gilroy-ExtraBold-D2UA7Ta5.woff2",
+      "assets/Gilroy-ExtraBold-FEWSg8Xa.woff",
+      "assets/Gilroy-ExtraBold-bUaqQUyg.ttf",
+      "assets/Gilroy-SemiBold-Dt1ldoW7.woff2",
+      "assets/Gilroy-SemiBold-BUXwVBlP.woff",
+      "assets/Gilroy-SemiBold-BpRPs99R.ttf",
+      "assets/maria-BnZYYLgi.png",
+      "assets/platform-modal-rose1-CdDUAwwL.png",
+      "assets/platform-modal-rose2-BtjGujcR.png",
+      "assets/loc-DDm3AI7L.png",
+      "assets/radius-nod4MdDk.png",
+      "assets/sex-CeCwUscs.png",
+      "assets/select-CLt24AxT.png",
+      "assets/search-wmeCQ1vi.png",
+      "assets/more_filter-DVDvQysj.png",
+      "assets/doctor_right_prices_actions-U_w2JcYj.png",
+      "assets/doctor_right_actions-Ce8g9YWm.png",
+      "assets/more_images-DOVqYOIg.png",
+      "assets/grey_about_photo-DmUocZ-p.png",
+      "assets/grey_about_spec-5b1a-swL.png",
+      "assets/about_photo-2ab-z6Hy.png",
+      "assets/google_btn-Dveh_z5a.png",
+      "assets/fb_btn-CBR-F-jP.png",
+      "assets/date-Dv9zy1b9.png"
+    ]
   }
 }

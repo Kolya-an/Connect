@@ -29,7 +29,7 @@ return [
     'exists' => 'Вибране значення для :attribute недійсне.',
     'file' => 'Поле :attribute повинно бути файлом.',
     'filled' => 'Поле :attribute обов’язкове для заповнення.',
-    'image' => 'Поле :attribute повинно бути зображенням.',
+    'images' => 'Поле :attribute повинно бути зображенням.',
     'integer' => 'Поле :attribute повинно бути цілим числом.',
     'max' => [
         'numeric' => 'Поле :attribute не може бути більше ніж :max.',
