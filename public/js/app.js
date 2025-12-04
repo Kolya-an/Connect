@@ -1,6 +1,5 @@
 //import './bootstrap';
-import '../css/style.css';
-import '../css/media.css';
+
 $(document).ready(function() {
     // открытие/закрытие всего меню
     $(".menu-toggle").click(function() {
