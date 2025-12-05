@@ -21,8 +21,13 @@ class Homepage extends Component
     public function mount()
     {
         $this->settings = HomepageSetting::with([
+            'promotion.doctor' => function ($query) {
+                $query->withCount('reviews'); // создаёт reviews_count
+            },
             'promotion.doctor.user',
         ])->first();
+
+        $this->promotion = $this->settings->promotion;
 
         if (!$this->settings) {
             $this->settings = null;

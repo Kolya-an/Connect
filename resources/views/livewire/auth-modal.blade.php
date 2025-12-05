@@ -5,7 +5,7 @@
         class="btn rose_btn register_btn">
         {{__('Реєстрація')}}
     </button>
-    <div @click="modal='register'" id="btn_reg" class="btn rose_btn">{{__('Зареєструйся, щоб бачити актуальні акції від лікарів!')}}</div>
+    <div @click="modal='register'" id="btn_reg" class="btn" style="background:#000;color:#fff;cursor:pointer">{{__('Зареєструйся, щоб бачити актуальні акції від лікарів!')}}</div>
     <!-- Модалка -->
     <div
         x-show="modal === 'register'"

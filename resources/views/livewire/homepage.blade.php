@@ -172,7 +172,7 @@
                         <div class="_flex-display _justify-content-between platform-modal-grey">
                             <div class="_flex-display _justify-content-between _align-center">
                                 <div class="_flex-display _justify-content-center _align-center platform-about_plate">Про нас</div>
-                                <a href="#"><svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <a href="{{route('about')}}"><svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M0 12.5C0 5.59644 5.59644 0 12.5 0H13.5C20.4036 0 26 5.59644 26 12.5C26 19.4036 20.4036 25 13.5 25H12.5C5.59644 25 0 19.4036 0 12.5Z" fill="white"/>
                                         <path d="M7.33104 16.2567C6.92053 16.6262 6.88725 17.2585 7.25671 17.669C7.62616 18.0795 8.25845 18.1128 8.66896 17.7433L7.33104 16.2567ZM18.9986 8.05256C19.0276 7.50104 18.6041 7.03041 18.0526 7.00138L9.065 6.52835C8.51348 6.49932 8.04285 6.92289 8.01382 7.47441C7.98479 8.02593 8.40836 8.49656 8.95988 8.52559L16.9488 8.94606L16.5284 16.935C16.4993 17.4865 16.9229 17.9572 17.4744 17.9862C18.0259 18.0152 18.4966 17.5916 18.5256 17.0401L18.9986 8.05256ZM8 17L8.66896 17.7433L18.669 8.74329L18 8L17.331 7.25671L7.33104 16.2567L8 17Z" fill="black"/>
                                     </svg></a>
@@ -186,7 +186,7 @@
                     <div class="_flex-display _justify-content-between _align-stretch platform-modal platform-modal-bottom _minwidth769">
                         <div class="_flex-display _justify-content-between _align-bottom platform-modal-rose">
                             <div class="_flex-display _justify-content-center _align-center platform-photo_plate">{{__('Фотобанк')}}</div>
-                            <a href="#"><svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <a href="{{route('photobank')}}"><svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 12.5C0 5.59644 5.59644 0 12.5 0H13.5C20.4036 0 26 5.59644 26 12.5C26 19.4036 20.4036 25 13.5 25H12.5C5.59644 25 0 19.4036 0 12.5Z" fill="white"/>
                                     <path d="M7.33104 16.2567C6.92053 16.6262 6.88725 17.2585 7.25671 17.669C7.62616 18.0795 8.25845 18.1128 8.66896 17.7433L7.33104 16.2567ZM18.9986 8.05256C19.0276 7.50104 18.6041 7.03041 18.0526 7.00138L9.065 6.52835C8.51348 6.49932 8.04285 6.92289 8.01382 7.47441C7.98479 8.02593 8.40836 8.49656 8.95988 8.52559L16.9488 8.94606L16.5284 16.935C16.4993 17.4865 16.9229 17.9572 17.4744 17.9862C18.0259 18.0152 18.4966 17.5916 18.5256 17.0401L18.9986 8.05256ZM8 17L8.66896 17.7433L18.669 8.74329L18 8L17.331 7.25671L7.33104 16.2567L8 17Z" fill="black"/>
                                 </svg></a>
@@ -194,7 +194,7 @@
                         <div class="platform-modal-grey">
                             <div class="_flex-display _justify-content-between _align-center">
                                 <div class="_flex-display _justify-content-center _align-center platform-action_plate">{{__('Акція')}}</div>
-                                <a href="#"><svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <a href="/doctors/{{$promotion->doctor->user->id}}?tab=5"><svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M0 12.5C0 5.59644 5.59644 0 12.5 0H13.5C20.4036 0 26 5.59644 26 12.5C26 19.4036 20.4036 25 13.5 25H12.5C5.59644 25 0 19.4036 0 12.5Z" fill="white"/>
                                         <path d="M7.33104 16.2567C6.92053 16.6262 6.88725 17.2585 7.25671 17.669C7.62616 18.0795 8.25845 18.1128 8.66896 17.7433L7.33104 16.2567ZM18.9986 8.05256C19.0276 7.50104 18.6041 7.03041 18.0526 7.00138L9.065 6.52835C8.51348 6.49932 8.04285 6.92289 8.01382 7.47441C7.98479 8.02593 8.40836 8.49656 8.95988 8.52559L16.9488 8.94606L16.5284 16.935C16.4993 17.4865 16.9229 17.9572 17.4744 17.9862C18.0259 18.0152 18.4966 17.5916 18.5256 17.0401L18.9986 8.05256ZM8 17L8.66896 17.7433L18.669 8.74329L18 8L17.331 7.25671L7.33104 16.2567L8 17Z" fill="black"/>
                                     </svg></a>
@@ -205,7 +205,7 @@
                                     <p class="platform-action-title">{{ $promotion->title }}</p>
                                     <p>{{ $promotion->description }}</p>
                                     <div class="fio_doc_spec">
-                                        <p class="fio_doc">{{ $promotion->doctor->second_name }} {{ $promotion->doctor->user?->name }}</p>
+                                        <a href="/doctors/{{$promotion->doctor->user->id}}" class="fio_doc">{{ $promotion->doctor->second_name }} {{ $promotion->doctor->user?->name }}</a>
                                         @if ($promotion?->doctor?->types)
                                             <p class="spec_doc">
                                                 @foreach ($promotion->doctor->types as $type)
@@ -215,17 +215,18 @@
                                         @endif
                                     </div>
                                     <div class="_flex-display _justify-content-between _align-center top_docs-rating_city">
-                                        <div class="_flex-display _align-center top_docs-rating"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                                <path d="M6.71468 0.378114C6.80449 0.101721 7.19551 0.101722 7.28532 0.378115L8.72876 4.82057C8.76892 4.94418 8.88411 5.02786 9.01408 5.02786H13.6851C13.9758 5.02786 14.0966 5.39975 13.8615 5.57057L10.0825 8.31616C9.97736 8.39255 9.93336 8.52796 9.97352 8.65157L11.417 13.094C11.5068 13.3704 11.1904 13.6003 10.9553 13.4294L7.17634 10.6838C7.07119 10.6074 6.92881 10.6075 6.82366 10.6838L3.04469 13.4294C2.80957 13.6003 2.49323 13.3704 2.58303 13.094L4.02648 8.65157C4.06664 8.52796 4.02264 8.39255 3.91749 8.31616L0.138516 5.57057C-0.0965979 5.39975 0.0242358 5.02786 0.314853 5.02786H4.98593C5.11589 5.02786 5.23108 4.94418 5.27124 4.82057L6.71468 0.378114Z" fill="#F396A2"/>
-                                            </svg>
-                                            <p><b>4.8</b> (105)</p>
-                                        </div>
+                                            <div class="_flex-display _align-center top_docs-rating"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                                    <path d="M6.71468 0.378114C6.80449 0.101721 7.19551 0.101722 7.28532 0.378115L8.72876 4.82057C8.76892 4.94418 8.88411 5.02786 9.01408 5.02786H13.6851C13.9758 5.02786 14.0966 5.39975 13.8615 5.57057L10.0825 8.31616C9.97736 8.39255 9.93336 8.52796 9.97352 8.65157L11.417 13.094C11.5068 13.3704 11.1904 13.6003 10.9553 13.4294L7.17634 10.6838C7.07119 10.6074 6.92881 10.6075 6.82366 10.6838L3.04469 13.4294C2.80957 13.6003 2.49323 13.3704 2.58303 13.094L4.02648 8.65157C4.06664 8.52796 4.02264 8.39255 3.91749 8.31616L0.138516 5.57057C-0.0965979 5.39975 0.0242358 5.02786 0.314853 5.02786H4.98593C5.11589 5.02786 5.23108 4.94418 5.27124 4.82057L6.71468 0.378114Z" fill="#F396A2"/>
+                                                </svg>
+                                                <p><b>{{ $promotion->doctor->rating }}</b> ({{ $promotion->doctor->reviews_count }})</p>
+                                            </div>
+
                                         <div class="_flex-display _align-center top_docs-city">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="13" viewBox="0 0 11 13" fill="none">
                                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M7 5.60028C7 4.77152 6.32846 4.09998 5.5003 4.09998C4.67154 4.09998 4 4.77152 4 5.60028C4 6.42843 4.67154 7.09998 5.5003 7.09998C6.32846 7.09998 7 6.42843 7 5.60028Z" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
                                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M5.49971 11.9C4.78062 11.9 1 8.839 1 5.63795C1 3.13196 3.01426 1.09998 5.49971 1.09998C7.98515 1.09998 10 3.13196 10 5.63795C10 8.839 6.21879 11.9 5.49971 11.9Z" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
-                                            <p><b>м. Київ</b></p>
+                                            <p><b>{{ $promotion->doctor->city }}</b></p>
                                         </div>
                                     </div>
                                 </div>
@@ -238,7 +239,7 @@
                         <div class="platform-services-plate">{{__('Популярні послуги')}}</div>
                         <ul class="platform-services-list">
                             @foreach($service_block as $key => $services)
-                                <li><a href="">{{ $services->name }}</a></li>
+                                <li><a href="{{ route('map', ['service_id' => $services->id]) }}">{{ $services->name }}</a></li>
                             @endforeach
                         </ul>
                     @endif
@@ -247,7 +248,8 @@
                     <div class="platform-modal-grey">
                         <div class="_flex-display _justify-content-between _align-center">
                             <div class="_flex-display _justify-content-center _align-center platform-action_plate">{{__('Акція')}}</div>
-                            <a href="#"><svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <a href="/doctors/{{$promotion->doctor->user->id}}">
+                                <svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 12.5C0 5.59644 5.59644 0 12.5 0H13.5C20.4036 0 26 5.59644 26 12.5C26 19.4036 20.4036 25 13.5 25H12.5C5.59644 25 0 19.4036 0 12.5Z" fill="white"/>
                                     <path d="M7.33104 16.2567C6.92053 16.6262 6.88725 17.2585 7.25671 17.669C7.62616 18.0795 8.25845 18.1128 8.66896 17.7433L7.33104 16.2567ZM18.9986 8.05256C19.0276 7.50104 18.6041 7.03041 18.0526 7.00138L9.065 6.52835C8.51348 6.49932 8.04285 6.92289 8.01382 7.47441C7.98479 8.02593 8.40836 8.49656 8.95988 8.52559L16.9488 8.94606L16.5284 16.935C16.4993 17.4865 16.9229 17.9572 17.4744 17.9862C18.0259 18.0152 18.4966 17.5916 18.5256 17.0401L18.9986 8.05256ZM8 17L8.66896 17.7433L18.669 8.74329L18 8L17.331 7.25671L7.33104 16.2567L8 17Z" fill="black"/>
                                 </svg></a>
@@ -255,24 +257,32 @@
                         <div class="_flex-display _justify-content-between _align-center platform-action-bottom">
                             <div class="platform-action-image"><img src="{{ asset('images/platform-action-images.png') }}" alt="" /></div>
                             <div class="platform-action-text">
-                                <p class="platform-action-title">-20% на першу процедуру</p>
-                                <p>Збільшення губ, Біоревіталізація, Чистка, Пілінг</p>
+                                <p class="platform-action-title">{{ $promotion->title }}</p>
+                                <p>{{ $promotion->description }}</p>
                                 <div class="fio_doc_spec">
-                                    <p class="fio_doc">Некрасова Анна</p>
-                                    <p class="spec_doc">Лікар дермовенеролог, косметолог</p>
+                                    <a href="/doctors/{{$promotion->doctor->user->id}}" class="fio_doc">{{ $promotion->doctor->second_name }} {{ $promotion->doctor->user?->name }}</a>
+                                    @if ($promotion?->doctor?->types)
+                                        <p class="spec_doc">
+                                            @foreach ($promotion->doctor->types as $type)
+                                                {{$type}}{{ $loop->last ? '' : ', ' }}
+                                            @endforeach
+                                        </p>
+                                    @endif
                                 </div>
                                 <div class="_flex-display _justify-content-between _align-center top_docs-rating_city">
-                                    <div class="_flex-display _align-center top_docs-rating"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                            <path d="M6.71468 0.378114C6.80449 0.101721 7.19551 0.101722 7.28532 0.378115L8.72876 4.82057C8.76892 4.94418 8.88411 5.02786 9.01408 5.02786H13.6851C13.9758 5.02786 14.0966 5.39975 13.8615 5.57057L10.0825 8.31616C9.97736 8.39255 9.93336 8.52796 9.97352 8.65157L11.417 13.094C11.5068 13.3704 11.1904 13.6003 10.9553 13.4294L7.17634 10.6838C7.07119 10.6074 6.92881 10.6075 6.82366 10.6838L3.04469 13.4294C2.80957 13.6003 2.49323 13.3704 2.58303 13.094L4.02648 8.65157C4.06664 8.52796 4.02264 8.39255 3.91749 8.31616L0.138516 5.57057C-0.0965979 5.39975 0.0242358 5.02786 0.314853 5.02786H4.98593C5.11589 5.02786 5.23108 4.94418 5.27124 4.82057L6.71468 0.378114Z" fill="#F396A2"/>
-                                        </svg>
-                                        <p><b>4.8</b> (105)</p>
-                                    </div>
+                                    @if ($promotion->doctor->reviews_count > 0)
+                                        <div class="_flex-display _align-center top_docs-rating"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                                <path d="M6.71468 0.378114C6.80449 0.101721 7.19551 0.101722 7.28532 0.378115L8.72876 4.82057C8.76892 4.94418 8.88411 5.02786 9.01408 5.02786H13.6851C13.9758 5.02786 14.0966 5.39975 13.8615 5.57057L10.0825 8.31616C9.97736 8.39255 9.93336 8.52796 9.97352 8.65157L11.417 13.094C11.5068 13.3704 11.1904 13.6003 10.9553 13.4294L7.17634 10.6838C7.07119 10.6074 6.92881 10.6075 6.82366 10.6838L3.04469 13.4294C2.80957 13.6003 2.49323 13.3704 2.58303 13.094L4.02648 8.65157C4.06664 8.52796 4.02264 8.39255 3.91749 8.31616L0.138516 5.57057C-0.0965979 5.39975 0.0242358 5.02786 0.314853 5.02786H4.98593C5.11589 5.02786 5.23108 4.94418 5.27124 4.82057L6.71468 0.378114Z" fill="#F396A2"/>
+                                            </svg>
+                                            <p><b>{{ $promotion->doctor->rating }}</b> ({{ $promotion->doctor->reviews_count }})</p>
+                                        </div>
+                                    @endif
                                     <div class="_flex-display _align-center top_docs-city">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="13" viewBox="0 0 11 13" fill="none">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M7 5.60028C7 4.77152 6.32846 4.09998 5.5003 4.09998C4.67154 4.09998 4 4.77152 4 5.60028C4 6.42843 4.67154 7.09998 5.5003 7.09998C6.32846 7.09998 7 6.42843 7 5.60028Z" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M5.49971 11.9C4.78062 11.9 1 8.839 1 5.63795C1 3.13196 3.01426 1.09998 5.49971 1.09998C7.98515 1.09998 10 3.13196 10 5.63795C10 8.839 6.21879 11.9 5.49971 11.9Z" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
-                                        <p><b>м. Київ</b></p>
+                                        <p><b>{{ $promotion->doctor->city }}</b></p>
                                     </div>
                                 </div>
                             </div>
@@ -280,7 +290,8 @@
                     </div>
                     <div class="_flex-display _justify-content-center _align-bottom platform-modal-rose">
                         <div class="_flex-display _justify-content-center _align-center platform-photo_plate">{{__('Фотобанк')}}</div>
-                        <a href="#"><svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <a href="{{route('photobank')}}">
+                            <svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0 12.5C0 5.59644 5.59644 0 12.5 0H13.5C20.4036 0 26 5.59644 26 12.5C26 19.4036 20.4036 25 13.5 25H12.5C5.59644 25 0 19.4036 0 12.5Z" fill="white"/>
                                 <path d="M7.33104 16.2567C6.92053 16.6262 6.88725 17.2585 7.25671 17.669C7.62616 18.0795 8.25845 18.1128 8.66896 17.7433L7.33104 16.2567ZM18.9986 8.05256C19.0276 7.50104 18.6041 7.03041 18.0526 7.00138L9.065 6.52835C8.51348 6.49932 8.04285 6.92289 8.01382 7.47441C7.98479 8.02593 8.40836 8.49656 8.95988 8.52559L16.9488 8.94606L16.5284 16.935C16.4993 17.4865 16.9229 17.9572 17.4744 17.9862C18.0259 18.0152 18.4966 17.5916 18.5256 17.0401L18.9986 8.05256ZM8 17L8.66896 17.7433L18.669 8.74329L18 8L17.331 7.25671L7.33104 16.2567L8 17Z" fill="black"/>
                             </svg></a>
