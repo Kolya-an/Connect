@@ -2793,3 +2793,6 @@ p.client_address span {
     left: 10px;
     z-index: 1000;
 }
+[x-cloak] {
+    display: none !important;
+}
