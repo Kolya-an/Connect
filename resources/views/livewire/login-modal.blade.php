@@ -10,6 +10,7 @@
     <div
         x-show="modal === 'login'"
         x-cloak
+        wire:ignore.self
         id="login_window" class="_flex-display _justify-content-center _align-center screen"
     >
         <div

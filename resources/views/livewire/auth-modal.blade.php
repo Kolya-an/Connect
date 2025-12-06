@@ -10,6 +10,7 @@
     <div
         x-show="modal === 'register'"
         x-cloak
+        wire:ignore.self
         id="register_window" class="_flex-display _justify-content-center _align-center screen"
     >
         <div
