@@ -9,7 +9,7 @@
     <!-- Модалка -->
     <div
         x-show="modal === 'register'"
-        x-cloak { display: none !important; }
+        x-cloak
         wire:ignore.self
         id="register_window" class="_flex-display _justify-content-center _align-center screen"
     >
