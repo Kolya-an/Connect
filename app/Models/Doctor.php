@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Service;
 use App\Services\GeocodingService;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Doctor extends Model
 {
@@ -113,6 +114,9 @@ class Doctor extends Model
             'id'
         );
     }
-
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
 
 }

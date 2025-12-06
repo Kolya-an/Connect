@@ -6,6 +6,8 @@ namespace App\Filament\Resources\Doctors;
 use App\Filament\Resources\Doctors\Pages\CreateDoctor;
 use App\Filament\Resources\Doctors\Pages\EditDoctor;
 use App\Filament\Resources\Doctors\Pages\ListDoctors;
+use App\Filament\Resources\Doctors\RelationManagers\AppointmentsRelationManager;
+use App\Filament\Resources\Doctors\RelationManagers\ScheduleRelationManager;
 use App\Filament\Resources\Doctors\Schemas\DoctorForm;
 use App\Filament\Resources\Doctors\Tables\DoctorsTable;
 use App\Models\Doctor;
@@ -42,7 +44,8 @@ class DoctorResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AppointmentsRelationManager::class,
+            ScheduleRelationManager::class,
         ];
     }
 

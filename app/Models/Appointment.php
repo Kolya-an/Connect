@@ -21,6 +21,8 @@ class Appointment extends Model
 
     protected $casts = [
         'date' => 'date:Y-m-d',
+        'hour' => 'string', // 'datetime' лучше для TimePicker в Filament
+        'status' => 'string',
     ];
     public function user()
     {
