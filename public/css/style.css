@@ -2113,6 +2113,7 @@ a.about_photo span.about_photo_title {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.85);
     z-index: 1000000;
+    display: none;
 }
 .window {
     padding: 50px;
