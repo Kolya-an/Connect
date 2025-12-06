@@ -1,4 +1,4 @@
-<div x-data="{ modal: @entangle('modal') }">
+<div x-data="{ modal: null, init() { modal = @entangle('modal') } }" x-init="init()">
     <!-- Кнопка -->
     <button
         @click="modal='login'"
@@ -9,7 +9,7 @@
     <!-- Модалка -->
     <div
         x-show="modal === 'login'"
-        x-cloak
+        x-cloak { display: none !important; }
         wire:ignore.self
         id="login_window" class="_flex-display _justify-content-center _align-center screen"
     >
