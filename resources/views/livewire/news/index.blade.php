@@ -62,7 +62,7 @@
                     @endif
                 </div>
             </div>
-            <div class="_flex-display _justify-content-between _align-stretch news_list_block">
+            <div class="_flex-display _align-stretch news_list_block">
                 @foreach($news as $item)
                     <div class="news_item">
                         <a href="{{ route('news.show', $item->slug) }}" class="photo_item_img"><img src="{{ asset('uploads/' . $item->image) }}" alt=""></a>
