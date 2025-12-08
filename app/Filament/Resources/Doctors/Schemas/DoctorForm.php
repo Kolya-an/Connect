@@ -76,7 +76,7 @@ class DoctorForm
                             ->visibility('public')
                             ->image()
                             ->imageEditor()
-                            ->acceptedFileTypes(['images/png','images/jpeg'])
+                           // ->acceptedFileTypes(['images/png','images/jpeg'])
                             ->imageEditorAspectRatios([
                                 null,
                                 '16:9',
