@@ -51,6 +51,7 @@ class NewsForm
                 FileUpload::make('images')
                     ->label('Зображення зверху')
                     ->directory('news/' . date('Y') . '/' . date('m'))
+                    ->disk('public_uploads')
                     ->visibility('public')
                     ->image()
                     ->imageEditor()
