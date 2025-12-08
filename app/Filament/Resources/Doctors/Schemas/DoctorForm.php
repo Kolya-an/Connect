@@ -72,6 +72,7 @@ class DoctorForm
                         FileUpload::make('photo')
                             ->label('Фото')
                             ->directory('doctor/' . date('Y') . '/' . date('m'))
+                            ->disk('public_uploads')
                             ->visibility('public')
                             ->image()
                             ->imageEditor()

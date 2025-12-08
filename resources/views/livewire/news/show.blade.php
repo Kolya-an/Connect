@@ -50,5 +50,5 @@
             @endforeach
         </div>
     </div>
-    <div class="container"><button onclick="history.back()" class="btn rose_btn return_btn">{{__('Повернутись назад')}}</button></div>
+    <div class="container"><a onclick="history.back()" class="btn rose_btn return_btn">{{__('Повернутись назад')}}</a></div>
 </main>

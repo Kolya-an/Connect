@@ -54,13 +54,14 @@ class NewsForm
                     ->visibility('public')
                     ->image()
                     ->imageEditor()
-                    ->acceptedFileTypes(['images/png','images/jpeg'])
-                    ->imageEditorAspectRatios([
+                    //->acceptedFileTypes(['images/png','images/jpeg'])
+                    /*->imageEditorAspectRatios([
                         null,
                         '16:9',
                         '4:3',
                         '1:1',
-                    ]),
+                    ])*/
+                                ,
                 Textarea::make('meta_description')
                     ->columnSpanFull(),
 

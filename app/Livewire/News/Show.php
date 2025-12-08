@@ -12,6 +12,7 @@ class Show extends Component
     public function mount($slug)
     {
         $this->news = News::with('categories')->where('slug', $slug)->firstOrFail();
+        //dd($this->news);
         $this->news->increment('views');
     }
 
