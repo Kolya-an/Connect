@@ -72,7 +72,7 @@ class DoctorForm
                         FileUpload::make('photo')
                             ->label('Фото')
                             ->directory('doctor/' . date('Y') . '/' . date('m'))
-                            ->disk('public_uploads')
+                            ->disk('public')
                             ->visibility('public')
                             ->image()
                             ->imageEditor()
@@ -199,6 +199,7 @@ class DoctorForm
                                             ->label('Фото')
                                             ->image()
                                             ->directory('doctor/' . date('Y') . '/' . date('m'))
+
                                             ->required()
                                             ->columnSpan(1),
 
