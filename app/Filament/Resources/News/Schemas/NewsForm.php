@@ -48,7 +48,7 @@ class NewsForm
                     ->relationship('categories', 'title')
                     ->preload(),
                 TextInput::make('meta_title'),
-                FileUpload::make('images')
+                FileUpload::make('image')
                     ->label('Зображення зверху')
                     ->directory('news/' . date('Y') . '/' . date('m'))
                     ->disk('public_uploads')
