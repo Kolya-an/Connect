@@ -1,5 +1,21 @@
 <div class="spec_register1_right">
     <div class="_flex-display client_reg_right">
+        <div class="spec_register1_left_block">
+                <input
+                    id="add_name"
+                    class="client_add_name"
+                    type="text"
+                    wire:model.defer="name"
+                    placeholder="Ваше ім'я"
+                />
+                <input
+                    id="add_second_name"
+                    class="client_add_second_name"
+                    type="text"
+                    wire:model.defer="second_name"
+                    placeholder="{{__('Ваше прізвище')}}"
+                />
+        </div>
         <div class="spec_register1_left_block spec_register1_left_block_city">
             <h5>{{__('Місто')}}</h5>
             <div class="_flex-display _align-center spec_register1_cities">

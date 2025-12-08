@@ -10,6 +10,8 @@ class PatientProfile extends Component
     public $user;
     public $city;
     public $sex;
+    public $name;
+    public $second_name;
     public $notification = false;
     public $showCityModal = false;
     public $allCities = [
@@ -78,11 +80,12 @@ class PatientProfile extends Component
         $this->user = Auth::user();
 
         $user = Auth::user();
-
+        $this->name = $user->name;
         if ($user->patient) {
             $this->city = $user->patient->city;
             $this->sex = $user->patient->sex;
             $this->notification = (bool) $user->patient->notification;
+            $this->second_name = $user->patient->second_name;
         }
     }
     public function updatedSearch()
@@ -102,12 +105,20 @@ class PatientProfile extends Component
     }
     public function save()
     {
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'second_name' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'sex' => 'nullable|string|in:male,female', // Проверьте разрешенные значения
+            'notification' => 'boolean',
+        ]);
         $user = Auth::user();
-
+        $user->update(['name' => $this->name]);
         $data = [
             'city' => $this->city,
             'sex' => $this->sex,
             'notification' => $this->notification,
+            'second_name' => $this->second_name,
         ];
 
         if ($user->patient) {
