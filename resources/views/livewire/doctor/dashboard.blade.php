@@ -7,7 +7,7 @@
         <button wire:click="setStep(5)" class="btn {{ $step === 5 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Пацієнти')}}</button>
         <button wire:click="setStep(6)" class="btn {{ $step === 6 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Фото')}}</button>
         <button wire:click="setStep(7)" class="btn {{ $step === 7 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Акції та знижки')}}</button>
-        <button wire:click="setStep(8)" class="btn {{ $step === 8 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Підтримка')}}</button>
+        <a href="https://t.me/+380998402441" target="_blank" class="btn white_rose_btn">{{__('Підтримка')}}</a>
     </div>
     @if($step === 1)
         <div class="spec_register_wrapper">
