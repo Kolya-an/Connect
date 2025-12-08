@@ -51,7 +51,7 @@
 
             <!-- Внутри — форма регистрации -->
                 @livewire('register-page')
-                <div @click="modal='login'">{{__('Або увійдіть')}}</div>
+                <a @click="modal='login'">{{__('Або увійдіть')}}</a>
             </div>
         </div>
     </div>
