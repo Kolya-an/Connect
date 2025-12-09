@@ -100,7 +100,7 @@ class Appointments extends Component
     private function generateWorkingHours(): array
     {
         $hours = [];
-        for ($i = 9; $i <= 18; $i++) {
+        for ($i = 8; $i <= 21; $i++) {
             $hours[] = sprintf('%02d:00', $i);
         }
         return $hours;
@@ -139,7 +139,7 @@ class Appointments extends Component
 
         $daySchedules = $this->schedules[$normalizedDate] ?? [];
 
-        for ($i = 9; $i <= 18; $i++) {
+        for ($i = 8; $i <= 21; $i++) {
             $hour = sprintf('%02d:00', $i);
             $status = $daySchedules[$hour]['status'] ?? 'non_working';
 

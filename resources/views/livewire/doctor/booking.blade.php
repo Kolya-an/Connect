@@ -10,12 +10,7 @@
     <div class="appointments_schedule">
         <div class="swiper swiper_appointments">
             <div class="swiper-wrapper appointments_carousel">
-                @php
-                   // dd($dates);
-                @endphp
                 @foreach($dates as $date)
-
-
                     <div class="swiper-slide appointments-slide">
                         <div class="appointments_day">
 
@@ -23,9 +18,6 @@
                                 {{ $date['weekday'] }},<br>
                                 {{ $date['formatted'] }}
                             </div>
-                            @php
-                                //dd($this->getTimeSlotsForDisplay($selectedDate));
-                            @endphp
                             @foreach($this->getTimeSlotsForDisplay($date['date']) as $slot)
                                 @if($slot['status']  === 'non_working')
                                     <div class="_flex-display _justify-content-center _align-center appointments_not">-</div>
