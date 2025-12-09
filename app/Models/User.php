@@ -92,9 +92,5 @@ class User extends Authenticatable implements FilamentUser
     {
         return ucfirst($this->role ?? 'patient');
     }
-    public function doctorPatient()
-    {
-        return $this->hasOne(DoctorPatients::class);
-    }
 
 }

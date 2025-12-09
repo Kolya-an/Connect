@@ -34,6 +34,8 @@ Route::get('/patient/dashboard', PatientDashboard::class)->name('patient.dashboa
 
 Route::get('/doctors/{id}', DoctorProfile::class)->name('doctor.profile');
 Route::get('/users/{id}', UserView::class)->name('user.profile');
+Route::get('/admin/pacients/{id}/edit', UserView::class)->name('admin.user.profile');
+Route::get('/admin/doctors/{id}/edit', UserView::class)->name('admin.doctor.profile');
 
 Route::get('/news/{slug}', Show::class)->name('news.show');
 Route::get('/news/', Index::class)->name('news');

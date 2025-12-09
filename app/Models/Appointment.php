@@ -28,6 +28,14 @@ class Appointment extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function patient()
+    {
+        return $this->belongsTo(Pacient::class);
+    }
+    public function pacient()    // фамилия пациента из таблицы pacients
+    {
+        return $this->hasOne(Pacient::class, 'user_id', 'user_id');
+    }
     public function doctor()
     {
         return $this->belongsTo(Doctor::class);
@@ -50,9 +58,8 @@ class Appointment extends Model
     {
         return $this->belongsTo(Doctor::class, 'doctor_id');
     }
-    /*public function doctor(): BelongsTo
+    public function doctorProfile()
     {
-        // appointments.doctor_id -> doctors.id
-        return $this->belongsTo(Doctor::class, 'doctor_id');
-    }*/
+        return $this->hasOne(Doctor::class,'user_id','doctor_id');
+    }
 }
