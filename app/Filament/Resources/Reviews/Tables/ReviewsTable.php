@@ -17,7 +17,7 @@ class ReviewsTable
         return $table
             ->columns([
                 TextColumn::make('doctor_full_name')
-                    ->label('Лікар')
+                    ->label('Доктор')
                     ->state(function ($record): ?string {
                         // appointment -> doctor -> user -> name
                         $name = $record->appointment?->doctor?->user?->name;

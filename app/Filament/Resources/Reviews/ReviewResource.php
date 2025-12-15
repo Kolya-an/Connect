@@ -56,6 +56,10 @@ class ReviewResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with(['doctor.user']);
+            ->with([
+                'appointment',
+                'appointment.doctor',
+                'appointment.doctor.user', // Обязательно для имени доктора
+            ]);
     }
 }
