@@ -57,7 +57,7 @@
                     <h4 wire:click="filterByProcedure('{{ $procedure }}')" style="cursor: pointer">
                         {{ $procedure }}
                     </h4>
-                    <div class="_flex-display _justify-content-between _align-stretch photo_list_block">
+                    <div class="_flex-display _align-stretch photo_list_block">
                         @foreach($photos as $photo)
                             @include('livewire.partials.photo-item', ['photo' => $photo])
                         @endforeach
@@ -66,7 +66,10 @@
                     <p>{{__('Фотографій немає')}}.</p>
                 @endforelse
             @else
-                <div class="_flex-display _justify-content-between _align-stretch photo_list_block">
+                <h4 wire:click="resetFilter()" style="cursor:pointer">
+                    ← {{ $selectedProcedure }}
+                </h4>
+                <div class="_flex-display _align-stretch photo_list_block">
                     @forelse($paginatedPhotos as $photo)
                         @include('livewire.partials.photo-item', ['photo' => $photo])
                     @empty

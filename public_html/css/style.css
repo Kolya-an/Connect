@@ -758,10 +758,12 @@ p.spec_doc {
     line-height: 160%;
 }
 p.platform-action-title {
+    margin-bottom: 0;
+}
+p.platform-action-title a {
     color: #F396A2;
     font-size: 20px;
     font-weight: 700;
-    margin-bottom: 0;
 }
 .platform-action-text .fio_doc_spec {
     margin-top: 20px;
