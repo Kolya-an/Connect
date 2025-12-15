@@ -77,8 +77,8 @@ class Doctor extends Model
     }
     public function educations()
     {
-        return $this->belongsToMany(Education::class)
-            ->withPivot(['title', 'period', 'desc']);
+        // Один врач имеет МНОГО записей в таблице education
+        return $this->hasMany(Education::class);
     }
     public function extra()
     {

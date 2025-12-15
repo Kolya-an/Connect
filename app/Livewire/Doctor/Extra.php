@@ -74,16 +74,22 @@ class Extra extends Component
 
 
         $filename = time() . '_' . $this->photo->getClientOriginalName();
-        $this->photo->storeAs('extra', $filename, 'public_uploads');
+        $path = $this->photo->storeAs(
+            'extra',
+            $filename,
+            'public_uploads'
+        );
 
-        $this->photos[] = $filename;
+        $this->photos[] = $path;
         $this->saveCertificatePhotos();
     }
-    public function removeCertificateImage($filename)
+    public function removeCertificateImage($path)
     {
-        Storage::disk('public_uploads')->delete($filename);
+        Storage::disk('public_uploads')->delete($path);
 
-        $this->photos = array_values(array_filter($this->photos, fn($img) => $img !== $filename));
+        $this->photos = array_values(
+            array_filter($this->photos, fn ($img) => $img !== $path)
+        );
 
         $this->saveCertificatePhotos();
     }

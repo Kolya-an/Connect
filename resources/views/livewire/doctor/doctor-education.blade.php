@@ -72,7 +72,7 @@
                     <a target="_blank"
                        wire:contextmenu.prevent="removeImage('{{ $photo }}')"
                        title="Правий клік — видалити"
-                    ><img src="{{ asset('uploads/education/' . $photo) }}" alt=""></a>
+                    ><img src="{{ asset('uploads/' . $photo) }}" alt=""></a>
                 @endforeach
             </div>
         @endif

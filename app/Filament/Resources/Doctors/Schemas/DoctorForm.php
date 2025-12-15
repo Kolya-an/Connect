@@ -63,6 +63,7 @@ class DoctorForm
                         ,
 
                     ]),
+
                 Section::make()
                     ->schema([
                         DatePicker::make('birthday')
@@ -145,6 +146,50 @@ class DoctorForm
                         TextInput::make('plate')
                             ->label('Плашка'),
                     ]),
+                Section::make('Сведения про освіту')
+                    ->description('Додайте всі записи про отриману освіту.')
+                    ->schema([
+                        self::getEducationRepeater(),
+                    ]),
+
+                // --- B. Блок для завантаження зображень ---
+                Section::make('Скан-копії освітніх документів')
+                    ->description('Завантажте скан-копії дипломів, сертифікатів.')
+                    ->schema([
+                        FileUpload::make('education_images')
+                            ->label('Документи')
+                            ->multiple()
+                            ->reorderable()
+                            ->image()
+                            ->directory('education')
+                            ->disk('public_uploads')
+                            ->visibility('public')
+                            ->downloadable()
+                            ->columnSpanFull()
+
+                    ]),
+                Section::make('Сведения про додаткову освіту')
+                    ->description('Додайте всі записи про додаткову освіту.')
+                    ->schema([
+                        self::getExtraRepeater(),
+                    ]),
+
+                // --- B. Блок для завантаження зображень ---
+                Section::make('Скан-копії додаткових документів')
+                    ->description('Завантажте скан-копії .')
+                    ->schema([
+                        FileUpload::make('extra_images')
+                            ->label('Додаткові документи')
+                            ->multiple()
+                            ->reorderable()
+                            ->image()
+                            ->directory('extra')
+                            ->disk('public_uploads')
+                            ->visibility('public')
+                            ->downloadable()
+                            ->columnSpanFull()
+
+                    ]),
                 Section::make('Фото до/після')
                     ->schema([
                         Grid::make()
@@ -225,5 +270,50 @@ class DoctorForm
                 ->collapsed()
             ]);
     }
-
+    protected static function getEducationRepeater(): Repeater
+    {
+        return Repeater::make('educations')
+            ->relationship('educations') // Ключовий момент: використовуємо зв'язок `educations()` з моделі Doctor
+            ->label('Записи про освіту')
+            ->collapsible()
+            ->defaultItems(1)
+            ->itemLabel(fn (array $state): ?string => $state['title'] ?? null) // Етикетка для згорнутого елемента
+            ->schema([
+                TextInput::make('title')
+                    ->label('Назва навчального закладу / Спеціальність')
+                    ->required(),
+                TextInput::make('period')
+                    ->label('Період навчання (напр., 2010 - 2015)')
+                    ->required(),
+                Textarea::make('desc')
+                    ->label('Опис / Додаткова інформація')
+                    ->rows(3)
+                    ->columnSpanFull(),
+            ])
+            ->columns(2)
+            ->cloneable();
+    }
+    protected static function getExtraRepeater(): Repeater
+    {
+        return Repeater::make('educations')
+            ->relationship('extra') // Ключовий момент: використовуємо зв'язок `educations()` з моделі Doctor
+            ->label('Записи про додаткову освіту')
+            ->collapsible()
+            ->defaultItems(1)
+            ->itemLabel(fn (array $state): ?string => $state['title'] ?? null) // Етикетка для згорнутого елемента
+            ->schema([
+                TextInput::make('title')
+                    ->label('Назва навчального закладу / Спеціальність')
+                    ->required(),
+                TextInput::make('period')
+                    ->label('Період навчання')
+                    ->required(),
+                Textarea::make('desc')
+                    ->label('Опис / Додаткова інформація')
+                    ->rows(3)
+                    ->columnSpanFull(),
+            ])
+            ->columns(2)
+            ->cloneable();
+    }
 }
