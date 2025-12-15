@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Filament\Resources\Reviews\Tables;
+namespace App\Filament\Resources\DoctorPromotions\Tables;
 
+use App\Models\Doctor;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use App\Models\Review;
 use Illuminate\Database\Eloquent\Builder;
 
-class ReviewsTable
+class DoctorPromotionsTable
 {
     public static function configure(Table $table): Table
     {
@@ -19,10 +21,8 @@ class ReviewsTable
                 TextColumn::make('doctor_full_name')
                     ->label('Лікар')
                     ->state(function ($record): ?string {
-                        // appointment -> doctor -> user -> name
-                        $name = $record->appointment?->doctor?->user?->name;
-                        // appointment -> doctor -> second_name
-                        $secondName = $record->appointment?->doctor?->second_name;
+                        $name = $record->doctor?->user?->name;
+                        $secondName = $record->doctor?->second_name;
 
                         if ($name || $secondName) {
                             return trim("{$name} {$secondName}");
@@ -32,25 +32,34 @@ class ReviewsTable
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         // Используем whereHas для поиска по фамилии через цепочку связей:
                         // reviews -> appointment -> doctor
-                        return $query->whereHas('appointment.doctor', function (Builder $q) use ($search) {
+                        return $query->whereHas('doctor', function (Builder $q) use ($search) {
                             $q->where('second_name', 'like', "%{$search}%");
                         });
                     })
                     ->sortable(false),
-                TextColumn::make('medical')
-                    ->label('Процедура')
-                    ->numeric()
+                TextColumn::make('title')
+                    ->label('Назва')
+                    ->searchable(),
+                TextColumn::make('old_price')
+                    ->label('Стара ціна')
+                    ->numeric(),
+                TextColumn::make('new_price')
+                    ->label('Нова ціна')
+                    ->numeric(),
+                TextColumn::make('date_from')
+                    ->label('Початок')
+                    ->date()
                     ->sortable(),
-                TextColumn::make('service')
-                    ->label('Сервіс')
-                    ->numeric()
+                TextColumn::make('date_to')
+                    ->label('Кінець')
+                    ->date()
                     ->sortable(),
-
             ])
             ->filters([
-                //
+
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

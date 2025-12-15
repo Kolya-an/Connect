@@ -118,5 +118,9 @@ class Doctor extends Model
     {
         return $this->hasMany(Appointment::class);
     }
+    public function getFullNameAttribute(): string
+    {
+        return $this->user->name . ' ' . $this->second_name;
+    }
 
 }

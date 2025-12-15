@@ -11,7 +11,7 @@
             </b></p>
     @endif
 
-    <a class="photo_name">{{ $photo['doctor']['second_name'] }} {{ $photo['doctor']['user']['name'] }}</a>
+    <a href="/doctors/{{$photo['doctor']['user']['id']}}" class="photo_name">{{ $photo['doctor']['second_name'] }} {{ $photo['doctor']['user']['name'] }}</a>
 
     <div class="_flex-display _justify-content-between _align-center top_docs-rating_city">
 
