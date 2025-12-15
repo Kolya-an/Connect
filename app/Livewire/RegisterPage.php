@@ -57,7 +57,6 @@ class RegisterPage extends Component
         $this->validate();
 
         $role = $this->type === 'doctor' ? 'doctor' : 'patient';
-
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
@@ -86,13 +85,15 @@ class RegisterPage extends Component
         }
 
         Auth::login($user);
+//dd($role);
 
         //return redirect()->route('home');
-        return $this->redirectByRole($user);
+        return $this->redirectByRole(request(), $user);
     }
 
     protected function redirectByRole(Request $request,$user)
     {
+
         switch ($user->role) {
             case 'doctor': // Доктор
                 return redirect()->route('doctor.dashboard');
