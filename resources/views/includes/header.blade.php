@@ -56,20 +56,20 @@
                         @endif
                         @if(in_array(Auth::user()->role, ['admin']))
                             <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                                <img src="{{asset('images/cab.png')}}">
+                                <img src="{{asset('images/cab.png')}}" alt="Connect">
                             </a>
                         @endif
                 @endauth
                 @guest
                     <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                        <img src="{{asset('images/cab.png')}}">
+                        <img src="{{asset('images/cab.png')}}" alt="Connect">
                     </a>
                 @endguest
             </div>
         </div>
         <div class="_flex-display _justify-content-between _align-center header_mob">
             <div class="header_logo">
-                <a href="/"><img src="{{asset('images/logomob.png')}}"/></a>
+                <a href="/"><img src="{{asset('images/logomob.png')}}" alt="Connect" /></a>
             </div>
             <div class="_flex-display _align-center header_mob_buttons">
                 <div class="_flex-display _justify-content-between _align-center header_button">
@@ -83,13 +83,13 @@
                         @endif
                         @if(in_array(Auth::user()->role, ['admin']))
                             <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                                <img src="{{asset('images/cab.png')}}">
+                                <img src="{{asset('images/cab.png')}}" alt="Connect">
                             </a>
                         @endif
                     @endauth
                     @guest
                         <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                            <img src="{{asset('images/cab.png')}}">
+                            <img src="{{asset('images/cab.png')}}" alt="Connect">
                         </a>
                     @endguest
                 </div>

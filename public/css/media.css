@@ -53,6 +53,9 @@
     #home-articles {
         padding-bottom: 0;
     }
+    header {
+        padding: 15px 0;
+    }
     footer {
         margin-top: 40px;
     }
@@ -69,6 +72,10 @@
         font-size: 35px;
         margin-bottom: 15px;
         line-height: 130%;
+    }
+    .btn {
+        padding-left: 14px;
+        padding-right: 14px;
     }
     .header_mob {
         height: 65px;
@@ -90,10 +97,10 @@
     }
     .header_mob_block {
         display: none;
-        position: absolute;
+        position: fixed;
         left: 0;
         top: 0;
-        z-index: 90;
+        z-index: 900;
         width: 100%;
         border-radius: 0 0 20px 20px;
         background: #FFEDED;
@@ -128,10 +135,7 @@
         margin-bottom: 10px;
     }
     .home_banner {
-        padding-top: 20px;
-        padding-bottom: 0;
-        padding-left: 0;
-        padding-right: 0;
+        padding: 20px 0 0 0;
         margin: 0 auto;
     }
     .p.home_banner_title {
@@ -225,10 +229,10 @@
     #more_filter_block {
         width: 360px;
         margin-left: -180px;
-        padding: 0;
+        padding: 5px;
     }
     #search .search_field_sex {
-        padding-left: 14px;
+        padding-left: 30px;
         background-position-x: 8px;
     }
     .more_filter_checkboxes {
@@ -237,14 +241,21 @@
     .more_filter_numb {
         width: calc(100% - 144px);
     }
+    .more_filter_numb p {
+        width:100%;
+    }
     .more_filter_checkbox span {
         font-size: 14px;
     }
     .more_filter_numb_field {
-        width: calc(50% - 8px);
+        width: 100%;
+        margin-bottom: 5px;
+        justify-content: space-between;
+        padding-right: 20px;
     }
     #search .more_filter_numb_field input {
         padding: 8px 12px;
+        width: calc(100% - 80px);
     }
     .doctor_photo {
         margin-top: 10px;
@@ -294,10 +305,10 @@
         right: 40%;
     }
     .all_services_button {
-        width: 48%;
+        width: auto;
     }
     .save_button {
-        width: 47%;
+        width: auto;
     }
     #photo_top .search_field.search_field_service {
         width: calc(50% - 6px);
@@ -426,6 +437,13 @@
         height: 300px;
         margin-bottom: 10px;
         border-radius: 0;
+        top: 0;
+    }
+    #btn_reg {
+        font-size: 12px;
+    }
+    #search input#search_service {
+        padding-left: 30px
     }
 }
 @media screen and (max-width: 425px) {

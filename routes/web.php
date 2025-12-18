@@ -14,7 +14,6 @@ use App\Livewire\AboutPage;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Doctor\Dashboard as DoctorDashboard;
 use App\Livewire\Patient\Dashboard as PatientDashboard;
-use Livewire\Volt\Volt;
 use App\Livewire\Pages\Auth\ForgotPassword;
 use App\Livewire\Pages\Auth\ResetPassword;
 
@@ -45,9 +44,6 @@ Route::get('/photobank', Photobank::class)->name('photobank');
 Route::get('/map', Map::class)->name('map');
 Route::get('/test', TestPage::class)->name('test');
 
-/*Volt::route('/forgot-password', 'pages.auth.forgot-password')
-    ->middleware('guest')
-    ->name('password.request');*/
 Route::get('/forgot-password', ForgotPassword::class)
     ->middleware('guest')
     ->name('password.request');

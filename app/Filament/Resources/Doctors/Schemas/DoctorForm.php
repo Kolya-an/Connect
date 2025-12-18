@@ -284,7 +284,8 @@ class DoctorForm
                     ->required(),
                 TextInput::make('period')
                     ->label('Період навчання (напр., 2010 - 2015)')
-                    ->required(),
+                    //->required()
+                ,
                 Textarea::make('desc')
                     ->label('Опис / Додаткова інформація')
                     ->rows(3)
@@ -295,7 +296,7 @@ class DoctorForm
     }
     protected static function getExtraRepeater(): Repeater
     {
-        return Repeater::make('educations')
+        return Repeater::make('extra')
             ->relationship('extra') // Ключовий момент: використовуємо зв'язок `educations()` з моделі Doctor
             ->label('Записи про додаткову освіту')
             ->collapsible()
@@ -307,7 +308,8 @@ class DoctorForm
                     ->required(),
                 TextInput::make('period')
                     ->label('Період навчання')
-                    ->required(),
+                    //->required()
+                ,
                 Textarea::make('desc')
                     ->label('Опис / Додаткова інформація')
                     ->rows(3)

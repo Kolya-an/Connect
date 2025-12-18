@@ -54,6 +54,7 @@ class Extra extends Component
     }
     public function updateField($id, $field, $value)
     {
+
         $education = \App\Models\Extra::find($id);
         if ($education) {
             $education->update([$field => $value]);

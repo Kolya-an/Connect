@@ -200,7 +200,7 @@
                                     </svg></a>
                             </div>
                             <div class="_flex-display _justify-content-between _align-center platform-action-bottom">
-                                <div class="platform-action-image"><img src="{{ asset('uploads/' . $promotion->doctor->photo) }}" alt="" /></div>
+                                <div class="platform-action-image"><img src="{{ asset('uploads/' . $promotion->doctor->photo) }}" alt="{{ $promotion->title }}" /></div>
                                 <div class="platform-action-text">
                                     <p class="platform-action-title"><a href="/doctors/{{$promotion->doctor->user->id}}?tab=5">{{ $promotion->title }}</a></p>
                                     <p>{{ $promotion->description }}</p>
@@ -255,7 +255,7 @@
                                 </svg></a>
                         </div>
                         <div class="_flex-display _justify-content-between _align-center platform-action-bottom">
-                            <div class="platform-action-image"><img src="{{ asset('images/platform-action-images.png') }}" alt="" /></div>
+                            <div class="platform-action-image"><img src="{{ asset('uploads/' . $promotion->doctor->photo) }}" alt="{{ $promotion->title }}" /></div>
                             <div class="platform-action-text">
                                 <p class="platform-action-title">{{ $promotion->title }}</p>
                                 <p>{{ $promotion->description }}</p>

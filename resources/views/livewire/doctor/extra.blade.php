@@ -21,6 +21,7 @@
                         type="text"
                         placeholder="{{__('Період навчання')}}"
                         value="{{ $ext['period'] }}"
+                        required
                         wire:blur="updateField({{ $ext['id'] }}, 'period', $event.target.value)"
                     />
                 </div>

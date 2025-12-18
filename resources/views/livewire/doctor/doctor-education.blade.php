@@ -23,6 +23,7 @@
                         value="{{ $edu['period'] }}"
                         wire:blur="updateField({{ $edu['id'] }}, 'period', $event.target.value)"
                     />
+
                 </div>
                 <button type="button" wire:click="removeEducation({{ $edu['id'] }})">
                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.000000" height="24.000000" fill="none" clip-path="url(#clipPath_0)" customFrame="url(#clipPath_0)">

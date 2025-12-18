@@ -120,7 +120,7 @@ body {
 svg:focus {
     outline: none !important;
 }
-div{
+div {
     box-sizing: border-box;
 }
 section {
@@ -335,7 +335,7 @@ footer {
     box-sizing: border-box;
     margin-top: 50px;
     position: relative;
-    z-index: 99;
+    z-index: 9;
 }
 .footer {
     width: 100%;
@@ -495,7 +495,7 @@ p.home_banner_title span {
     padding: 16px 26px;
     margin: 23px 0 16px;
     gap: 16px;
-    box-shadow: 0 79px 128px 0 rgba(192, 192, 192, 0.09), 0 28.836px 46.722px 0 rgba(192, 192, 192, 0.06), 0 13.999px 22.683px 0 rgba(192, 192, 192, 0.05), 0 6.863px 11.119px 0 rgba(192, 192, 192, 0.04), 0 2.714px 4.397px 0 rgba(192, 192, 192, 0.03);
+    box-shadow: 0 79px 128px 0 rgba(192, 192, 192, 0.09), 0 28px 46px 0 rgba(192, 192, 192, 0.06), 0 13px 22px 0 rgba(192, 192, 192, 0.05), 0 6px 11px 0 rgba(192, 192, 192, 0.04), 0 2px 4px 0 rgba(192, 192, 192, 0.03);
 }
 .field_section {
     gap: 12px;
@@ -578,7 +578,7 @@ p.home_banner_title span {
 .doc_number_one .doc_number_one_image {
     border-radius: 470px;
 }
-p.fio_doc {
+a.fio_doc {
     font-weight: 600;
     font-size: 20px;
     margin-bottom: 0;
@@ -771,7 +771,7 @@ p.platform-action-title a {
 .platform-action-text p.top_docs-rating, .platform-action-text p.top_docs-city {
     font-size: 12px;
 }
-.platform-action-text p.fio_doc {
+.platform-action-text a.fio_doc {
     font-size: 18px;
 }
 .platform-action-text p.spec_doc {
@@ -2538,7 +2538,7 @@ textarea.add_desc {
     color: rgba(0, 0, 0, 1);
 }
 .add_photo.add_photo_page {
-    width: 151px;
+    /*width: 151px;*/
     height: 35px;
     font-size: 16px;
     gap: 8px;

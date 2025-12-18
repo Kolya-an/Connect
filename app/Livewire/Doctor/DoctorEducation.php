@@ -19,7 +19,6 @@ class DoctorEducation extends Component
     public $doctor;
     public $photos = [];
     public $photo;
-
     public function mount()
     {
         $doctor = Auth::user()->doctor;
@@ -57,15 +56,20 @@ class DoctorEducation extends Component
 
     public function updateField($id, $field, $value)
     {
+        $value = trim($value ?? '');
+
         $education = Education::find($id);
+
         if ($education) {
-            $education->update([$field => $value]);
+            $education->update([
+                $field => $value === '' ? '' : $value,
+            ]);
         }
 
-        // Оновлюємо локальний масив, щоб UI одразу відображав зміни
+        // Обновляем локальный массив
         foreach ($this->educations as &$item) {
             if ($item['id'] == $id) {
-                $item[$field] = $value;
+                $item[$field] = $value === '' ? '' : $value;
                 break;
             }
         }
