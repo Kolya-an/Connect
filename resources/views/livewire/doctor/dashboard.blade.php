@@ -61,7 +61,7 @@
         @livewire('doctor.promotions')
         <div class="_flex-display _align-center spec_register_buttons">
             <a wire:click="setStep(6)" class="white_rose_btn register_prev">{{__('Назад')}}</a>
-            <a wire:click="setStep(8)" class="rose_btn register_next">{{__('Далі')}}</a>
+            <a href="/doctors/{{Auth::id()}}" class="rose_btn register_next" target="_blank">{{__('Подивитися сторінку')}}</a>
         </div>
     @elseif($step === 8)
 
