@@ -77,12 +77,12 @@
                 @if($isLoading)
                     <div class="text-center py-4">
                         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-                        <div class="text-gray-500 mt-2">Пошук вулиць...</div>
+                        <div class="text-gray-500 mt-2">{{__('Пошук вулиць...')}}</div>
                     </div>
                 @elseif(count($suggestions) > 0)
                     <div class="border border-gray-300 rounded-md">
                         <div class="bg-gray-50 px-4 py-2 text-sm text-gray-600 border-b">
-                            Знайдено {{ count($suggestions) }} вулиць
+                            {{__('Знайдено')}} {{ count($suggestions) }} {{__('вулиць')}}
                         </div>
                         <ul class="divide-y divide-gray-200">
                             @foreach($suggestions as $index => $suggestion)
@@ -115,15 +115,15 @@
                 @endif
                 @if($search && strlen($search) >= 2 && !$isLoading)
                 <div class="text-center py-6 text-gray-500">
-                    <div class="mb-2">Вулиць за запитом "{{ $search }}" не знайдено</div>
+                    <div class="mb-2">{{__('Вулиць за запитом')}} "{{ $search }}" {{__('не знайдено')}}</div>
                     <button wire:click="saveAddress"
                             class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition-colors">
-                        Використати цю назву
+                        {{__('Використати цю назву')}}
                     </button>
                 </div>
                 @elseif(!$search)
                     <div class="text-center py-8 text-gray-400">
-                        ✏️ Введіть назву вулиці для пошуку
+                        ✏️ {{__('Введіть назву вулиці для пошуку')}}
                     </div>
                 @endif
             </div>

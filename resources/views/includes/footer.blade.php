@@ -78,7 +78,204 @@
 <div id="btn_top"><img src="{{asset('images/top.png')}}"/></div>
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{{-- Подключаем Cropper.js --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 
+{{-- Alpine.js компонент для Before/After --}}
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('beforeAfterComponent', () => ({
+            cropperBefore: null,
+            cropperAfter: null,
+            currentAspectRatio: 1/2,
+
+            init() {
+                console.log('BeforeAfter компонент инициализирован');
+
+                // Следим за изменением showAddModal
+                this.$watch('showAddModal', (value) => {
+                    if (value) {
+                        setTimeout(() => {
+                            this.updateAspectRatio();
+                            this.reinitializeCroppersIfNeeded();
+                        }, 50);
+                    } else {
+                        this.destroyCroppers();
+                    }
+                });
+
+                // Инициализация при первой загрузке
+                if (this.$wire.get('showAddModal')) {
+                    setTimeout(() => {
+                        this.updateAspectRatio();
+                    }, 100);
+                }
+            },
+
+            reinitializeCroppersIfNeeded() {
+                // Проверяем, есть ли уже загруженные изображения
+                const fileBefore = document.getElementById('fileBefore');
+                const fileAfter = document.getElementById('fileAfter');
+
+                if (fileBefore?.files?.length > 0) {
+                    this.initCropperFromFile(fileBefore.files[0], 'before');
+                }
+
+                if (fileAfter?.files?.length > 0) {
+                    this.initCropperFromFile(fileAfter.files[0], 'after');
+                }
+            },
+
+            initCropperFromFile(file, type) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.setupCropper(type, e.target.result);
+                };
+                reader.readAsDataURL(file);
+            },
+
+            updateAspectRatio() {
+                const orientation = this.$wire.get('orientation');
+                this.currentAspectRatio = orientation === 'vertical' ? 2/1 : 1/2;
+
+                if (this.cropperBefore) {
+                    this.cropperBefore.setAspectRatio(this.currentAspectRatio);
+                }
+                if (this.cropperAfter) {
+                    this.cropperAfter.setAspectRatio(this.currentAspectRatio);
+                }
+            },
+
+            initCropper(event, type) {
+                const file = event.target.files[0];
+                if (!file) return;
+                this.initCropperFromFile(file, type);
+            },
+
+            setupCropper(type, imageUrl) {
+                const containerId = `cropContainer${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                const imageId = `imageToCrop${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                const previewId = `preview${type.charAt(0).toUpperCase() + type.slice(1)}`;
+
+                // Показываем контейнер для кропа, скрываем превью
+                const container = document.getElementById(containerId);
+                const preview = document.getElementById(previewId);
+
+                if (container && preview) {
+                    container.style.display = 'block';
+                    preview.style.display = 'none';
+                }
+
+                const imageElement = document.getElementById(imageId);
+                if (!imageElement) return;
+
+                imageElement.src = imageUrl;
+
+                // Уничтожаем старый кроппер
+                if (type === 'before' && this.cropperBefore) {
+                    this.cropperBefore.destroy();
+                } else if (type === 'after' && this.cropperAfter) {
+                    this.cropperAfter.destroy();
+                }
+
+                // Создаем новый кроппер после загрузки изображения
+                imageElement.onload = () => {
+                    this.createCropper(imageElement, type);
+                };
+            },
+
+            createCropper(imageElement, type) {
+                try {
+                    const cropper = new Cropper(imageElement, {
+                        aspectRatio: this.currentAspectRatio,
+                        viewMode: 1,
+                        autoCropArea: 0.8,
+                        movable: true,
+                        zoomable: true,
+                        rotatable: true,
+                        scalable: true,
+                    });
+
+                    if (type === 'before') {
+                        this.cropperBefore = cropper;
+                    } else {
+                        this.cropperAfter = cropper;
+                    }
+                } catch (error) {
+                    console.error(`Ошибка при создании Cropper:`, error);
+                }
+            },
+
+            resetCrop(type) {
+                const cropper = type === 'before' ? this.cropperBefore : this.cropperAfter;
+                if (cropper) cropper.reset();
+            },
+
+            removeImage(type) {
+                if (type === 'before' && this.cropperBefore) {
+                    this.cropperBefore.destroy();
+                    this.cropperBefore = null;
+                } else if (type === 'after' && this.cropperAfter) {
+                    this.cropperAfter.destroy();
+                    this.cropperAfter = null;
+                }
+
+                const containerId = `cropContainer${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                const previewId = `preview${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                const fileInputId = `file${type.charAt(0).toUpperCase() + type.slice(1)}`;
+
+                const container = document.getElementById(containerId);
+                const preview = document.getElementById(previewId);
+                const fileInput = document.getElementById(fileInputId);
+
+                if (container) container.style.display = 'none';
+                if (preview) preview.style.display = 'flex';
+                if (fileInput) fileInput.value = '';
+            },
+
+            destroyCroppers() {
+                if (this.cropperBefore) {
+                    this.cropperBefore.destroy();
+                    this.cropperBefore = null;
+                }
+                if (this.cropperAfter) {
+                    this.cropperAfter.destroy();
+                    this.cropperAfter = null;
+                }
+            },
+
+            async saveImages() {
+                if (!this.cropperBefore || !this.cropperAfter) {
+                    alert('Будь ласка, завантажте та обріжте обидва фото!');
+                    return;
+                }
+
+                let beforeData, afterData;
+                try {
+                    const beforeCanvas = this.cropperBefore.getCroppedCanvas({
+                        width: 800,
+                        height: this.currentAspectRatio === 2/1 ? 400 : 1600
+                    });
+                    beforeData = beforeCanvas.toDataURL('image/jpeg', 0.8);
+
+                    const afterCanvas = this.cropperAfter.getCroppedCanvas({
+                        width: 800,
+                        height: this.currentAspectRatio === 2/1 ? 400 : 1600
+                    });
+                    afterData = afterCanvas.toDataURL('image/jpeg', 0.8);
+                } catch (error) {
+                    alert('Помилка при обробці зображень');
+                    return;
+                }
+
+                this.$wire.set('photo_before_data', beforeData);
+                this.$wire.set('photo_after_data', afterData);
+                this.$wire.addPhoto();
+            }
+        }));
+    });
+</script>
 @livewireScripts
 @stack('scripts')
 </body>

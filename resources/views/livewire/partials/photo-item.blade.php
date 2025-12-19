@@ -1,8 +1,10 @@
 <div class="photo_item">
-    <a class="photo_item_img">
-        <img src="{{ asset('uploads/' . $photo['photo']) }}" alt="{{ $photo['procedure'] }}">
+    <a href="/doctors/{{$photo['doctor']['user']['id']}}" class="photo_item_img">
+        <div class="_flex-display comparison-container {{ $photo['orientation'] === 'vertical' ? '_flex-column' : '_flex-row' }}">
+            <img src="{{ asset('uploads/' . $photo['photo_before']) }}" alt="{{ $photo['procedure'] }}">
+            <img src="{{ asset('uploads/' . $photo['photo_after']) }}" alt="{{ $photo['procedure'] }}">
+        </div>
     </a>
-
     @if(!empty($photo['doctor']['types']) && is_array($photo['doctor']['types']))
         <p><b>
                 @foreach($photo['doctor']['types'] as $type)

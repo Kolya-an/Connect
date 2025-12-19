@@ -1,8 +1,13 @@
 <div>
-    <div class="_flex-display _justify-content-between _align-stretch photo_list_block">
+    <div class="_flex-display _align-stretch photo_list_block">
         @forelse($photos as $photo)
             <div class="photo_item">
-                <a class="photo_item_img"><img src="{{ asset('uploads/'.$photo->photo) }}" alt=""></a>
+                <div class="photo_item_img">
+                    <div class="_flex-display comparison-container {{ $photo->orientation === 'vertical' ? '_flex-column' : '_flex-row' }}">
+                        <img src="{{ asset('uploads/'.$photo->photo_before) }}">
+                        <img src="{{ asset('uploads/'.$photo->photo_after) }}">
+                    </div>
+                </div>
                 <p><b>{{__('Процедура')}}:</b> {{ $photo->procedure }}</p>
                 <p><b>{{__('Препарат')}}:</b> {{ $photo->product }}</p>
             </div>

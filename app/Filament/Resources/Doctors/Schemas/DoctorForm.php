@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Doctors\Schemas;
 use App\Models\Doctor;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -12,6 +13,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use App\Models\Service;
 
@@ -168,7 +170,7 @@ class DoctorForm
                             ->columnSpanFull()
 
                     ]),
-                Section::make('Сведения про додаткову освіту')
+                Section::make('Відомості про додаткову освіту')
                     ->description('Додайте всі записи про додаткову освіту.')
                     ->schema([
                         self::getExtraRepeater(),
@@ -240,13 +242,41 @@ class DoctorForm
                                 ->schema([
                                     Grid::make(3)->schema([
                                         // Превью фото
-                                        FileUpload::make('photo')
-                                            ->label('Фото')
+                                        FileUpload::make('photo_before')
+                                            ->label('Фото До')
                                             ->image()
                                             ->directory('doctor/' . date('Y') . '/' . date('m'))
                                             ->disk('public_uploads')
                                             ->required()
+                                            ->image()
+                                            ->imageEditor()
+                                            ->imageEditorAspectRatios([
+                                                '2:1',
+                                                '1:2',
+                                            ])
                                             ->columnSpan(1),
+                                        FileUpload::make('photo_after')
+                                            ->label('Фото Після')
+                                            ->image()
+                                            ->directory('doctor/' . date('Y') . '/' . date('m'))
+                                            ->disk('public_uploads')
+                                            ->required()
+                                            ->imageEditor()
+                                            ->imageEditorAspectRatios([
+                                                '2:1',
+                                                '1:2',
+                                            ])
+                                            ->columnSpan(1),
+                                        Radio::make('orientation')
+                                            ->label('Розташування фото')
+                                            ->options([
+                                                'horizontal' => 'Горизонтально (поруч)',
+                                                'vertical'   => 'Вертикально (одне під одним)',
+                                            ])
+                                            ->default('horizontal')
+                                            ->required()
+                                            ->reactive()
+                                            ->columnSpan(2),
 
                                         // Поля справа
                                         Grid::make(2)->schema([

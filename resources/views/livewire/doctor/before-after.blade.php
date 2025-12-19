@@ -1,7 +1,58 @@
-<div class="spec_register_wrapper">
+<div class="spec_register_wrapper" x-data="beforeAfterComponent" wire:ignore.self>
+    <style>
+
+        .upload-label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .upload-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f396a2;
+            color: white;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .upload-button:hover {
+            background: #e08792;
+        }
+
+        .preview-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .crop-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .small-btn {
+            padding: 5px 15px;
+            font-size: 14px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .small-btn:hover {
+            background: #5a6268;
+        }
+    </style>
     <h5>{{__('Ваші - До/Після')}}</h5>
     <button wire:click="$set('showAddModal', true)"
-            class="_flex-display _justify-content-center _align-center btn white_rose_btn add_photo add_photo_page add_photo_btn">
+    class="_flex-display _justify-content-center _align-center btn white_rose_btn add_photo add_photo_page add_photo_btn">
         <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.000000" height="14.000000" fill="none">
             <rect id="ic:round-plus" width="14.000000" height="14.000000" x="0.000000" y="0.000000" fill="rgb(255,255,255)" fill-opacity="0" />
             <path id="Vector" d="M13 8L8 8L8 13C8 13.2652 7.89464 13.5196 7.70711 13.7071C7.51957 13.8946 7.26522 14 7 14C6.73478 14 6.48043 13.8946 6.29289 13.7071C6.10536 13.5196 6 13.2652 6 13L6 8L1 8C0.734784 8 0.48043 7.89464 0.292893 7.70711C0.105357 7.51957 0 7.26522 0 7C0 6.73478 0.105357 6.48043 0.292893 6.29289C0.48043 6.10536 0.734784 6 1 6L6 6L6 1C6 0.734784 6.10536 0.480429 6.29289 0.292893C6.48043 0.105357 6.73478 -8.88178e-16 7 0C7.26522 -8.88178e-16 7.51957 0.105357 7.70711 0.292893C7.89464 0.480429 8 0.734784 8 1L8 6L13 6C13.2652 6 13.5196 6.10536 13.7071 6.29289C13.8946 6.48043 14 6.73478 14 7C14 7.26522 13.8946 7.51957 13.7071 7.70711C13.5196 7.89464 13.2652 8 13 8Z" fill="rgb(243,150,162)" fill-rule="nonzero" />
@@ -9,10 +60,14 @@
     </button>
     <p>{{__('Додаючи фото, лікар повинен мати згоду на це від пацієнта!')}}</p>
     <div class="_flex-display _align-stretch photo_list_block">
-        @forelse($photos as $item)
+    @forelse($photos as $item)
             <div class="photo_item">
                 <a wire:click="deletePhoto({{ $item->id }})" class="photo_item_img">
-                    <img src="{{ asset('uploads/'.$item->photo) }}" alt="{{ $item->procedure }}">
+                    {{--<img src="{{ asset('uploads/'.$item->photo) }}" alt="{{ $item->procedure }}">--}}
+                    <div class="_flex-display comparison-container {{ $item->orientation === 'vertical' ? '_flex-column' : '_flex-row' }}">
+                        <img src="{{ asset('uploads/'.$item->photo_before) }}">
+                        <img src="{{ asset('uploads/'.$item->photo_after) }}">
+                    </div>
                     <div class="_flex-display _justify-content-center _align-center delete_image _display_none">
                         <svg width="23" height="29" viewBox="0 0 23 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M1.58333 25.3333C1.58333 26.1732 1.91696 26.9786 2.51083 27.5725C3.10469 28.1664 3.91015 28.5 4.75 28.5H17.4167C18.2565 28.5 19.062 28.1664 19.6558 27.5725C20.2497 26.9786 20.5833 26.1732 20.5833 25.3333V6.33333H1.58333V25.3333ZM4.75 9.5H17.4167V25.3333H4.75V9.5ZM16.625 1.58333L15.0417 0H7.125L5.54167 1.58333H0V4.75H22.1667V1.58333H16.625Z" fill="white"/>
@@ -28,9 +83,9 @@
         @endforelse
     </div>
 
-    @if($showAddModal)
+@if($showAddModal)
         <div id="add_photo" class="_flex-display _justify-content-center _align-center screen">
-            <div class="window add_info_window">
+            <div class="window add_info_window" style="padding: 20px">
                 <div class="_flex-display _justify-content-between _align-center window_top">
                     <h4>{{__('Додати До/Після')}}</h4>
                     <button wire:click="$set('showAddModal', false)" id="window_close" class="window_close">
@@ -51,41 +106,76 @@
                         </svg>
                     </button>
                 </div>
+                <div class="_flex-display _justify-content-between _align-center orientation-selector" style="margin: 15px 0; gap: 10px;">
+                    <label class="custom-radio">
+                        <input type="radio" wire:model.live="orientation" value="horizontal" x-on:change="updateAspectRatio">
+                        <span></span>{{__('Горизонтально (1:2)')}}
+                    </label>
+                    <label class="custom-radio">
+                        <input type="radio" wire:model.live="orientation" value="vertical" x-on:change="updateAspectRatio">
+                        <span></span>{{__('Вертикально (2:1)')}}
+                    </label>
+                </div>
+
+
                 <div class="_flex-display _justify-content-between _align-center">
-                    <button type="button"
-                            onclick="document.getElementById('photoInput').click()"
-                            class="_flex-display _justify-content-center _align-center btn white_rose_btn add_photo add_photo_page">
-                        <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.000000" height="14.000000" fill="none">
-                            <rect id="ic:round-plus" width="14.000000" height="14.000000" x="0.000000" y="0.000000" fill="rgb(255,255,255)" fill-opacity="0" />
-                            <path id="Vector" d="M13 8L8 8L8 13C8 13.2652 7.89464 13.5196 7.70711 13.7071C7.51957 13.8946 7.26522 14 7 14C6.73478 14 6.48043 13.8946 6.29289 13.7071C6.10536 13.5196 6 13.2652 6 13L6 8L1 8C0.734784 8 0.48043 7.89464 0.292893 7.70711C0.105357 7.51957 0 7.26522 0 7C0 6.73478 0.105357 6.48043 0.292893 6.29289C0.48043 6.10536 0.734784 6 1 6L6 6L6 1C6 0.734784 6.10536 0.480429 6.29289 0.292893C6.48043 0.105357 6.73478 -8.88178e-16 7 0C7.26522 -8.88178e-16 7.51957 0.105357 7.70711 0.292893C7.89464 0.480429 8 0.734784 8 1L8 6L13 6C13.2652 6 13.5196 6.10536 13.7071 6.29289C13.8946 6.48043 14 6.73478 14 7C14 7.26522 13.8946 7.51957 13.7071 7.70711C13.5196 7.89464 13.2652 8 13 8Z" fill="rgb(243,150,162)" fill-rule="nonzero" />
-                        </svg> {{__('Додати фото')}}
-                    </button>
-                    @if ($photo)
-                        <div style="margin-top:10px;">
-                            <img src="{{ $photo->temporaryUrl() }}" alt="Preview" style="width:100px; border-radius:5px;">
+                    <div style="flex: 1;">
+                        <label class="upload-label">
+                            <span>{{__('Фото ДО')}}</span>
+                            <input type="file" id="fileBefore" accept="image/*" x-on:change="initCropper($event, 'before')" style="display: none;">
+                            <div class="upload-button">{{__('Вибрати фото')}}</div>
+                        </label>
+                        <div class="preview-container">
+                            <div id="cropContainerBefore" style="width: 100%; height: 300px; display: none;">
+                                <img id="imageToCropBefore" style="max-width: 100%;">
+                            </div>
+                            <div id="previewBefore" style="width: 100%; height: 300px; background: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                                <span style="color: #999;">{{__('Попередній перегляд')}}</span>
+                            </div>
                         </div>
-                    @endif
+                        <div class="crop-controls" style="margin-top: 10px; display: none;" id="controlsBefore">
+                            <button type="button" x-on:click="resetCrop('before')" class="btn small-btn">{{__('Скинути')}}</button>
+                            <button type="button" x-on:click="removeImage('before')" class="btn small-btn">{{__('Видалити')}}</button>
+                        </div>
+                    </div>
+
+                    <div style="flex: 1;">
+                        <label class="upload-label">
+                            <span>{{__('Фото ПОСЛЯ')}}</span>
+                            <input type="file" id="fileAfter" accept="image/*" x-on:change="initCropper($event, 'after')" style="display: none;">
+                            <div class="upload-button">{{__('Вибрати фото')}}</div>
+                        </label>
+                        <div class="preview-container">
+                            <div id="cropContainerAfter" style="width: 100%; height: 300px; display: none;">
+                                <img id="imageToCropAfter" style="max-width: 100%;">
+                            </div>
+                            <div id="previewAfter" style="width: 100%; height: 300px; background: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                                <span style="color: #999;">{{__('Попередній перегляд')}}</span>
+                            </div>
+                        </div>
+                        <div class="crop-controls" style="margin-top: 10px; display: none;" id="controlsAfter">
+                            <button type="button" x-on:click="resetCrop('after')" class="btn small-btn">{{__('Скинути')}}</button>
+                            <button type="button" x-on:click="removeImage('after')" class="btn small-btn">{{__('Видалити')}}</button>
+                        </div>
+                    </div>
                 </div>
-                <input type="file" id="photoInput" wire:model="photo" accept="image/*" style="display:none">
-                @error('photo')
-                <span class="error" style="color:red">{{ $message }}</span>
-                @enderror
+
                 <div class="search_field search_field_input">
                     <input type="text"
-                           wire:model="procedure"
-                           placeholder="{{__('Процедура')}}"
-                           class="add_desc_photo"
-                           style="padding:0 10px;background:none">
-                @error('procedure') <span class="error">{{ $message }}</span> @enderror
+                    wire:model="procedure"
+                    placeholder="{{__('Процедура')}}"
+                    class="add_desc_photo"
+                    style="padding:0 10px;background:none">
+                    @error('procedure') <span class="error">{{ $message }}</span> @enderror
                 </div>
                 <div class="search_field search_field_input">
                     <input type="text"
-                           wire:model="product"
-                           placeholder="{{__('Препарат')}}"
-                           class="add_desc_photo"
-                           style="padding:0 10px;background:none">
+                    wire:model="product"
+                    placeholder="{{__('Препарат')}}"
+                    class="add_desc_photo"
+                    style="padding:0 10px;background:none">
                 </div>
-                <button wire:click="addPhoto" class="btn rose_btn submit_window">{{__('Зберегти')}}</button>
+                <button @click="saveImages()" class="btn rose_btn">{{__('Зберегти')}}</button>
             </div>
         </div>
     @endif
