@@ -158,7 +158,7 @@
                     <div class="doc-plate rose-plate _display_table">{{__('Ваша сторінка')}}</div>
                     @if(!empty($about->our_text) && strip_tags($about->our_text) !== ''){!! $about->our_text !!}@endif
                     @if(!empty($about->our_rose_text) && strip_tags($about->our_rose_text) !== '')
-                        {{ $about->our_rose_text }}
+                        {!! $about->our_rose_text !!}
                     @else
                         <a class="btn rose_btn" href="#">{{__('Підтримка')}}</a>
                     @endif

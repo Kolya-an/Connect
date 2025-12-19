@@ -150,8 +150,22 @@ class AboutForm
                                 'blockquote',
                                 'table',
                             ]),
-                        TextInput::make('our_rose_text')
-                            ->label('Текст в рожевому блоці'),
+                        RichEditor::make('our_rose_text')
+                            ->label('Текст в рожевому блоці')
+                            ->toolbarButtons([
+                                'bold',
+                                'italic',
+                                'underline',
+                                'strike',
+                                'h1',
+                                'h2',
+                                'h3',
+                                'bulletList',
+                                'orderedList',
+                                'link',
+                                'blockquote',
+                                'table',
+                            ]),
                     ]),
 
 
