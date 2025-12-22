@@ -25,7 +25,7 @@
         .preview-container {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 200px;
             border: 2px dashed #ddd;
             border-radius: 8px;
             overflow: hidden;
@@ -87,7 +87,8 @@
         <div id="add_photo" class="_flex-display _justify-content-center _align-center screen">
             <div class="window add_info_window" style="padding: 20px">
                 <div class="_flex-display _justify-content-between _align-center window_top">
-                    <h4>{{__('Додати До/Після')}}</h4>
+                    {{--<h4>{{__('Додати До/Після')}}</h4>--}}
+                    <button @click="saveImages()" class="btn rose_btn">{{__('Зберегти')}}</button>
                     <button wire:click="$set('showAddModal', false)" id="window_close" class="window_close">
                         <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" clip-path="url(#clipPath_6)" customFrame="url(#clipPath_6)">
                             <defs>
@@ -107,11 +108,11 @@
                     </button>
                 </div>
                 <div class="_flex-display _justify-content-between _align-center orientation-selector" style="margin: 15px 0; gap: 10px;">
-                    <label class="custom-radio">
+                    <label class="custom-radio" style="width:45%">
                         <input type="radio" wire:model.live="orientation" value="horizontal" x-on:change="updateAspectRatio">
                         <span></span>{{__('Горизонтально (1:2)')}}
                     </label>
-                    <label class="custom-radio">
+                    <label class="custom-radio" style="width:45%">
                         <input type="radio" wire:model.live="orientation" value="vertical" x-on:change="updateAspectRatio">
                         <span></span>{{__('Вертикально (2:1)')}}
                     </label>
@@ -121,9 +122,9 @@
                 <div class="_flex-display _justify-content-between _align-center">
                     <div style="flex: 1;">
                         <label class="upload-label">
-                            <span>{{__('Фото ДО')}}</span>
+                           {{-- <span>{{__('Фото ДО')}}</span>--}}
                             <input type="file" id="fileBefore" accept="image/*" x-on:change="initCropper($event, 'before')" style="display: none;">
-                            <div class="upload-button">{{__('Вибрати фото')}}</div>
+                            <div class="upload-button">{{__('Фото ДО')}}</div>
                         </label>
                         <div class="preview-container">
                             <div id="cropContainerBefore" style="width: 100%; height: 300px; display: none;">
@@ -141,9 +142,9 @@
 
                     <div style="flex: 1;">
                         <label class="upload-label">
-                            <span>{{__('Фото ПОСЛЯ')}}</span>
+                            {{--<span>{{__('Фото ПІСЛЯ')}}</span>--}}
                             <input type="file" id="fileAfter" accept="image/*" x-on:change="initCropper($event, 'after')" style="display: none;">
-                            <div class="upload-button">{{__('Вибрати фото')}}</div>
+                            <div class="upload-button">{{__('Фото ПІСЛЯ')}}</div>
                         </label>
                         <div class="preview-container">
                             <div id="cropContainerAfter" style="width: 100%; height: 300px; display: none;">
@@ -159,23 +160,24 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="search_field search_field_input">
-                    <input type="text"
-                    wire:model="procedure"
-                    placeholder="{{__('Процедура')}}"
-                    class="add_desc_photo"
-                    style="padding:0 10px;background:none">
-                    @error('procedure') <span class="error">{{ $message }}</span> @enderror
+                <div class="_flex-display _justify-content-between _align-center">
+                    <div class="search_field search_field_input" style="width:48%">
+                        <input type="text"
+                        wire:model="procedure"
+                        placeholder="{{__('Процедура')}}"
+                        class="add_desc_photo"
+                        style="padding:0 10px;background:none">
+                        @error('procedure') <span class="error">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="search_field search_field_input" style="width:48%">
+                        <input type="text"
+                        wire:model="product"
+                        placeholder="{{__('Препарат')}}"
+                        class="add_desc_photo"
+                        style="padding:0 10px;background:none">
+                    </div>
                 </div>
-                <div class="search_field search_field_input">
-                    <input type="text"
-                    wire:model="product"
-                    placeholder="{{__('Препарат')}}"
-                    class="add_desc_photo"
-                    style="padding:0 10px;background:none">
-                </div>
-                <button @click="saveImages()" class="btn rose_btn">{{__('Зберегти')}}</button>
+                {{--<button @click="saveImages()" class="btn rose_btn">{{__('Зберегти')}}</button>--}}
             </div>
         </div>
     @endif
