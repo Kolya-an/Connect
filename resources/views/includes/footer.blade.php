@@ -66,10 +66,10 @@
                         @livewire('subscribe-form')
                     </div>
                 </div>
-                {{--<div class="_flex-display _align-center footer_links">
-                    <a href="#">{{__('Privacy policy')}}</a>
-                    <a href="#">{{__('Cookie policy')}}</a>
-                </div>--}}
+                <div class="_flex-display _flex-column _align-center footer_links">
+                    <a target="_blank" href="/publicnii-dogovir-oferta-dlia-klijentiv">{{__('Правила користування сайтом')}}</a>
+                    <a target="_blank" href="/polozennia-pro-obrobku-personalnix-danix">{{__('Політика конфіденційності')}}</a>
+                </div>
             </div>
         </div>
     </div>

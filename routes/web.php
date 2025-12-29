@@ -16,6 +16,7 @@ use App\Livewire\Doctor\Dashboard as DoctorDashboard;
 use App\Livewire\Patient\Dashboard as PatientDashboard;
 use App\Livewire\Pages\Auth\ForgotPassword;
 use App\Livewire\Pages\Auth\ResetPassword;
+use App\Models\Page;
 
 
 Route::view('/', 'home.index')->name('home');
@@ -50,5 +51,13 @@ Route::get('/forgot-password', ForgotPassword::class)
 Route::get('/reset-password/{token}', ResetPassword::class)
     ->middleware('guest')
     ->name('password.reset');
+
+Route::get('/{slug}', function ($slug) {
+    $page = Page::where('slug', $slug)
+        ->where('is_published', true)
+        ->firstOrFail();
+
+    return view('page.show', compact('page'));
+});
 
 require __DIR__.'/auth.php';
