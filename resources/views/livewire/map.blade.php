@@ -366,10 +366,17 @@
                             </div>
                             @if($doc->photos->count())
                                 <div class="_flex-display _justify-content-between _align-stretch doctor_right_images">
-                                    @foreach($doc->photos as $photo)
-                                        <a href="#"><img src="{{ asset('uploads/' . $photo->photo) }}"></a>
+                                    @foreach($doc->photos->take(3) as $photo)
+                                        <div class="photo_item">
+                                            <div class="photo_item_img">
+                                                <div class="_flex-display comparison-container {{ $photo->orientation === 'vertical' ? '_flex-column' : '_flex-row' }}">
+                                                    <img src="{{ asset('uploads/'.$photo->photo_before) }}">
+                                                    <img src="{{ asset('uploads/'.$photo->photo_after) }}">
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
-                                    <a class="_flex-display _justify-content-center _align-center more_images" href="#"><span>{{__('Більше фото')}}</span></a>
+                                    <a class="_flex-display _justify-content-center _align-center more_images" href="{{ route('doctor.profile', ['id' => $doc->user_id, 'tab' => 4]) }}"><span>{{__('Більше фото')}}</span></a>
                                 </div>
                             @endif
                             <div class="_flex-display _justify-content-between _align-center doctors_buttons">
