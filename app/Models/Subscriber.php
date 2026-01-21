@@ -9,6 +9,7 @@ class Subscriber extends Model
 {
     //use HasFactory;
 
+    protected $table = 'subscribers';
     protected $fillable = [
         'email',
     ];

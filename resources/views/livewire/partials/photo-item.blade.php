@@ -1,10 +1,21 @@
 <div class="photo_item">
-    <a href="/doctors/{{$photo['doctor']['user']['id']}}" class="photo_item_img">
-        <div class="_flex-display comparison-container {{ $photo['orientation'] === 'vertical' ? '_flex-column' : '_flex-row' }}">
-            <img src="{{ asset('uploads/' . $photo['photo_before']) }}" alt="{{ $photo['procedure'] }}">
-            <img src="{{ asset('uploads/' . $photo['photo_after']) }}" alt="{{ $photo['procedure'] }}">
-        </div>
-    </a>
+    @auth
+        <a href="/doctors/{{$photo['doctor']['user']['id']}}" class="photo_item_img">
+            <div class="_flex-display comparison-container {{ $photo['orientation'] === 'vertical' ? '_flex-column' : '_flex-row' }}">
+                <img src="{{ asset('uploads/' . $photo['photo_before']) }}" alt="{{ $photo['procedure'] }}">
+                <img src="{{ asset('uploads/' . $photo['photo_after']) }}" alt="{{ $photo['procedure'] }}">
+            </div>
+        </a>
+    @endauth
+
+    @guest
+        <a wire:click="$dispatch('openLoginModal')" class="photo_item_img">
+            <div class="_flex-display comparison-container {{ $photo['orientation'] === 'vertical' ? '_flex-column' : '_flex-row' }}">
+                <img src="{{ asset('uploads/' . $photo['photo_before']) }}" alt="{{ $photo['procedure'] }}">
+                <img src="{{ asset('uploads/' . $photo['photo_after']) }}" alt="{{ $photo['procedure'] }}">
+            </div>
+        </a>
+    @endguest
     @if(!empty($photo['doctor']['types']) && is_array($photo['doctor']['types']))
         <p><b>
                 @foreach($photo['doctor']['types'] as $type)
@@ -12,9 +23,13 @@
                 @endforeach
             </b></p>
     @endif
+    @auth
+        <a href="/doctors/{{$photo['doctor']['user']['id']}}" class="photo_name">{{ $photo['doctor']['second_name'] }} {{ $photo['doctor']['user']['name'] }}</a>
+    @endauth
 
-    <a href="/doctors/{{$photo['doctor']['user']['id']}}" class="photo_name">{{ $photo['doctor']['second_name'] }} {{ $photo['doctor']['user']['name'] }}</a>
-
+    @guest
+        <a wire:click="$dispatch('openLoginModal')" class="photo_name">{{ $photo['doctor']['second_name'] }} {{ $photo['doctor']['user']['name'] }}</a>
+    @endguest
     <div class="_flex-display _justify-content-between _align-center top_docs-rating_city">
 
         @if ($photo['doctor']['reviews_count'] > 0)

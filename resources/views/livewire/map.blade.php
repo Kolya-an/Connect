@@ -239,23 +239,7 @@
                                         </div>
                                         <a class="doctor_left_link" href="{{ route('doctor.profile', ['id' => $doc->user_id, 'tab' => 6]) }}">{{__('Відгуки')}}</a>
                                     @endif
-                                    <div class="_flex-display _align-center doctor_left_address">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
-                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M10.875 8.37538C10.875 7.33943 10.0356 6.5 9.00038 6.5C7.96443 6.5 7.125 7.33943 7.125 8.37538C7.125 9.41057 7.96443 10.25 9.00038 10.25C10.0356 10.25 10.875 9.41057 10.875 8.37538Z" stroke="#F396A2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.99963 16.25C8.10078 16.25 3.375 12.4238 3.375 8.42247C3.375 5.28998 5.89283 2.75 8.99963 2.75C12.1064 2.75 14.625 5.28998 14.625 8.42247C14.625 12.4238 9.89849 16.25 8.99963 16.25Z" stroke="#F396A2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                        <span>@if ($doc->city)
-                                                {{ $doc->city}}
-                                                {{', '}}
-                                            @endif
-                                            @if ($doc->address)
-                                                {{ $doc->address}}
-                                            @endif</span>
-                                    </div>
-                                    <a class="doctor_left_link" href="{{route('map')}}?doctor_id={{ $doc->id}}">{{__('Дивитись на карті')}}</a>
-                                </div>
-                                <div class="_flex-display _justify-content-between _align-center city_map _maxwidth768">
-                                    <div class="mob_address">
+                                    @auth
                                         <div class="_flex-display _align-center doctor_left_address">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
                                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M10.875 8.37538C10.875 7.33943 10.0356 6.5 9.00038 6.5C7.96443 6.5 7.125 7.33943 7.125 8.37538C7.125 9.41057 7.96443 10.25 9.00038 10.25C10.0356 10.25 10.875 9.41057 10.875 8.37538Z" stroke="#F396A2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -270,7 +254,27 @@
                                                 @endif</span>
                                         </div>
                                         <a class="doctor_left_link" href="{{route('map')}}?doctor_id={{ $doc->id}}">{{__('Дивитись на карті')}}</a>
-                                    </div>
+                                    @endauth
+                                </div>
+                                <div class="_flex-display _justify-content-between _align-center city_map _maxwidth768">
+                                    @auth
+                                        <div class="mob_address">
+                                            <div class="_flex-display _align-center doctor_left_address">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.875 8.37538C10.875 7.33943 10.0356 6.5 9.00038 6.5C7.96443 6.5 7.125 7.33943 7.125 8.37538C7.125 9.41057 7.96443 10.25 9.00038 10.25C10.0356 10.25 10.875 9.41057 10.875 8.37538Z" stroke="#F396A2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8.99963 16.25C8.10078 16.25 3.375 12.4238 3.375 8.42247C3.375 5.28998 5.89283 2.75 8.99963 2.75C12.1064 2.75 14.625 5.28998 14.625 8.42247C14.625 12.4238 9.89849 16.25 8.99963 16.25Z" stroke="#F396A2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                <span>@if ($doc->city)
+                                                        {{ $doc->city}}
+                                                        {{', '}}
+                                                    @endif
+                                                    @if ($doc->address)
+                                                        {{ $doc->address}}
+                                                    @endif</span>
+                                            </div>
+                                            <a class="doctor_left_link" href="{{route('map')}}?doctor_id={{ $doc->id}}">{{__('Дивитись на карті')}}</a>
+                                        </div>
+                                    @endauth
                                     @if ($doc->reviews_count > 0)
                                         <div class="mob_rating">
                                             <div class="_flex-display _justify-content-center _align-center top_docs-rating"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -380,8 +384,15 @@
                                 </div>
                             @endif
                             <div class="_flex-display _justify-content-between _align-center doctors_buttons">
-                                <a href="{{ route('doctor.profile', ['id' => $doc->user_id, 'tab' => 2]) }}" class="btn white_rose_btn all_services_button">{{__('Усі послуги')}}</a>
-                                <a href="{{ route('doctor.profile', ['id' => $doc->user_id, 'tab' => 3]) }}" class="btn rose_btn save_button">{{__('Записатись')}}</a>
+                                @auth
+                                    <a href="{{ route('doctor.profile', ['id' => $doc->user_id, 'tab' => 2]) }}" class="btn white_rose_btn all_services_button">{{__('Усі послуги')}}</a>
+                                    <a href="{{ route('doctor.profile', ['id' => $doc->user_id, 'tab' => 3]) }}" class="btn rose_btn save_button">{{__('Записатись')}}</a>
+                                @endauth
+
+                                @guest
+                                    <a wire:click="$dispatch('openLoginModal')" class="btn white_rose_btn all_services_button">{{__('Усі послуги')}}</a>
+                                    <a wire:click="$dispatch('openLoginModal')" class="btn rose_btn save_button">{{__('Записатись')}}</a>
+                                @endguest
                             </div>
                         </div>
                     </div>

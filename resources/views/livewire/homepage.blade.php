@@ -87,7 +87,13 @@
                                 </span></p>
                             </div>
                         @endif
-                        <a href="/doctors/{{$doctor->user->id}}" class="btn rose_btn doc_more">{{__('Докладніше про лікаря')}}</a>
+                        @auth
+                            <a href="/doctors/{{$doctor->user->id}}" class="btn rose_btn doc_more">{{__('Докладніше про лікаря')}}</a>
+                        @endauth
+
+                        @guest
+                            <a wire:click="$dispatch('openLoginModal')" class="btn rose_btn doc_more">{{__('Докладніше про лікаря')}}</a>
+                        @endguest
                         @if($doctor->plate)
                             <div class="doc-plate rose-plate">{{$doctor->plate}}</div>
                         @endif
@@ -139,7 +145,13 @@
                                 </span></p>
                                     </div>
                                 @endif
-                                <a href="/doctors/{{$doctor_item->user->id}}" class="btn rose_btn doc_more">{{__('Докладніше про лікаря')}}</a>
+                                @auth
+                                    <a href="/doctors/{{$doctor_item->user->id}}" class="btn rose_btn doc_more">{{__('Докладніше про лікаря')}}</a>
+                                @endauth
+
+                                @guest
+                                    <a wire:click="$dispatch('openLoginModal')" class="btn rose_btn doc_more">{{__('Докладніше про лікаря')}}</a>
+                                @endguest
                                 @if($doctor_item->plate)
                                     <div class="doc-plate">{{$doctor_item->plate}}</div>
                                 @endif
@@ -248,11 +260,21 @@
                     <div class="platform-modal-grey">
                         <div class="_flex-display _justify-content-between _align-center">
                             <div class="_flex-display _justify-content-center _align-center platform-action_plate">{{__('Акція')}}</div>
-                            <a href="/doctors/{{$promotion->doctor->user->id}}">
-                                <svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M0 12.5C0 5.59644 5.59644 0 12.5 0H13.5C20.4036 0 26 5.59644 26 12.5C26 19.4036 20.4036 25 13.5 25H12.5C5.59644 25 0 19.4036 0 12.5Z" fill="white"/>
-                                    <path d="M7.33104 16.2567C6.92053 16.6262 6.88725 17.2585 7.25671 17.669C7.62616 18.0795 8.25845 18.1128 8.66896 17.7433L7.33104 16.2567ZM18.9986 8.05256C19.0276 7.50104 18.6041 7.03041 18.0526 7.00138L9.065 6.52835C8.51348 6.49932 8.04285 6.92289 8.01382 7.47441C7.98479 8.02593 8.40836 8.49656 8.95988 8.52559L16.9488 8.94606L16.5284 16.935C16.4993 17.4865 16.9229 17.9572 17.4744 17.9862C18.0259 18.0152 18.4966 17.5916 18.5256 17.0401L18.9986 8.05256ZM8 17L8.66896 17.7433L18.669 8.74329L18 8L17.331 7.25671L7.33104 16.2567L8 17Z" fill="black"/>
-                                </svg></a>
+                            @auth
+                                <a href="/doctors/{{$promotion->doctor->user->id}}">
+                                    <svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 12.5C0 5.59644 5.59644 0 12.5 0H13.5C20.4036 0 26 5.59644 26 12.5C26 19.4036 20.4036 25 13.5 25H12.5C5.59644 25 0 19.4036 0 12.5Z" fill="white"/>
+                                        <path d="M7.33104 16.2567C6.92053 16.6262 6.88725 17.2585 7.25671 17.669C7.62616 18.0795 8.25845 18.1128 8.66896 17.7433L7.33104 16.2567ZM18.9986 8.05256C19.0276 7.50104 18.6041 7.03041 18.0526 7.00138L9.065 6.52835C8.51348 6.49932 8.04285 6.92289 8.01382 7.47441C7.98479 8.02593 8.40836 8.49656 8.95988 8.52559L16.9488 8.94606L16.5284 16.935C16.4993 17.4865 16.9229 17.9572 17.4744 17.9862C18.0259 18.0152 18.4966 17.5916 18.5256 17.0401L18.9986 8.05256ZM8 17L8.66896 17.7433L18.669 8.74329L18 8L17.331 7.25671L7.33104 16.2567L8 17Z" fill="black"/>
+                                    </svg></a>
+                            @endauth
+
+                            @guest
+                                <a wire:click="$dispatch('openLoginModal')">
+                                    <svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 12.5C0 5.59644 5.59644 0 12.5 0H13.5C20.4036 0 26 5.59644 26 12.5C26 19.4036 20.4036 25 13.5 25H12.5C5.59644 25 0 19.4036 0 12.5Z" fill="white"/>
+                                        <path d="M7.33104 16.2567C6.92053 16.6262 6.88725 17.2585 7.25671 17.669C7.62616 18.0795 8.25845 18.1128 8.66896 17.7433L7.33104 16.2567ZM18.9986 8.05256C19.0276 7.50104 18.6041 7.03041 18.0526 7.00138L9.065 6.52835C8.51348 6.49932 8.04285 6.92289 8.01382 7.47441C7.98479 8.02593 8.40836 8.49656 8.95988 8.52559L16.9488 8.94606L16.5284 16.935C16.4993 17.4865 16.9229 17.9572 17.4744 17.9862C18.0259 18.0152 18.4966 17.5916 18.5256 17.0401L18.9986 8.05256ZM8 17L8.66896 17.7433L18.669 8.74329L18 8L17.331 7.25671L7.33104 16.2567L8 17Z" fill="black"/>
+                                    </svg></a>
+                            @endguest
                         </div>
                         <div class="_flex-display _justify-content-between _align-center platform-action-bottom">
                             <div class="platform-action-image"><img src="{{ asset('uploads/' . $promotion->doctor->photo) }}" alt="{{ $promotion->title }}" /></div>
@@ -260,7 +282,13 @@
                                 <p class="platform-action-title">{{ $promotion->title }}</p>
                                 <p>{{ $promotion->description }}</p>
                                 <div class="fio_doc_spec">
-                                    <a href="/doctors/{{$promotion->doctor->user->id}}" class="fio_doc">{{ $promotion->doctor->second_name }} {{ $promotion->doctor->user?->name }}</a>
+                                    @auth
+                                        <a href="/doctors/{{$promotion->doctor->user->id}}" class="fio_doc">{{ $promotion->doctor->second_name }} {{ $promotion->doctor->user?->name }}</a>
+                                    @endauth
+
+                                    @guest
+                                        <a  wire:click="$dispatch('openLoginModal')" class="fio_doc">{{ $promotion->doctor->second_name }} {{ $promotion->doctor->user?->name }}</a>
+                                    @endguest
                                     @if ($promotion?->doctor?->types)
                                         <p class="spec_doc">
                                             @foreach ($promotion->doctor->types as $type)

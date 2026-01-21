@@ -1,4 +1,4 @@
-<div x-data="{ modal: null, init() { modal = @entangle('modal') } }" x-init="init()">
+<div x-data="{ modal: @entangle('modal') }">
     <!-- Кнопка -->
     <button
         @click="modal='login'"

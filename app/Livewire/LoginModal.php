@@ -8,6 +8,11 @@ class LoginModal extends Component
 {
     public $modal = null; // login | register | null
 
+    protected $listeners = [
+        'openLoginModal' => 'showLogin',
+        'openRegisterModal' => 'showRegister',
+    ];
+
     public function showLogin()    { $this->modal = 'login'; }
     public function showRegister() { $this->modal = 'register'; }
 
