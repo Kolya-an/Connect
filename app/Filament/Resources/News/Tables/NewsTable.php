@@ -72,7 +72,7 @@ class NewsTable
                             ->unique();
 
                         foreach ($emails as $email) {
-                            Mail::to($email)->send(
+                            Mail::to($email)->queue(
                                 new NewsToSubscribersMail($record)
                             );
                         }
@@ -93,9 +93,8 @@ class NewsTable
                         ->color('success')
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion()
-                        ->action(function (Collection $records, BulkAction $action) {
+                        ->action(function (Collection $records) { // Прибираємо $action, він тут не потрібен
 
-                            // Только опубликованные
                             $newsItems = $records->where('status', true);
 
                             if ($newsItems->isEmpty()) {
@@ -103,7 +102,6 @@ class NewsTable
                                     ->title('Немає опублікованих новин')
                                     ->warning()
                                     ->send();
-
                                 return;
                             }
 
@@ -113,27 +111,17 @@ class NewsTable
                                 ->unique()
                                 ->values();
 
-                            $total = $newsItems->count() * $emails->count();
-                            $sent = 0;
-
                             foreach ($newsItems as $news) {
                                 foreach ($emails as $email) {
-                                    Mail::to($email)->send(
+                                    Mail::to($email)->queue(
                                         new NewsToSubscribersMail($news)
-                                    );
-
-                                    $sent++;
-
-                                    // ⬇️ обновляем прогресс
-                                    $action->setProgress(
-                                        intval(($sent / $total) * 100)
                                     );
                                 }
                             }
 
                             Notification::make()
-                                ->title('Розсилка завершена')
-                                ->body("Відправлено {$sent} листів")
+                                ->title('Розсилку додано в чергу')
+                                ->body("Завдання для " . ($newsItems->count() * $emails->count()) . " листів створено.")
                                 ->success()
                                 ->send();
                         }),
