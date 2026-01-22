@@ -87,7 +87,7 @@ class NewsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    BulkAction::make('sendSelectedToSubscribers')
+                    /*BulkAction::make('sendSelectedToSubscribers')
                         ->label('Відправити підписникам')
                         ->icon('heroicon-o-paper-airplane')
                         ->color('success')
@@ -124,7 +124,7 @@ class NewsTable
                                 ->body("Завдання для " . ($newsItems->count() * $emails->count()) . " листів створено.")
                                 ->success()
                                 ->send();
-                        }),
+                        }),*/
 
                     DeleteBulkAction::make(),
                 ]),
