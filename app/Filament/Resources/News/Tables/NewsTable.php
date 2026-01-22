@@ -118,7 +118,7 @@ class NewsTable
 
                             foreach ($newsItems as $news) {
                                 foreach ($emails as $email) {
-                                    Mail::to($email)->queue(
+                                    Mail::to($email)->send(
                                         new NewsToSubscribersMail($news)
                                     );
 
