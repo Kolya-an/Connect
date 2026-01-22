@@ -72,7 +72,7 @@ class NewsTable
                             ->unique();
 
                         foreach ($emails as $email) {
-                            Mail::to($email)->queue(
+                            Mail::to($email)->send(
                                 new NewsToSubscribersMail($record)
                             );
                         }
