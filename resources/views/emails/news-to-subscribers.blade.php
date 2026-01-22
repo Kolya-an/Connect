@@ -14,9 +14,11 @@
                         <h2 style="color:#111;">
                             {{ $news->title }}
                         </h2>
-
+                        @php
+                            $textContent = is_string($news->content) ? $news->content : '';
+                        @endphp
                         <p style="color:#444; line-height:1.6;">
-                            {!! nl2br(e(Str::limit($news->content, 1000))) !!}
+                            {!! nl2br(e(Str::limit($textContent, 1000))) !!}
                         </p>
 
                         <p style="margin-top:30px;">
