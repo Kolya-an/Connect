@@ -49,6 +49,21 @@
                             <p><span>{{ $promo->old_price ? number_format($promo->old_price, 0, '.', ' ') . '₴' : '' }}</span> {{ $promo->new_price ? number_format($promo->new_price, 0, '.', ' ') . '₴' : '' }}</p>
                         </div>
                     </div>
+                    <div class="_flex-display _justify-content-between _align-center spec_action_actions" style="margin-top: 15px; gap: 10px; flex-wrap: wrap;">
+                        <button wire:click="sendToPatients({{ $promo->id }})" class="btn white_rose_btn spec_action_send_btn">{{__('Розіслати своїм пацієнтам')}}</button>
+                        <button wire:click="showOnMap({{ $promo->id }})" class="btn white_rose_btn spec_action_map_btn">{{__('Показати на карті')}}</button>
+                        <div class="_flex-display _align-center spec_action_radius" style="gap: 8px;">
+                            <select wire:model="radius" class="radius_select">
+                                <option value="5">5 км</option>
+                                <option value="10">10 км</option>
+                                <option value="20">20 км</option>
+                                <option value="30">30 км</option>
+                                <option value="40">40 км</option>
+                                <option value="50">50 км</option>
+                            </select>
+                            <button wire:click="sendInRadius({{ $promo->id }})" class="btn white_rose_btn spec_action_radius_send_btn">{{__('Розіслати в радіусі')}}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         @empty

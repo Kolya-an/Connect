@@ -2572,6 +2572,47 @@ textarea.add_desc_photo {
     width: 100%;
     max-width: 100%;
 }
+.spec_action_actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.spec_action_send_btn,
+.spec_action_map_btn,
+.spec_action_radius_send_btn {
+    padding: 8px 16px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 1);
+    border-radius: 184px;
+    color: rgba(255, 255, 255, 1);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.spec_action_send_btn:hover,
+.spec_action_map_btn:hover,
+.spec_action_radius_send_btn:hover {
+    border: 1px solid rgba(255, 255, 255, 1);
+    color: rgba(243, 150, 162, 1);
+    background: #fff;
+}
+.radius_select {
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 1);
+    border-radius: 184px;
+    background: rgba(243, 150, 162, 1);
+    color: rgba(255, 255, 255, 1);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+}
+.radius_select option {
+    background: rgba(243, 150, 162, 1);
+    color: rgba(255, 255, 255, 1);
+}
 .spec_action_buttons {
     gap: 8px;
 }

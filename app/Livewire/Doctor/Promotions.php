@@ -13,6 +13,7 @@ class Promotions extends Component
     public $promotions = [];
     public $showModal = false;
     public $editingId = null;
+    public $radius = 10;
 
     // поля формы
     public $title;
@@ -165,6 +166,22 @@ class Promotions extends Component
         $this->editingId = null;
         $this->title = $this->description = $this->old_price = $this->new_price = $this->date_from = $this->date_to = null;
     }
+
+    public function sendToPatients($promoId)
+    {
+        // TODO: реалізувати розсилку пацієнтам
+    }
+
+    public function showOnMap($promoId)
+    {
+        // TODO: показати на карті
+    }
+
+    public function sendInRadius($promoId)
+    {
+        // TODO: реалізувати розсилку в радіусі
+    }
+
     public function render()
     {
         return view('livewire.doctor.promotions');

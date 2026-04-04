@@ -79,7 +79,7 @@ class Personal1 extends Component
 
         $user = Auth::user();
 
-        if ($user->doctor) {
+        if ($user && $user->doctor) {
             $this->city = $user->doctor->city;
         }
     }
@@ -110,9 +110,9 @@ class Personal1 extends Component
             'city' => $this->city,
         ];
 
-        if ($user->doctor) {
+        if ($user && $user->doctor) {
             $user->doctor->update($data);
-        } else {
+        } elseif ($user) {
             $user->doctor()->create($data);
         }
 
