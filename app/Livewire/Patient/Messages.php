@@ -3,6 +3,7 @@
 namespace App\Livewire\Patient;
 
 use App\Models\Message;
+use App\Models\PatientNotification;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Models\User;
@@ -17,6 +18,8 @@ class Messages extends Component
     public $user_id;
     public $patient;
     public $appointment_id;
+    public $activeTab = 'messages'; // 'messages' або 'notifications'
+
     public function mount(User $id)
     {
         $this->user = $id;
@@ -25,18 +28,50 @@ class Messages extends Component
             abort(403, 'Доступ запрещен');
         }
         $this->patient = $this->user->patient;
-
-
     }
+
+    public function switchTab($tab)
+    {
+        $this->activeTab = $tab;
+        $this->resetPage();
+    }
+
+    public function markAsRead($notificationId)
+    {
+        $notification = PatientNotification::where('user_id', $this->user_id)->find($notificationId);
+        if ($notification) {
+            $notification->update(['is_read' => true]);
+        }
+    }
+
+    public function deleteNotification($notificationId)
+    {
+        $notification = PatientNotification::where('user_id', $this->user_id)->find($notificationId);
+        if ($notification) {
+            $notification->delete();
+        }
+    }
+
     public function render()
     {
         $messages = Message::where('user_id', $this->user_id)
-           // ->where('status', ['canceled', 'completed'])
             ->with(['doctor.user'])
             ->orderBy('created_at')
             ->paginate(5);
+
+        $notifications = PatientNotification::where('user_id', $this->user_id)
+            ->with(['doctor.user', 'promotion'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(5, ['*'], 'notifications_page');
+
+        $unreadCount = PatientNotification::where('user_id', $this->user_id)
+            ->where('is_read', false)
+            ->count();
+
         return view('livewire.patient.messages', [
-            'messages' => $messages
+            'messages' => $messages,
+            'notifications' => $notifications,
+            'unreadCount' => $unreadCount,
         ]);
     }
 }

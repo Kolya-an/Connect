@@ -4,6 +4,9 @@ namespace App\Livewire\Doctor;
 
 use Livewire\Component;
 use App\Models\DoctorPromotion;
+use App\Models\PatientNotification;
+use App\Models\Appointment;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
@@ -169,7 +172,58 @@ class Promotions extends Component
 
     public function sendToPatients($promoId)
     {
-        // TODO: реалізувати розсилку пацієнтам
+        try {
+            $doctor = $this->getDoctor();
+            $promotion = DoctorPromotion::where('doctor_id', $doctor->id)->findOrFail($promoId);
+
+            // Отримуємо всіх унікальних пацієнтів лікаря через записа
+            $patientIds = Appointment::where('doctor_id', $doctor->id)
+                ->whereNotNull('user_id')
+                ->distinct()
+                ->pluck('user_id');
+
+            if ($patientIds->isEmpty()) {
+                session()->flash('error', 'У вас поки що немає пацієнтів для розсилки');
+                return;
+            }
+
+            $patients = User::whereIn('id', $patientIds)->get();
+
+            $sentCount = 0;
+            foreach ($patients as $patient) {
+                // Перевіряємо, чи пацієнт хоче отримувати сповіщення
+                if ($patient->patient && $patient->patient->notification) {
+                    $dateFrom = $promotion->date_from ? $promotion->date_from->format('d.m.Y') : '';
+                    $dateTo = $promotion->date_to ? $promotion->date_to->format('d.m.Y') : '';
+                    
+                    $messageText = "Акція: {$promotion->title}";
+                    if ($dateFrom && $dateTo) {
+                        $messageText .= "\nПеріод: {$dateFrom} - {$dateTo}";
+                    }
+                    if ($promotion->old_price && $promotion->new_price) {
+                        $messageText .= "\nСтара ціна: {$promotion->old_price}₴, Нова ціна: {$promotion->new_price}₴";
+                    }
+                    if ($promotion->description) {
+                        $messageText .= "\n{$promotion->description}";
+                    }
+
+                    PatientNotification::create([
+                        'user_id' => $patient->id,
+                        'doctor_id' => $doctor->id,
+                        'promotion_id' => $promotion->id,
+                        'title' => $promotion->title,
+                        'message' => $messageText,
+                        'is_read' => false,
+                    ]);
+                    $sentCount++;
+                }
+            }
+
+            session()->flash('message', "Акцію розіслано {$sentCount} пацієнтам");
+        } catch (Exception $e) {
+            logger()->error('Send to patients error: ' . $e->getMessage());
+            session()->flash('error', 'Помилка при розсилці: ' . $e->getMessage());
+        }
     }
 
     public function showOnMap($promoId)
