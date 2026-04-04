@@ -246,7 +246,76 @@ class Promotions extends Component
 
     public function sendInRadius($promoId)
     {
-        // TODO: реалізувати розсилку в радіусі
+        try {
+            $doctor = $this->getDoctor();
+            $promotion = DoctorPromotion::where('doctor_id', $doctor->id)->findOrFail($promoId);
+
+            // Перевіряємо, чи є координати у лікаря
+            if (!$doctor->latitude || !$doctor->longitude) {
+                session()->flash('error', 'Вкажіть адресу в профілі для розсилки в радіусі');
+                return;
+            }
+
+            $lat = $doctor->latitude;
+            $lng = $doctor->longitude;
+            $radiusKm = $this->radius;
+
+            // Отримуємо пацієнтів в радіусі через формулу Haversine
+            // Всі пацієнти, які мають координати в заданому радіусі
+            $patientsInRange = \DB::table('pacients')
+                ->whereNotNull('latitude')
+                ->whereNotNull('longitude')
+                ->selectRaw(
+                    'user_id, (6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) as distance',
+                    [$lat, $lng, $lat]
+                )
+                ->having('distance', '<=', $radiusKm)
+                ->distinct()
+                ->pluck('user_id');
+
+            if ($patientsInRange->isEmpty()) {
+                session()->flash('error', "Не знайдено пацієнтів з координатами в радіусі {$radiusKm} км");
+                return;
+            }
+
+            $patients = User::whereIn('id', $patientsInRange)->get();
+
+            $sentCount = 0;
+            foreach ($patients as $patient) {
+                // Перевіряємо, чи пацієнт хоче отримувати сповіщення
+                if ($patient->patient && $patient->patient->notification) {
+                    $dateFrom = $promotion->date_from ? $promotion->date_from->format('d.m.Y') : '';
+                    $dateTo = $promotion->date_to ? $promotion->date_to->format('d.m.Y') : '';
+                    
+                    $messageText = "Акція: {$promotion->title}";
+                    if ($dateFrom && $dateTo) {
+                        $messageText .= "\nПеріод: {$dateFrom} - {$dateTo}";
+                    }
+                    if ($promotion->old_price && $promotion->new_price) {
+                        $messageText .= "\nСтара ціна: {$promotion->old_price}₴, Нова ціна: {$promotion->new_price}₴";
+                    }
+                    if ($promotion->description) {
+                        $messageText .= "\n{$promotion->description}";
+                    }
+
+                    PatientNotification::create([
+                        'user_id' => $patient->id,
+                        'doctor_id' => $doctor->id,
+                        'promotion_id' => $promotion->id,
+                        'title' => $promotion->title,
+                        'message' => $messageText,
+                        'is_read' => false,
+                    ]);
+                    $sentCount++;
+                }
+            }
+
+            session()->flash('message', "Акцію розіслано {$sentCount} пацієнтам в радіусі {$radiusKm} км");
+            $this->loadPromotions();
+        } catch (Exception $e) {
+            logger()->error('Send in radius error: ' . $e->getMessage());
+            session()->flash('error', 'Помилка при розсилці: ' . $e->getMessage());
+        }
     }
 
     public function render()

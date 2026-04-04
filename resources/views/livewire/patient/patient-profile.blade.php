@@ -42,6 +42,23 @@
             </div>
             <button wire:click="$set('showCityModal', true)" class="btn white_rose_btn add_btn add_city">{{__('Змінити місто')}}</button>
         </div>
+        <div class="spec_register1_left_block spec_register1_left_block_address">
+            <h5>{{__('Адреса')}}</h5>
+            <div class="search_field search_field_input add_service_nobg" style="max-width: 100%; width: 100%;">
+                <input
+                    id="add_address"
+                    class="add_address"
+                    type="text"
+                    wire:model.defer="address"
+                    placeholder="{{__('Введіть адресу')}}"
+                />
+            </div>
+            @if($latitude && $longitude)
+                <p style="color: #999; font-size: 11px; margin-top: 5px;">
+                    Координати: {{ round($latitude, 6) }}, {{ round($longitude, 6) }}
+                </p>
+            @endif
+        </div>
         <div class="spec_register1_left_block  spec_register1_left_block_sex">
             <h5>{{__('Ваша стать')}}</h5>
             <label class="custom-radio">

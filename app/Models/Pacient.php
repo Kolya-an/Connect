@@ -16,12 +16,15 @@ class Pacient extends Model
         'photo',
         'phone',
         'city',
+        'address',
         'user_id',
         'notification',
         'sex',
         'name',
         'email',
         'password',
+        'latitude',
+        'longitude',
     ];
 
 

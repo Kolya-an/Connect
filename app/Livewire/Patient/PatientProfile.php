@@ -4,16 +4,21 @@ namespace App\Livewire\Patient;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class PatientProfile extends Component
 {
     public $user;
     public $city;
+    public $address;
     public $sex;
     public $name;
     public $second_name;
     public $notification = false;
     public $showCityModal = false;
+    public $latitude;
+    public $longitude;
     public $allCities = [
         // Областные центры и крупные города
         'Київ', 'Харків', 'Одеса', 'Дніпро', 'Донецьк', 'Запоріжжя', 'Львів', 'Кривий Ріг',
@@ -83,9 +88,12 @@ class PatientProfile extends Component
         $this->name = $user->name;
         if ($user->patient) {
             $this->city = $user->patient->city;
+            $this->address = $user->patient->address;
             $this->sex = $user->patient->sex;
             $this->notification = (bool) $user->patient->notification;
             $this->second_name = $user->patient->second_name;
+            $this->latitude = $user->patient->latitude;
+            $this->longitude = $user->patient->longitude;
         }
     }
     public function updatedSearch()
@@ -109,16 +117,28 @@ class PatientProfile extends Component
             'name' => 'required|string|max:255',
             'second_name' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
-            'sex' => 'nullable|string|in:male,female', // Проверьте разрешенные значения
+            'address' => 'nullable|string|max:255',
+            'sex' => 'nullable|string|in:male,female',
             'notification' => 'boolean',
         ]);
         $user = Auth::user();
         $user->update(['name' => $this->name]);
+
+        // Геокодування при зміні міста або адреси
+        $coords = null;
+        $fullAddress = trim(($this->address ? $this->address . ', ' : '') . ($this->city ? $this->city : ''));
+        if ($fullAddress) {
+            $coords = $this->geocodeAddress($fullAddress);
+        }
+
         $data = [
             'city' => $this->city,
+            'address' => $this->address,
             'sex' => $this->sex,
             'notification' => $this->notification,
             'second_name' => $this->second_name,
+            'latitude' => $coords ? $coords['lat'] : $this->latitude,
+            'longitude' => $coords ? $coords['lng'] : $this->longitude,
         ];
 
         if ($user->patient) {
@@ -128,6 +148,34 @@ class PatientProfile extends Component
         }
 
         session()->flash('message', 'Інформацію оновлено!');
+    }
+
+    private function geocodeAddress($address)
+    {
+        return Cache::remember("patient_geocode_" . md5($address), 3600, function () use ($address) {
+            $apiKey = config('services.google.maps_api_key');
+            $url = "https://maps.googleapis.com/maps/api/geocode/json";
+
+            $response = Http::get($url, [
+                'address' => $address . ', Україна',
+                'key' => $apiKey,
+                'language' => 'uk'
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+
+                if ($data['status'] === 'OK' && !empty($data['results'])) {
+                    $location = $data['results'][0]['geometry']['location'];
+                    return [
+                        'lat' => $location['lat'],
+                        'lng' => $location['lng']
+                    ];
+                }
+            }
+
+            return null;
+        });
     }
     public function resetCity()
     {

@@ -103,6 +103,15 @@ class Doctor extends Model
         return $this->hasMany(DoctorPromotion::class);
     }
 
+    /**
+     * Отримати всіх унікальних пацієнтів через записа
+     */
+    public function patients()
+    {
+        return $this->belongsToMany(Pacient::class, 'appointments', 'doctor_id', 'user_id')
+            ->withPivot('id');
+    }
+
     public function reviews()
     {
         return $this->hasManyThrough(
