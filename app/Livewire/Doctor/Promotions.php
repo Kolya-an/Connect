@@ -228,7 +228,20 @@ class Promotions extends Component
 
     public function showOnMap($promoId)
     {
-        // TODO: показати на карті
+        try {
+            $doctor = $this->getDoctor();
+            $promotion = DoctorPromotion::where('doctor_id', $doctor->id)->findOrFail($promoId);
+            
+            // Вмикаємо показ на карті
+            $promotion->update(['map' => 1]);
+            
+            session()->flash('message', 'Акцію увімкнено для показу на карті');
+            
+            $this->loadPromotions();
+        } catch (Exception $e) {
+            logger()->error('Show on map error: ' . $e->getMessage());
+            session()->flash('error', 'Помилка: ' . $e->getMessage());
+        }
     }
 
     public function sendInRadius($promoId)

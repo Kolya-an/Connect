@@ -49,12 +49,15 @@
                         const doctors = data.doctors;
                         if (!doctors || doctors.length === 0) {
                             markersLayer.clearLayers();
-
                             return;
                         }
                         markersLayer.clearLayers();
 
+                        console.log('Doctors data:', doctors); // DEBUG
+
                         doctors.forEach(doc => {
+                            console.log('Doctor:', doc.user_id, 'Promotions:', doc.promotions); // DEBUG
+
                             const marker = L.marker([doc.latitude, doc.longitude]);
                             const giftIcon = doc.gift === 1 ? '&#127873;' : '';
                             const hasActivePromotions = doc.promotions && doc.promotions.some(promo => {
@@ -66,9 +69,36 @@
 
                             const actionIcon = hasActivePromotions ? '&#37;' : '';
 
+                            // Додаємо назви акцій, у яких map=1 і входять в діапазон дат
+                            let promotionsHtml = '';
+                            if (doc.promotions) {
+                                const now = new Date();
+                                console.log('Checking promotions for doctor:', doc.user_id); // DEBUG
+                                const mapPromotions = doc.promotions.filter(promo => {
+                                    console.log('Promo:', promo.title, 'map:', promo.map, 'date_from:', promo.date_from, 'date_to:', promo.date_to); // DEBUG
+                                    const dateFrom = new Date(promo.date_from);
+                                    const dateTo = new Date(promo.date_to);
+                                    return promo.map == 1 && now >= dateFrom && now <= dateTo;
+                                });
+
+                                console.log('Map promotions:', mapPromotions); // DEBUG
+
+                                if (mapPromotions.length > 0) {
+                                    promotionsHtml = '<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee;">';
+                                    mapPromotions.forEach(promo => {
+                                        promotionsHtml += '<div style="margin-bottom: 4px;"><b style="color: #f396a2;">' + promo.title + '</b>';
+                                        if (promo.new_price && promo.old_price) {
+                                            promotionsHtml += '<br><span style="text-decoration: line-through; color: #999;">' + promo.old_price + '₴</span> <b>' + promo.new_price + '₴</b>';
+                                        }
+                                        promotionsHtml += '</div>';
+                                    });
+                                    promotionsHtml += '</div>';
+                                }
+                            }
+
                             const info = `<a href="/doctors/${doc.user_id}"><b>${doc.user.name} ${doc.second_name}</b></a>
                             <br>${doc.address}<br>{{__("Рейтинг")}}: ${doc.rating}
-                            <br>${giftIcon} ${actionIcon}`;
+                            <br>${giftIcon} ${actionIcon}${promotionsHtml}`;
                             marker.bindPopup(info);
                             markersLayer.addLayer(marker);
                         });

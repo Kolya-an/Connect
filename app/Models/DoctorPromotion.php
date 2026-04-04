@@ -11,12 +11,13 @@ class DoctorPromotion extends Model
     protected $fillable = [
         'doctor_id', 'title', 'description',
         'old_price', 'new_price',
-        'date_from', 'date_to',
+        'date_from', 'date_to', 'map',
     ];
 
     protected $casts = [
         'date_from' => 'date',
         'date_to' => 'date',
+        'map' => 'boolean',
     ];
 
     public function doctor()
