@@ -8,6 +8,7 @@ use App\Models\PatientNotification;
 use App\Models\Appointment;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 
@@ -262,7 +263,7 @@ class Promotions extends Component
 
             // Отримуємо пацієнтів в радіусі через формулу Haversine
             // Всі пацієнти, які мають координати в заданому радіусі
-            $patientsInRange = \DB::table('pacients')
+            $patientsInRange = DB::table('pacients')
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
                 ->selectRaw(
