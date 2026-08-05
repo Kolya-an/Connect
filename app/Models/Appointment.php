@@ -23,6 +23,7 @@ class Appointment extends Model
         'date' => 'date:Y-m-d',
         'hour' => 'string', // 'datetime' лучше для TimePicker в Filament
         'status' => 'string',
+        'information' => 'encrypted',
     ];
     public function user()
     {

@@ -1,27 +1,38 @@
 #!/bin/bash
 
-set -e
+set -e  # зупиняти скрипт при будь-якій помилці
 
+echo "?? Deploy started..."
 
+PROJECT_DIR="/var/www/connect"
+BRANCH="master"
+PHP_FPM_SERVICE="php8.3-fpm"
 
-echo "Deploying..."
+cd $PROJECT_DIR
 
-git pull origin master
+echo "?? Checking branch..."
+git checkout $BRANCH
 
-php artisan down
+echo "?? Pulling latest changes..."
+git pull origin $BRANCH
 
-php composer.phar install --optimize-autoloader --no-dev
+echo "?? Installing composer dependencies..."
+composer install --no-dev --optimize-autoloader --no-interaction
 
-php artisan migrate
+echo "??? Running migrations..."
+php artisan migrate --force
 
-php artisan config:cache
+echo "?? Clearing caches..."
+php artisan optimize:clear
 
-php artisan route:cache
+echo "? Rebuilding caches..."
+php artisan optimize
 
-php artisan event:cache
+echo "?? Fixing permissions..."
+chown -R www-data:www-data $PROJECT_DIR
+chmod -R 775 storage bootstrap/cache
 
-php artisan view:cache
+echo "?? Restarting PHP-FPM..."
+systemctl restart $PHP_FPM_SERVICE
 
-php artisan up
-
-echo "Done!"
+echo "? Deploy finished successfully!"

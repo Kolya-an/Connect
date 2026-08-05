@@ -33,7 +33,7 @@
                                 @if($appointment->status === 'canceled')
                                     {{__('Скасовано')}}
                                 @elseif($appointment->status === 'completed')
-                                    {{__('Завершено')}}
+                                    <a wire:click.prevent="showInfoModal({{ $appointment->id }})" style="cursor:pointer; text-decoration:underline;">{{__('Завершено')}}</a>
                                 @endif
                             </p>
                             @if(optional($appointment->review)->text)
@@ -48,7 +48,7 @@
                         @if($appointment->status === 'canceled')
                             {{__('Скасовано')}}
                         @elseif($appointment->status === 'completed')
-                            {{__('Завершено')}}
+                            <a wire:click.prevent="showInfoModal({{ $appointment->id }})" style="cursor:pointer; text-decoration:underline;">{{__('Завершено')}}</a>
                         @endif
                     </p>
                     @if(optional($appointment->review)->text)
@@ -187,5 +187,46 @@
                 </div>
             </div>
         </div>
+    @endif
+    @if($infoModalVisible)
+        @php
+            $infoAppointment = $appointments->firstWhere('id', $this->selectedInfoAppointmentId);
+        @endphp
+        @if($infoAppointment)
+            <div id="add_city" class="_flex-display _justify-content-center _align-center screen">
+                <div class="window add_info_window">
+                    <div class="_flex-display _justify-content-between _align-center window_top">
+                        <h4>{{__('Інформація про візит')}}</h4>
+                        <div wire:click="closeInfoModal" id="window_close" class="window_close">
+                            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" clip-path="url(#clipPath_6)" customFrame="url(#clipPath_6)">
+                                <defs>
+                                    <clipPath id="clipPath_6">
+                                        <rect width="48.000000" height="48.000000" x="0.000000" y="0.000000" rx="24.000000" fill="rgb(255,255,255)" />
+                                    </clipPath>
+                                    <clipPath id="clipPath_7">
+                                        <rect width="28.000000" height="28.000000" x="10.000000" y="10.000000" fill="rgb(255,255,255)" />
+                                    </clipPath>
+                                </defs>
+                                <rect id="Frame 1153" width="48.000000" height="48.000000" x="0.000000" y="0.000000" rx="24.000000" fill="rgb(255,225,228)" />
+                                <g id="material-symbols:close-rounded" clip-path="url(#clipPath_7)" customFrame="url(#clipPath_7)">
+                                    <rect id="material-symbols:close-rounded" width="28.000000" height="28.000000" x="10.000000" y="10.000000" fill="rgb(255,255,255)" fill-opacity="0" />
+                                    <path id="Vector" d="M24.0009 25.6333L18.2842 31.3499C18.0704 31.5638 17.7981 31.6708 17.4676 31.6708C17.137 31.6708 16.8648 31.5638 16.6509 31.3499C16.437 31.136 16.3301 30.8638 16.3301 30.5333C16.3301 30.2027 16.437 29.9305 16.6509 29.7166L22.3676 23.9999L16.6509 18.2833C16.437 18.0694 16.3301 17.7972 16.3301 17.4666C16.3301 17.136 16.437 16.8638 16.6509 16.6499C16.8648 16.436 17.137 16.3291 17.4676 16.3291C17.7981 16.3291 18.0704 16.436 18.2842 16.6499L24.0009 22.3666L29.7176 16.6499C29.9315 16.436 30.2037 16.3291 30.5342 16.3291C30.8648 16.3291 31.137 16.436 31.3509 16.6499C31.5648 16.8638 31.6717 17.136 31.6717 17.4666C31.6717 17.7972 31.5648 18.0694 31.3509 18.2833L25.6342 23.9999L31.3509 29.7166C31.5648 29.9305 31.6717 30.2027 31.6717 30.5333C31.6717 30.8638 31.5648 31.136 31.3509 31.3499C31.137 31.5638 30.8648 31.6708 30.5342 31.6708C30.2037 31.6708 29.9315 31.5638 29.7176 31.3499L24.0009 25.6333Z" fill="rgb(0,0,0)" fill-rule="nonzero" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="spec_register1_right_block" style="margin:0">
+                        <p class="client_address" style="margin:0 0 10px 0">
+                            <span>{{__('Послуга')}}: </span>
+                            {{ $infoAppointment->service->name ?? __('Не вказано') }}
+                        </p>
+                        <p class="client_address" style="margin:0">
+                            <span>{{__('Інформація')}}: </span>
+                            {{ $infoAppointment->information ?? __('Немає інформації') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        @endif
     @endif
 </div>

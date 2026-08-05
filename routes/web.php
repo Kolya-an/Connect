@@ -60,4 +60,8 @@ Route::get('/{slug}', function ($slug) {
     return view('page.show', compact('page'));
 });
 
+Route::get('/training-form', function () {
+    return view('training-form');
+});
+
 require __DIR__.'/auth.php';

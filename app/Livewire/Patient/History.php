@@ -26,6 +26,9 @@ class History extends Component
     public $service = 5;
     public $appointment_id;
 
+    public $infoModalVisible = false;
+    public $selectedInfoAppointmentId;
+
     public function mount(User $id)
     {
         $this->user = $id;
@@ -41,6 +44,18 @@ class History extends Component
     {
         $this->selectedAppointmentId = $appointmentId;
         $this->modalVisible = true;
+    }
+
+    public function showInfoModal($appointmentId)
+    {
+        $this->selectedInfoAppointmentId = $appointmentId;
+        $this->infoModalVisible = true;
+    }
+
+    public function closeInfoModal()
+    {
+        $this->infoModalVisible = false;
+        $this->selectedInfoAppointmentId = null;
     }
 
 
@@ -83,8 +98,8 @@ class History extends Component
     public function render()
     {
         $appointments = Appointment::where('user_id', $this->user_id)
-            ->where('status', ['canceled', 'completed'])
-            ->with(['doctor.user'])
+            ->whereIn('status', ['canceled', 'completed'])
+            ->with(['doctor.user', 'service'])
             ->orderBy('date')
             ->orderBy('hour')
             ->paginate(5); // Пагинация здесь
