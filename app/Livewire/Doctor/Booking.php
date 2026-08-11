@@ -24,6 +24,7 @@ class Booking extends Component
     public $workingHours = [];
     public $formattedDate;
     public $showLoginModal = false;
+    public $showPhoneModal = false;
 
     public $search = '';
 
@@ -72,7 +73,7 @@ class Booking extends Component
     {
         $this->showModal = false;
         //$this->selectedDate = null;
-
+        $this->showPhoneModal = false;
         // Также диспатчим при закрытии модалки
         $this->dispatch('reinit-swiper');
         $this->search = '';
@@ -233,6 +234,11 @@ class Booking extends Component
         }
 
         return $services;
+    }
+
+    public function openPhoneModal()
+    {
+        $this->showPhoneModal = true;
     }
 
     public function render()

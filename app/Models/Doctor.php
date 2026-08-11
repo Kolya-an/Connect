@@ -40,7 +40,8 @@ class Doctor extends Model
         'gift',
         'share',
         'latitude',
-        'longitude'
+        'longitude',
+        'doctor_history_agree',
     ];
 
     protected function casts(): array

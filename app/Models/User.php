@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Doctor;
+use App\Models\DoctorPatients;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -91,6 +92,11 @@ class User extends Authenticatable implements FilamentUser
     public function getRoleNameAttribute(): string
     {
         return ucfirst($this->role ?? 'patient');
+    }
+
+    public function doctorPatient()
+    {
+        return $this->hasOne(DoctorPatients::class, 'user_id');
     }
 
 }

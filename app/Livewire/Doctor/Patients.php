@@ -32,6 +32,12 @@ class Patients extends Component
     public $patientInformation = '';
     public $information = '';
     public $editingPatientId = null;
+    
+    // New properties for checkboxes
+    public $doc_pac_information = false;
+    public $doc_pac_confirmation = false;
+    public $doc_his_information = false;
+    public $doc_his_confirmation = false;
 
     public function mount($doctorId)
     {
@@ -84,7 +90,7 @@ class Patients extends Component
             $this->searchPatient = $user ? trim($user->name . ' ' . ($user->patient->second_name ?? '')) : '';
 
              $this->doctorPatientRelation = DoctorPatients::where('doctor_id', $this->doctorId)
-                 ->where('patient_id', $this->selectedPatientId)
+                 ->where('user_id', $this->selectedPatientId)
                  ->first();
 
             $this->doctorPatientText = $this->doctorPatientRelation->text ?? '';
@@ -149,17 +155,19 @@ class Patients extends Component
     {
         try {
             $this->editingPatientId = $patientId;
+            
+            // Reset checkboxes when opening modal
+            $this->doc_pac_information = false;
+            $this->doc_pac_confirmation = false;
+            $this->doc_his_information = false;
+            $this->doc_his_confirmation = false;
 
             // Проверяем существование таблицы
-            if (\Schema::hasTable('doctor_patients')) {
-                $relation = DoctorPatients::where('doctor_id', $this->doctorId)
-                    ->where('patient_id', $patientId)
-                    ->first();
+            $relation = DoctorPatients::where('doctor_id', $this->doctorId)
+                ->where('user_id', $patientId)
+                ->first();
 
-                $this->patientInformation = $relation ? ($relation->text ?? '') : '';
-            } else {
-                $this->patientInformation = '';
-            }
+            $this->patientInformation = $relation ? ($relation->text ?? '') : '';
 
             $this->modalVisible = true;
         } catch (\Exception $e) {
@@ -167,6 +175,7 @@ class Patients extends Component
             $this->modalVisible = true;
         }
     }
+    
     public function savePatientInformation()
     {
         try {
@@ -179,14 +188,12 @@ class Patients extends Component
                     ],
                     [
                         'text' => $this->patientInformation,
-                        // Добавьте другие поля если нужно
+                        'doctor_rel' => now(), // Устанавливаем текущее время 
                     ]
                 );
 
                 // Обновляем текст в компоненте
                 $this->doctorPatientText = $this->patientInformation;
-
-                session()->flash('message', 'Інформацію успішно збережено.');
             }
 
             $this->closeModal();
@@ -195,21 +202,30 @@ class Patients extends Component
             session()->flash('error', 'Помилка при збереженні: ' . $e->getMessage());
         }
     }
+    
     public function closeModal()
     {
         $this->modalVisible = false;
         $this->editingPatientId = null;
         $this->patientInformation = '';
+        $this->doc_pac_information = false;
+        $this->doc_pac_confirmation = false;
+        $this->doc_his_information = false;
+        $this->doc_his_confirmation = false;
     }
+    
     public function showModalHistory($appointmentId)
     {
         $this->selectedAppointmentId = $appointmentId;
         $this->modalHistory = true;
-        $this->information = '';
+        $appointment = Appointment::find($appointmentId);
+        $this->information = $appointment ? ($appointment->information ?? '') : '';
+        $this->doc_his_information = false;
+        $this->doc_his_confirmation = false;
     }
+    
     public function completedAppointment()
     {
-       // dd($this->selectedAppointmentId);
         $this->modalHistory = true;
         $appointment = Appointment::where('id', $this->selectedAppointmentId)
             // ->where('doctor_id', $this->doctorId)
@@ -217,20 +233,23 @@ class Patients extends Component
 
         $appointment->update([
             'status' => 'completed',
-            'information' => $this->information
+            'information' => $this->information,
+            'doctor_rel' => now()
         ]);
         $this->closeModalHistory();
     }
+    
     public function closeModalHistory()
     {
         $this->modalHistory = false;
         $this->selectedAppointmentId = null;
         $this->information = '';
+        $this->doc_his_information = false;
+        $this->doc_his_confirmation = false;
     }
 
     public function canceledAppointment($id)
     {
-        //dd($id);
         $appointment = Appointment::where('id', $id)
             // ->where('doctor_id', $this->doctorId)
             ->first();
@@ -250,7 +269,12 @@ class Patients extends Component
             ->toArray();
 
         $doctorPatientsQuery = User::whereIn('id', $patientIds)
-            ->with('patient')
+            ->with([
+        'patient',
+        'doctorPatient' => function ($query) {
+            $query->where('doctor_id', $this->doctorId);
+        }
+    ])
             ->orderBy('name');
 
         // Фильтруем только если выбран конкретный пациент

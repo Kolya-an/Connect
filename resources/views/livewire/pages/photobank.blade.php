@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('page.title','Фотобанк - Connect')
+@section('page.title','Банк клінічних кейсів - Connect')
 @section('content')
     {{ $slot }}
 @endsection

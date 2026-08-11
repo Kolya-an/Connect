@@ -42,7 +42,7 @@
                         <livewire:header-service />
                     </li>
                     <li><a href="{{route('about')}}">{{__('Про сервіс')}}</a></li>
-                    <li><a href="{{route('photobank')}}">{{__('Фотобанк')}}</a></li>
+                    <li><a href="{{route('photobank')}}">{{__('Банк кейсів')}}</a></li>
                     <li><a href="{{route('news')}}">{{__('Новини')}}</a></li>
                 </ul>
             </div>

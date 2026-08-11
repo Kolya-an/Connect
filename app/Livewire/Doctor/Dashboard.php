@@ -11,6 +11,8 @@ class Dashboard extends Component
 {
     public $step = 1;
     public $doctorId;
+    public $agreeModalVisible = false;
+    public $doctor_history_agree;
 
     // Общие данные
     public $phone;
@@ -21,6 +23,7 @@ class Dashboard extends Component
         if ($doctor) {
             $this->doctorId = $doctor->id;
             $this->phone = $doctor->phone;
+            $this->doctor_history_agree = $doctor->doctor_history_agree;
         }
     }
 
@@ -44,12 +47,38 @@ class Dashboard extends Component
 
     public function setStep($stepNumber)
     {
+        if ($stepNumber=== 5 && empty($this->doctor_history_agree)) {
+            $this->agreeModalVisible = true; // Відкриваємо модалку згоди
+            return; // Перериваємо перехід
+        }
         $this->step = $stepNumber;
         if ($this->step === 3) {
             $this->dispatch('reinit-swipers');
         }
     }
+    public function agreeDoctorHistory()
+    {
+        $user = Auth::user();
 
+        if ($user->doctor) {
+            $user->doctor->update([
+                'doctor_history_agree' => now(),
+            ]);
+        } 
+
+        $this->doctor_history_agree = now();
+        $this->agreeModalVisible = false;
+
+        // Автоматично відкриваємо "Історію візитів" після підтвердження
+        $this->step = 5;
+
+        session()->flash('message', 'Згоду на обробку даних успішно надано!');
+    }
+
+    public function closeAgreeModal()
+    {
+        $this->agreeModalVisible = false;
+    }
 
     public function render()
     {

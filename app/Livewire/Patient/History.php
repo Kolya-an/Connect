@@ -27,7 +27,9 @@ class History extends Component
     public $appointment_id;
 
     public $infoModalVisible = false;
+    public $agreeModalVisible = false;
     public $selectedInfoAppointmentId;
+    public $pac_his_confirmation = false;
 
     public function mount(User $id)
     {
@@ -51,6 +53,10 @@ class History extends Component
         $this->selectedInfoAppointmentId = $appointmentId;
         $this->infoModalVisible = true;
     }
+    public function agreeModalVisible()
+    {
+        $this->agreeModalVisible = true;
+    }
 
     public function closeInfoModal()
     {
@@ -70,6 +76,12 @@ class History extends Component
             'service' => $this->service,
         ]);
 
+        if ($this->selectedAppointmentId) {
+            Appointment::where('id', $this->selectedAppointmentId)->update([
+                'patient_rel' => now(),
+            ]);
+        }
+
             // Закрываем модалку
         $this->closeModal();
 
@@ -82,6 +94,8 @@ class History extends Component
         $this->medical = 5;
         $this->service = 5;
         $this->selectedAppointmentId = null;
+        $this->pac_his_confirmation = false;
+        $this->agreeModalVisible = false;
 
         // Очищаем flash сообщения при закрытии модального окна
         session()->forget(['success', 'error']);

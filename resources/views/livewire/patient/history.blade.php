@@ -179,9 +179,22 @@
 
                         @error('service') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
 
+                        <label class="_flex-display _align-top more_filter_checkbox" style="flex-wrap: nowrap;">
+                
+                            <input id="pac_his_confirmation" type="checkbox" wire:model.live="pac_his_confirmation">
+                            <span class="checkmark"></span>
+                            <span class="check_title" style="width: calc(100% - 30px);">{{ __('Я надаю згоду на обробку моїх даних, що стосуються здоров’я, у межах функціоналу медичного запису платформи, включно із зберіганням відомостей про проведені процедури, використані препарати, рекомендації та іншої інформації, необхідної для ведення моєї історії процедур') }}</span>
+                        </label>
+
                         <!-- КНОПКИ -->
 
-                        <button type="button" wire:click.prevent="cancelAppointment" class="white_rose_btn register_prev" style="width:100%">{{__('Відправити')}}</button>
+                        <button 
+                            type="button" wire:click.prevent="cancelAppointment" 
+                            class="white_rose_btn register_prev" 
+                            style="width:100%"
+                            @disabled(!$pac_his_confirmation)>
+                            {{__('Відправити')}}
+                        </button>
 
                     </form>
                 </div>
@@ -229,4 +242,5 @@
             </div>
         @endif
     @endif
+    
 </div>

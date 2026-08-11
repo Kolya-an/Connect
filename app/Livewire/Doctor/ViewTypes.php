@@ -10,12 +10,24 @@ class ViewTypes extends Component
 {
     public $user_id;
     public $doctor;
+    public $showPhoneModal = false;
     use WithPagination;
     public function mount($id)
     {
         $this->user_id = $id;
         $this->doctor = Doctor::findOrFail($id);
     }
+
+    public function openPhoneModal()
+    {
+        $this->showPhoneModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->showPhoneModal = false;
+    }
+
     public function render()
     {
         $services = $this->doctor

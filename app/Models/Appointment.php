@@ -16,11 +16,15 @@ class Appointment extends Model
         'status',
         'cause',
         'information',
+        'doctor_rel',
+        'patient_rel',
         'service_id'
     ];
 
     protected $casts = [
         'date' => 'date:Y-m-d',
+        'doctor_rel' => 'date:Y-m-d',
+        'patient_rel' => 'date:Y-m-d',
         'hour' => 'string', // 'datetime' лучше для TimePicker в Filament
         'status' => 'string',
         'information' => 'encrypted',

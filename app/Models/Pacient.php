@@ -25,6 +25,7 @@ class Pacient extends Model
         'password',
         'latitude',
         'longitude',
+        'patient_history_agree',
     ];
 
 

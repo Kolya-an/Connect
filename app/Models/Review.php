@@ -10,7 +10,7 @@ class Review extends Model
         'appointment_id',
         'text',
         'medical',
-        'service',
+        'service'
     ];
     public function appointment()
     {

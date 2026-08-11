@@ -43,7 +43,7 @@
                                         <path d="M6.71468 0.848329C6.80449 0.571936 7.19551 0.571937 7.28532 0.84833L8.72876 5.29078C8.76892 5.41439 8.88411 5.49808 9.01408 5.49808H13.6851C13.9758 5.49808 14.0966 5.86996 13.8615 6.04078L10.0825 8.78637C9.97736 8.86277 9.93336 8.99817 9.97352 9.12178L11.417 13.5642C11.5068 13.8406 11.1904 14.0705 10.9553 13.8996L7.17634 11.1541C7.07119 11.0777 6.92881 11.0777 6.82366 11.1541L3.04469 13.8996C2.80957 14.0705 2.49323 13.8406 2.58303 13.5642L4.02648 9.12178C4.06664 8.99817 4.02264 8.86276 3.91749 8.78637L0.138516 6.04078C-0.0965979 5.86996 0.0242358 5.49808 0.314853 5.49808H4.98593C5.11589 5.49808 5.23108 5.41439 5.27124 5.29078L6.71468 0.848329Z" fill="#FFDDDF"/>
                                     </svg>
                                 </div>
-                                <p><b>+3000</b> {{__('перевіренних косметологіва')}}</p>
+                                <p><b>+3000</b> {{__('косметологів, які надали документи про освіту')}}</p>
                             </div>
                         </div>
                     @endif
@@ -137,12 +137,12 @@
         @if(!empty($about->photobank_text) && strip_tags($about->photobank_text) !== '')
             <div class="_flex-display _justify-content-between _align-center about_rose_photo">
                 <div class="about_rose">
-                    <div class="doc-plate rose-plate _display_table">{{__('Фотобанк')}}</div>
+                    <div class="doc-plate rose-plate _display_table">{{__('Банк клінічних кейсів')}}</div>
                     {!! $about->photobank_text !!}
                 </div>
                 <a href="#" class="_flex-display _justify-content-center _align-bottom about_photo">
                     <span class="_flex-display _justify-content-center _align-center about_photo_bottom">
-                        <span class="_flex-display _justify-content-center _align-center about_photo_title">{{__('Фотобанк')}}</span>
+                        <span class="_flex-display _justify-content-center _align-center about_photo_title">{{__('Банк клінічних кейсів')}}</span>
                         <svg viewBox="0 0 26 25" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26.000000" height="25.000000" fill="none">
                             <path id="Frame 1079" d="M13.5 0C20.4036 0 26 5.59644 26 12.5C26 19.4036 20.4036 25 13.5 25L12.5 25C5.59644 25 0 19.4036 0 12.5C0 5.59644 5.59644 0 12.5 0L13.5 0Z" fill="rgb(255,255,255)" fill-rule="evenodd" />
                             <path id="Arrow 1" d="M0 -1L13.4536 -1L13.4536 1L0 1L0 -1ZM0.02 0.98L0 1C-0.56 1 -1 0.56 -1 -0C-1 -0.56 -0.56 -1 0 -1L0.02 -0.98L0.02 0.98ZM12.0394 0L7.08966 -4.94975C6.69368 -5.34573 6.69368 -5.96798 7.08966 -6.36396C7.48564 -6.75994 8.1079 -6.75994 8.50388 -6.36396L14.1607 -0.707107C14.5567 -0.311127 14.5567 0.311127 14.1607 0.707107L8.50388 6.36396C8.1079 6.75994 7.48564 6.75994 7.08966 6.36396C6.69368 5.96798 6.69368 5.34573 7.08966 4.94975L12.0394 0Z" fill="rgb(0,0,0)" fill-rule="nonzero" transform="matrix(0.743294,-0.668965,0.668965,0.743294,8,17)" />

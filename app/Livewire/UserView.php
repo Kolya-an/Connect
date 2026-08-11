@@ -16,6 +16,8 @@ class UserView extends Component
     public $user_id;
     public $patient;
     public $step = 1;
+    public $agreeModalVisible = false;
+    public $patient_history_agree;
 
 
     public function mount(User $id)
@@ -26,13 +28,39 @@ class UserView extends Component
             abort(403, 'Доступ запрещен');
         }
         $this->patient = $this->user->patient;
-
+        $this->patient_history_agree = $this->user->patient->patient_history_agree;
     }
     public function setStep($stepNumber)
     {
+        if ($stepNumber=== 2 && empty($this->patient_history_agree)) {
+            $this->agreeModalVisible = true; // Відкриваємо модалку згоди
+            return; // Перериваємо перехід
+        }
         $this->step = $stepNumber;
     }
+    public function agreePatientHistory()
+    {
+        $user = Auth::user();
 
+        if ($user->patient) {
+            $user->patient->update([
+                'patient_history_agree' => now(),
+            ]);
+        } 
+
+        $this->patient_history_agree = now();
+        $this->agreeModalVisible = false;
+
+        // Автоматично відкриваємо "Історію візитів" після підтвердження
+        $this->step = 2;
+
+        session()->flash('message', 'Згоду на обробку даних успішно надано!');
+    }
+
+    public function closeAgreeModal()
+    {
+        $this->agreeModalVisible = false;
+    }
 
 
 

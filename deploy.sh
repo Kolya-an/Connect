@@ -1,11 +1,11 @@
 #!/bin/bash
 
-set -e  # зупиняти скрипт при будь-якій помилці
+set -e  # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 echo "?? Deploy started..."
 
 PROJECT_DIR="/var/www/connect"
-BRANCH="master"
+BRANCH="main"
 PHP_FPM_SERVICE="php8.3-fpm"
 
 cd $PROJECT_DIR

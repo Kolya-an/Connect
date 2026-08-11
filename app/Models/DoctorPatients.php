@@ -10,5 +10,10 @@ class DoctorPatients extends Model
         'user_id',
         'doctor_id',
         'text',
+        'doctor_rel',
+    ];
+    protected $casts = [
+        'doctor_rel' => 'date:Y-m-d',
+        'text' => 'encrypted',
     ];
 }
