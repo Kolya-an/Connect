@@ -14,6 +14,7 @@ echo "?? Checking branch..."
 git checkout $BRANCH
 
 echo "?? Pulling latest changes..."
+git reset --hard
 git pull origin $BRANCH
 
 echo "?? Installing composer dependencies..."
