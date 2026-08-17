@@ -42,6 +42,8 @@ class Doctor extends Model
         'latitude',
         'longitude',
         'doctor_history_agree',
+        'passport',
+        'licensy',
     ];
 
     protected function casts(): array

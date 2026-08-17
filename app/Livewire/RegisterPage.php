@@ -12,7 +12,8 @@ class RegisterPage extends Component
 {
     public $type = 'patient'; // patient | doctor
     public bool $accept_terms = false;
-
+    public bool $accept_politik = false;
+    
     // Общие поля
     public $name;
     public $second_name;
@@ -20,6 +21,7 @@ class RegisterPage extends Component
     public $phone;
     public $password;
     public $password_confirmation;
+    
 
     // Только для доктора
     public $sex;

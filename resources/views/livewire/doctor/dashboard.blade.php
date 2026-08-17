@@ -19,8 +19,10 @@
                 <div class="spec_register1_right">
                     <h5>{{__('Ваша Спеціальність')}}</h5>
                     @livewire('doctor.type')
+                    @livewire('doctor.passport')
                     @livewire('doctor.doctor-education')
                     @livewire('doctor.extra')
+                    @livewire('doctor.licensy')
                     @livewire('doctor.share')
                     @livewire('doctor.description')
                     <button wire:click="setStep(2)" class="rose_btn register_next">{{__('Далі')}}</button>

@@ -143,6 +143,34 @@ class DoctorForm
                                     $record->services()->sync($state);
                                 }
                             }),
+                            FileUpload::make('passport')
+                            ->label('Паспорт (селфі з документом, що посвідчує особу)')
+                           // ->directory('doctor/' . date('Y') . '/' . date('m'))
+                            ->disk('public_uploads')
+                            ->visibility('public')
+                            ->image()
+                            ->imageEditor()
+                           // ->acceptedFileTypes(['images/png','images/jpeg'])
+                            ->imageEditorAspectRatios([
+                                null,
+                                '16:9',
+                                '4:3',
+                                '1:1',
+                            ]),
+                            FileUpload::make('licensy')
+                            ->label('Ліцензія')
+                           // ->directory('doctor/' . date('Y') . '/' . date('m'))
+                            ->disk('public_uploads')
+                            ->visibility('public')
+                            ->image()
+                            ->imageEditor()
+                           // ->acceptedFileTypes(['images/png','images/jpeg'])
+                            ->imageEditorAspectRatios([
+                                null,
+                                '16:9',
+                                '4:3',
+                                '1:1',
+                            ]),
                         Toggle::make('active')
                             ->label('Активна?'),
                         TextInput::make('plate')

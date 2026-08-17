@@ -98,6 +98,9 @@
             </div>
         </div>
         <div class="spec_content">
+            @if ($doctor->active)
+                <p style="color: green; font-weight: bold; text-align: right;">{{__('Особу підтверджено. Документи про освіту надано')}}</p>
+            @endif
             <div class="_flex-display _justify-content-center _align-center select_cats">
                 <button wire:click="setStep(1)" class="btn {{ $step === 1 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Про лікаря')}}</button>
                 <button wire:click="setStep(2)" class="btn {{ $step === 2 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Процедури')}}</button>
