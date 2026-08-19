@@ -13,7 +13,8 @@ class Dashboard extends Component
     public $doctorId;
     public $agreeModalVisible = false;
     public $doctor_history_agree;
-
+    public $modalAgree = false;
+    public $doc_agree = false;
     // Общие данные
     public $phone;
 
@@ -24,6 +25,7 @@ class Dashboard extends Component
             $this->doctorId = $doctor->id;
             $this->phone = $doctor->phone;
             $this->doctor_history_agree = $doctor->doctor_history_agree;
+            $this->modalAgree = $doctor->agree;
         }
     }
 
@@ -78,6 +80,27 @@ class Dashboard extends Component
     public function closeAgreeModal()
     {
         $this->agreeModalVisible = false;
+    }
+    public function saveAgree()
+    {
+        $user = Auth::user();
+
+        if ($user->doctor) {
+            $user->doctor->update([
+                'agree' => now(),
+            ]);
+        } 
+
+        $this->modalAgree = true;
+
+      
+
+        session()->flash('message', 'Згоду на обробку даних успішно надано!');
+    }
+
+    public function closeAgree()
+    {
+        $this->modalAgree = true;
     }
 
     public function render()

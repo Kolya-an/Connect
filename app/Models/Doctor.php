@@ -44,6 +44,7 @@ class Doctor extends Model
         'doctor_history_agree',
         'passport',
         'licensy',
+        'agree',
     ];
 
     protected function casts(): array
@@ -52,6 +53,7 @@ class Doctor extends Model
             'types' => 'array',
             'education_images' => 'array',
             'extra_images' => 'array',
+            'agree' => 'date:Y-m-d',
         ];
     }
     protected static function booted()

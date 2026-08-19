@@ -26,9 +26,15 @@ class Pacient extends Model
         'latitude',
         'longitude',
         'patient_history_agree',
+        'agree',
     ];
 
-
+    protected function casts(): array
+    {
+        return [
+            'agree' => 'date:Y-m-d',
+        ];
+    }
 
     public function user()
     {

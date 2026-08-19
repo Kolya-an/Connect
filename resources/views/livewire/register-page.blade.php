@@ -59,7 +59,7 @@
         <label class="_flex-display _align-center more_filter_checkbox" style="margin-bottom: 10px;">
             <input wire:model.live="accept_politik" id="check_politik" type="checkbox" name="check_politik" class="form-check-input @error('accept_politik') is-invalid @enderror">
             <span class="checkmark"></span>
-            <span class="check_title">{{__('Я прочитав(ла)')}} <a target="_blank" href="/polozennia-pro-obrobku-personalnix-danix">{{__('Політику приватності')}}</a></span>
+            <span class="check_title">{{__('Я прочитав(ла)')}} <a target="_blank" href="{{ asset('doc/personal.pdf') }}">{{__('Політику приватності')}}</a></span>
             @error('accept_politik')
                 <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
@@ -68,7 +68,7 @@
         <label class="_flex-display _align-center more_filter_checkbox" style="margin-bottom: 10px;">
             <input wire:model.live="accept_terms" id="check_terms" type="checkbox" name="check_terms" class="form-check-input @error('accept_terms') is-invalid @enderror">
             <span class="checkmark"></span>
-            <span class="check_title">{{__('Я прочитав(ла) та приймаю')}} <a target="_blank" href="/umovy-vykorystannia">{{__('Умови використання')}}</a></span>
+            <span class="check_title">{{__('Я прочитав(ла) та приймаю')}} <a target="_blank" href="{{ asset('doc/' . ($type === 'doctor' ? 'umovi_doc' : 'umovi_user') . '.pdf') }}">{{__('Умови використання')}}</a></span>
             @error('accept_terms')
                 <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror

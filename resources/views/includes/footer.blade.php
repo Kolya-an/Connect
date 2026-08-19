@@ -34,6 +34,7 @@
                     <li><a href="{{route('about')}}">{{__('Про сервіс')}}</a></li>
                     <li><a href="{{route('photobank')}}">{{__('Банк кейсів')}}</a></li>
                     <li><a href="{{route('news')}}">{{__('Новини')}}</a></li>
+                    <li><a target="_blank" href="/cookies">{{__('Політика Cookies')}}</a></li>
                 </ul>
             </div>
             <div class="_flex-display _justify-content-between footer_right">
@@ -66,9 +67,14 @@
                         @livewire('subscribe-form')
                     </div>
                 </div>
+                @php
+                    $userType = auth()->check() ? auth()->user()->role : (request()->get('role') ?? 'patient');
+                @endphp
                 <div class="_flex-display _flex-column _align-center footer_links">
-                    <a target="_blank" href="/publicnii-dogovir-oferta-dlia-klijentiv">{{__('Правила користування сайтом')}}</a>
-                    <a target="_blank" href="/polozennia-pro-obrobku-personalnix-danix">{{__('Політика конфіденційності')}}</a>
+                    <a target="_blank" href="{{ asset('doc/' . ($userType === 'doctor' ? 'umovi_doc' : 'umovi_user') . '.pdf') }}">
+                        {{ __('Правила користування сайтом') }}
+                    </a>
+                    <a target="_blank" href="{{ asset('doc/personal.pdf') }}">{{__('Політика конфіденційності')}}</a>
                 </div>
             </div>
         </div>

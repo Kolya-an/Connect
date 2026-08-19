@@ -38,6 +38,7 @@ class Patients extends Component
     public $doc_pac_confirmation = false;
     public $doc_his_information = false;
     public $doc_his_confirmation = false;
+    public $agree = false;
 
     public function mount($doctorId)
     {

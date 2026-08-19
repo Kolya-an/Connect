@@ -45,6 +45,7 @@ Route::get('/photobank', Photobank::class)->name('photobank');
 Route::get('/map', Map::class)->name('map');
 Route::get('/test', TestPage::class)->name('test');
 
+
 Route::get('/forgot-password', ForgotPassword::class)
     ->middleware('guest')
     ->name('password.request');

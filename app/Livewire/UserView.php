@@ -18,6 +18,8 @@ class UserView extends Component
     public $step = 1;
     public $agreeModalVisible = false;
     public $patient_history_agree;
+    public $modalAgree = false;
+    public $doc_agree = false;
 
 
     public function mount(User $id)
@@ -29,6 +31,7 @@ class UserView extends Component
         }
         $this->patient = $this->user->patient;
         $this->patient_history_agree = $this->user->patient->patient_history_agree;
+        $this->modalAgree = $this->user->patient->agree;
     }
     public function setStep($stepNumber)
     {
@@ -62,7 +65,27 @@ class UserView extends Component
         $this->agreeModalVisible = false;
     }
 
+    public function saveAgree()
+    {
+        $user = Auth::user();
 
+        if ($user->patient) {
+            $user->patient->update([
+                'agree' => now(),
+            ]);
+        } 
+
+        $this->modalAgree = true;
+
+      
+
+        session()->flash('message', 'Згоду на обробку даних успішно надано!');
+    }
+
+    public function closeAgree()
+    {
+        $this->modalAgree = true;
+    }
 
 
     public function render()
