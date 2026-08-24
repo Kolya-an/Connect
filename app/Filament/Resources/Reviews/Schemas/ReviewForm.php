@@ -7,6 +7,7 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\Toggle;
 
 class ReviewForm
 {
@@ -34,6 +35,10 @@ class ReviewForm
                     ->required()
                     ->numeric()
                     ->default(5),
+                Toggle::make('active')
+                    ->label('Активний (відображати на сайті)')
+                    ->default(false)
+                    ->required(),
             ]);
     }
 }

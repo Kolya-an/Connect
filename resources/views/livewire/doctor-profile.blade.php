@@ -98,14 +98,19 @@
             </div>
         </div>
         <div class="spec_content">
-            @if ($doctor->active)
-                <p style="color: green; font-weight: bold; text-align: right;">{{__('Особу підтверджено. Документи про освіту надано')}}</p>
-            @endif
+            <div class="_flex-display _justify-content-between _align-center" style="margin-bottom: 10px;">
+                <button wire:click="openDoctorReportModal({{ $doctor->id }})" class="btn rose_btn">
+                    {{ __('Поскаржитися на лікаря') }}
+                </button>
+                @if ($doctor->active)
+                    <p style="color: green; font-weight: bold; text-align: right;">{{__('Особу підтверджено. Документи про освіту надано')}}</p>
+                @endif
+            </div>
             <div class="_flex-display _justify-content-center _align-center select_cats">
                 <button wire:click="setStep(1)" class="btn {{ $step === 1 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Про лікаря')}}</button>
                 <button wire:click="setStep(2)" class="btn {{ $step === 2 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Процедури')}}</button>
                 <button wire:click="setStep(3)" class="btn {{ $step === 3 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Запис на прийом')}}</button>
-                <button wire:click="setStep(4)" class="btn {{ $step === 4 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Фото')}}</button>
+                <button wire:click="setStep(4)" class="btn {{ $step === 4 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Клінічні кейси')}}</button>
                 <button wire:click="setStep(5)" class="btn {{ $step === 5 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Акції та знижки')}}</button>
                 <button wire:click="setStep(6)" class="btn {{ $step === 6 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Відгуки')}}</button>
             </div>
@@ -124,4 +129,27 @@
             @endif
         </div>
     </div>
+    @if($showDoctorReportModal)
+        <div class="_flex-display _justify-content-center _align-center screen" wire:click.self="closeDoctorReportModal">
+            <div class="window phone_appointment_window" style="max-width: 500px; padding: 25px;">
+                <h4 style="margin-bottom: 15px;">{{ __('Поскаржитися на лікаря') }}</h4>
+                
+                <form wire:submit.prevent="sendDoctorReport">
+                    <div style="margin-bottom: 15px;">
+                        <textarea wire:model="doctorReportText" class="form-control" rows="4" 
+                                placeholder="{{ __('Вкажіть причину скарги на лікаря...') }}" 
+                                style="width: 100%; border-radius: 8px; padding: 10px; border: 1px solid #ccc;"></textarea>
+                        @error('doctorReportText') 
+                            <span style="color: red; font-size: 12px;">{{ $message }}</span> 
+                        @enderror
+                    </div>
+
+                    <div class="_flex-display _justify-content-between" style="gap: 10px;">
+                        <button type="button" wire:click="closeDoctorReportModal" class="btn white_rose_btn">{{ __('Скасувати') }}</button>
+                        <button type="submit" class="btn rose_btn">{{ __('Відправити') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
 </div>   

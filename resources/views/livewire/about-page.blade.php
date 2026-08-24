@@ -166,4 +166,11 @@
             </div>
         @endif
     </div>
+    <div id="disclamer" style="margin-top:20px;">
+        <div class="container">
+            <div class="disclamer_text" >
+                {!! $about->disclamer !!}
+            </div>
+        </div>
+    </div>
 </main>

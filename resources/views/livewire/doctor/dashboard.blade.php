@@ -5,7 +5,7 @@
         <button wire:click="setStep(3)" class="btn {{ $step === 3 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Графік роботи')}}</button>
         <button wire:click="setStep(4)" class="btn {{ $step === 4 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Мої записи')}}</button>
         <button wire:click="setStep(5)" class="btn {{ $step === 5 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Пацієнти')}}</button>
-        <button wire:click="setStep(6)" class="btn {{ $step === 6 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Фото')}}</button>
+        <button wire:click="setStep(6)" class="btn {{ $step === 6 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Клінічні кейси')}}</button>
         <button wire:click="setStep(7)" class="btn {{ $step === 7 ? 'rose_btn' : 'white_rose_btn' }}">{{__('Акції та знижки')}}</button>
         <a href="https://t.me/+380998402441" target="_blank" class="btn white_rose_btn">{{__('Підтримка')}}</a>
     </div>

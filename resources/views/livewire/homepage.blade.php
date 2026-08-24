@@ -400,5 +400,12 @@
             </div>
         </div>
     @endif
+    <div id="disclamer">
+        <div class="container">
+            <div class="disclamer_text" >
+                {!! $settings->disclamer !!}
+            </div>
+        </div>
+    </div>
     @endif
 </main>

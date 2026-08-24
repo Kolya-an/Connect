@@ -23,6 +23,7 @@ class HomepageSetting extends Model
         'doctor_id',
         'doctors_ids',
         'promotion_id',
+        'disclamer',
     ];
     protected $casts = [
         'manual_news_ids' => 'array',

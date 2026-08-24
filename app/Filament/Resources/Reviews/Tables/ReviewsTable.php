@@ -9,6 +9,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use App\Models\Review;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\ToggleColumn; 
+use Filament\Tables\Filters\TernaryFilter;
 
 class ReviewsTable
 {
@@ -45,10 +47,13 @@ class ReviewsTable
                     ->label('Сервіс')
                     ->numeric()
                     ->sortable(),
+                ToggleColumn::make('active')
+                    ->label('Активний'),
 
             ])
             ->filters([
-                //
+                TernaryFilter::make('active')
+                    ->label('Статус активності'),
             ])
             ->recordActions([
                 EditAction::make(),

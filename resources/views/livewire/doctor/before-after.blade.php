@@ -50,7 +50,7 @@
             background: #5a6268;
         }
     </style>
-    <h5>{{__('Ваші - До/Після')}}</h5>
+    <h5>{{__('Ваші - До процедури/Після процедури')}}</h5>
     <button wire:click="$set('showAddModal', true)"
     class="_flex-display _justify-content-center _align-center btn white_rose_btn add_photo add_photo_page add_photo_btn">
         <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.000000" height="14.000000" fill="none">
@@ -75,7 +75,7 @@
                     </div>
                 </a>
                 <p><b>{{__('Процедура:')}}</b> {{ $item->procedure }}</p>
-                <p><b>{{__('Препарат:')}}</b> {{ $item->product }}</p>
+                <p><b>{{__('Клінічний кейс:')}}</b> {{ $item->product }}</p>
 
             </div>
         @empty
@@ -124,7 +124,7 @@
                         <label class="upload-label">
                            {{-- <span>{{__('Фото ДО')}}</span>--}}
                             <input type="file" id="fileBefore" accept="image/*" x-on:change="initCropper($event, 'before')" style="display: none;">
-                            <div class="upload-button">{{__('Фото ДО')}}</div>
+                            <div class="upload-button">{{__('Фото До процедури')}}</div>
                         </label>
                         <div class="preview-container">
                             <div id="cropContainerBefore" style="width: 100%; height: 300px; display: none;">
@@ -144,7 +144,7 @@
                         <label class="upload-label">
                             {{--<span>{{__('Фото ПІСЛЯ')}}</span>--}}
                             <input type="file" id="fileAfter" accept="image/*" x-on:change="initCropper($event, 'after')" style="display: none;">
-                            <div class="upload-button">{{__('Фото ПІСЛЯ')}}</div>
+                            <div class="upload-button">{{__('Після процедури')}}</div>
                         </label>
                         <div class="preview-container">
                             <div id="cropContainerAfter" style="width: 100%; height: 300px; display: none;">
@@ -172,7 +172,7 @@
                     <div class="search_field search_field_input" style="width:48%">
                         <input type="text"
                         wire:model="product"
-                        placeholder="{{__('Препарат')}}"
+                        placeholder="{{__('Клінічний кейс')}}"
                         class="add_desc_photo"
                         style="padding:0 10px;background:none">
                     </div>

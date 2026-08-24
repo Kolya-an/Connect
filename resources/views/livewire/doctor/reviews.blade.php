@@ -55,6 +55,9 @@
             @if($review->text)
                 <p>{{ $review->text }}</p>
             @endif
+            <button wire:click="openReviewReportModal({{ $review->id }})" class="btn rose_btn" style="margin-top: 10px;">
+                {{ __('Поскаржитися') }}
+            </button>
         </div>
     @endforeach
     @if($reviews->hasPages())
@@ -89,5 +92,28 @@
 
             @endif
         </ul>
+    @endif
+    @if($showReviewReportModal)
+        <div class="_flex-display _justify-content-center _align-center screen" wire:click.self="closeReviewReportModal">
+            <div class="window phone_appointment_window" style="max-width: 500px; padding: 25px;">
+                <h4 style="margin-bottom: 15px;">{{ __('Поскаржитися на відгук') }}</h4>
+                
+                <form wire:submit.prevent="sendReviewReport">
+                    <div style="margin-bottom: 15px;">
+                        <textarea wire:model="reviewReportText" class="form-control" rows="4" 
+                                placeholder="{{ __('Вкажіть причину скарги...') }}" 
+                                style="width: 100%; border-radius: 8px; padding: 10px; border: 1px solid #ccc;"></textarea>
+                        @error('reviewReportText') 
+                            <span style="color: red; font-size: 12px;">{{ $message }}</span> 
+                        @enderror
+                    </div>
+
+                    <div class="_flex-display _justify-content-between" style="gap: 10px;">
+                        <button type="button" wire:click="closeReviewReportModal" class="btn white_rose_btn">{{ __('Скасувати') }}</button>
+                        <button type="submit" class="btn rose_btn">{{ __('Відправити') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     @endif
 </div>

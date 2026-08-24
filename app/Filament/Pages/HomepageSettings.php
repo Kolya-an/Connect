@@ -200,6 +200,14 @@ class HomepageSettings extends Page
                     })
                     ->searchable()
                     ->required(),
+
+                Section::make('Дисклеймер')
+                    ->schema([
+                        RichEditor::make('disclamer')
+                            ->label('Текст дисклеймер'),
+                        
+
+                    ]),
             ]);
 
     }

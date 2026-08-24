@@ -54,6 +54,6 @@
     @endif
 
     @if($photo['product'])
-        <p><b>{{__('Препарат')}}:</b> {{ $photo['product'] }}</p>
+        <p><b>{{__('Клінічний кейс')}}:</b> {{ $photo['product'] }}</p>
     @endif
 </div>

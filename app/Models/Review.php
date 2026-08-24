@@ -10,11 +10,22 @@ class Review extends Model
         'appointment_id',
         'text',
         'medical',
-        'service'
+        'service',
+        'active'
     ];
+
+    protected $casts = [
+        'active' => 'boolean',
+    ];
+
     public function appointment()
     {
         return $this->belongsTo(Appointment::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
     }
 
 }

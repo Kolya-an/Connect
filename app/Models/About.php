@@ -23,6 +23,7 @@ class About extends Model
         'photobank_text',
         'our_text',
         'our_rose_text',
+        'disclamer',
     ];
     protected $casts = [
         'second_text' => 'array',

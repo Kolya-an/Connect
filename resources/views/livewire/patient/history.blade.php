@@ -109,7 +109,7 @@
         <div id="add_city" class="_flex-display _justify-content-center _align-center screen">
             <div class="window add_info_window">
                 <div class="_flex-display _justify-content-between _align-center window_top">
-                    <h4>{{__('Бажаєте скасувати візит?')}}</h4>
+                    <h4>{{__('Відгук')}}</h4>
                     <div wire:click="closeModal" id="window_close" class="window_close">
                         <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" clip-path="url(#clipPath_6)" customFrame="url(#clipPath_6)">
                             <defs>
@@ -132,7 +132,7 @@
                             <textarea
                                 class="add_desc_vuz"
                                 wire:model.defer="text"
-                                placeholder="{{__('Ваш відгук')}}..."
+                                placeholder="{{__('Забороняються: ненормативна лексика, образи, погрози, персональні нападки, розкриття персональних даних третіх осіб, медичні твердження про інших осіб, а також свідомо неправдива інформація. Після модерації ваш відгук буде опубліковано. Платформа залишає за собою право тимчасово приховувати, не публікувати або видаляти відгуки, які порушують правила або щодо яких надійшла обґрунтована скарга.')}}..."
                             ></textarea>
                         </div>
 

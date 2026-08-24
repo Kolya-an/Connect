@@ -168,7 +168,11 @@ class AboutForm
                             ]),
                     ]),
 
-
+                    Section::make('Дисклеймер')
+                    ->schema([
+                    RichEditor::make('disclamer')
+                        ->label('Текст')
+                ]),
 
 
             ]);
