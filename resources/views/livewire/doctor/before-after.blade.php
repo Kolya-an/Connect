@@ -88,7 +88,7 @@
             <div class="window add_info_window" style="padding: 20px">
                 <div class="_flex-display _justify-content-between _align-center window_top">
                     {{--<h4>{{__('Додати До/Після')}}</h4>--}}
-                    <button @click="saveImages()" class="btn rose_btn">{{__('Зберегти')}}</button>
+                    <button @click="saveImages()" class="btn rose_btn" @disabled(!$accept_umov || !$accept_zgoda)>{{__('Зберегти')}}</button>
                     <button wire:click="$set('showAddModal', false)" id="window_close" class="window_close">
                         <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" clip-path="url(#clipPath_6)" customFrame="url(#clipPath_6)">
                             <defs>
@@ -124,7 +124,7 @@
                         <label class="upload-label">
                            {{-- <span>{{__('Фото ДО')}}</span>--}}
                             <input type="file" id="fileBefore" accept="image/*" x-on:change="initCropper($event, 'before')" style="display: none;">
-                            <div class="upload-button">{{__('Фото До процедури')}}</div>
+                            <div class="upload-button">{{__('До процедури')}}</div>
                         </label>
                         <div class="preview-container">
                             <div id="cropContainerBefore" style="width: 100%; height: 300px; display: none;">
@@ -160,8 +160,35 @@
                         </div>
                     </div>
                 </div>
-                <div class="_flex-display _justify-content-between _align-center">
-                    <div class="search_field search_field_input" style="width:48%">
+                <div class="_flex-display _justify-content-between" style="margin: 15px 0; gap: 10px;">
+                    <div class="_flex-display _justify-content-between orientation-selector" style="width:45%;">
+                        <input wire:model.live="accept_umov" id="check_umov" type="checkbox" name="check_politik" class="form-check-input @error('accept_umov') is-invalid @enderror">
+                        <span class="checkmark"></span>
+                        <span class="check_title" style="width: calc(100% - 36px);font-size: 12px; line-height: 1;">
+                            {{__('Я погоджуюсь з умовами розміщення клінічного кейсу.')}}
+                        </span>
+                        @error('accept_umov')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="_flex-display _justify-content-between orientation-selector" style="width:45%;">
+                        <input wire:model.live="accept_zgoda" id="check_zgoda" type="checkbox" name="check_zgoda" class="form-check-input @error('accept_zgoda') is-invalid @enderror">
+                        <span class="checkmark"></span>
+                        <span class="check_title" style="width: calc(100% - 36px);font-size: 12px; line-height: 1;">
+                            {{__('Я підтверджую, що додане фото цього кейсу належить пацієнту, який оформив згоду, додану до цього кейсу.')}}
+                        </span>
+                        @error('accept_zgoda')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+
+
+
+
+
+                    <div class="search_field search_field_input" style="max-width: 100%;">
                         <input type="text"
                         wire:model="procedure"
                         placeholder="{{__('Процедура')}}"
@@ -169,14 +196,17 @@
                         style="padding:0 10px;background:none">
                         @error('procedure') <span class="error">{{ $message }}</span> @enderror
                     </div>
-                    <div class="search_field search_field_input" style="width:48%">
-                        <input type="text"
+                
+                
+                    <div class="search_field search_field_input" style="max-width: 100%;border:0;">
+                        <textarea
                         wire:model="product"
-                        placeholder="{{__('Клінічний кейс')}}"
+                        placeholder="{{__('Тут ви можете описати приклад клінічного кейсу, уникаючі слів і виразів: «результат», «ефект», «прибрали», «виправили», «омолодили», «до / після», "покращення".Можливо так: пацієнтка ... років, з ... морфотипом обличчя, була проведена процедура контурної пластики нижньої третини обличчя. Використовувався препарат... в кількості мл на зону.')}}"
                         class="add_desc_photo"
-                        style="padding:0 10px;background:none">
+                        style="padding:10px;background:none;font-size: 12px;width: calc(100% - 8px);">
+                    </textarea>
                     </div>
-                </div>
+                
                 {{--<button @click="saveImages()" class="btn rose_btn">{{__('Зберегти')}}</button>--}}
             </div>
         </div>

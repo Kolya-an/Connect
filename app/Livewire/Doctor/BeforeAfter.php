@@ -24,6 +24,8 @@ class BeforeAfter extends Component
     public $photoToDelete = null;
     public $photo_before_data;
     public $photo_after_data;
+    public $accept_umov = false;
+    public $accept_zgoda = false;
 
     public $orientation = 'horizontal';
 
