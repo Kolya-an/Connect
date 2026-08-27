@@ -76,6 +76,19 @@
                 </a>
                 <p><b>{{__('Процедура:')}}</b> {{ $item->procedure }}</p>
                 <p><b>{{__('Клінічний кейс:')}}</b> {{ $item->product }}</p>
+                <p><b>{{__('Статус:')}}</b> @switch($item->photoConsent?->status)
+                    @case('signed')
+                        <span class="text-success">{{ __('Підписано') }}</span>
+                        @break
+                    @case('pending')
+                        <span class="text-warning">{{ __('Очікує підпису') }}</span>
+                        @break
+                    @case('declined')
+                        <span class="text-danger">{{ __('Відхилено') }}</span>
+                        @break
+                    @default
+                        <span class="text-muted">{{ __('Немає згоди') }}</span>
+                @endswitch</p>
 
             </div>
         @empty
@@ -106,6 +119,18 @@
                             </g>
                         </svg>
                     </button>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="patient_id"><b>{{ __('Пацієнт') }}</b></label>
+                    <select wire:model="patient_id" class="form-control">
+                        <option value="">-- {{ __('Оберіть пацієнта') }} --</option>
+                        @foreach($patients as $patient)
+                            <option value="{{ $patient->user_id }}">
+                                {{ $patient->user?->name }} {{ $patient->second_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('patient_id') <span class="text-danger" style="font-size: 12px;">{{ $message }}</span> @enderror
                 </div>
                 <div class="_flex-display _justify-content-between _align-center orientation-selector" style="margin: 15px 0; gap: 10px;">
                     <label class="custom-radio" style="width:45%">

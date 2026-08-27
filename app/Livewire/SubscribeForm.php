@@ -8,6 +8,7 @@ class SubscribeForm extends Component
 {
     // Публичное свойство для хранения значения поля email
     public string $email = '';
+    public bool $accept_politik = false;
 
     // Публичное свойство для сообщения об успехе
     public ?string $successMessage = null;

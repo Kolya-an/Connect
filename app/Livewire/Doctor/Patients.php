@@ -56,6 +56,7 @@ class Patients extends Component
                 ->toArray();
 
             $this->patients = User::whereIn('id', $patientIds)
+                ->where('active', 1) // 🛑 Фільтр лише активних пацієнтів
                 ->with('patient')
                 ->where(function ($query) use ($value) {
                     $query->where('name', 'like', '%' . $value . '%')
@@ -131,6 +132,7 @@ class Patients extends Component
     public function performSearchOnFocus()
     {
         $this->patients = User::where('role', 'patient')
+            ->where('active', 1) // 🛑 Фільтр лише активних пацієнтів
             ->with('patient')
             ->where(function($query) {
                 $query->where('name', 'like', '%' . $this->searchPatient . '%')
@@ -270,12 +272,13 @@ class Patients extends Component
             ->toArray();
 
         $doctorPatientsQuery = User::whereIn('id', $patientIds)
+            ->where('active', 1) // 🛑 Фільтр лише активних пацієнтів
             ->with([
-        'patient',
-        'doctorPatient' => function ($query) {
-            $query->where('doctor_id', $this->doctorId);
-        }
-    ])
+                'patient',
+                'doctorPatient' => function ($query) {
+                    $query->where('doctor_id', $this->doctorId);
+                }
+            ])
             ->orderBy('name');
 
         // Фильтруем только если выбран конкретный пациент
@@ -285,8 +288,11 @@ class Patients extends Component
 
         $doctorPatients = $doctorPatientsQuery->paginate(5);
 
-        // Записи для выбранного пациента
-        $appointmentsQuery = Appointment::where('doctor_id', $this->doctorId);
+        // Записи для выбранного пациента (виключаємо прийоми неактивних пацієнтів)
+        $appointmentsQuery = Appointment::where('doctor_id', $this->doctorId)
+            ->whereHas('user', function ($q) {
+                $q->where('active', 1); // 🛑 Перевірка активності пацієнта у записи на прийом
+            });
 
         if ($this->selectedPatientId) {
             $appointmentsQuery->where('user_id', $this->selectedPatientId);

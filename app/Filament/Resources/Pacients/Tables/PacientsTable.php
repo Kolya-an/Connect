@@ -11,12 +11,16 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class PacientsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => 
+                $query->whereHas('user', fn (Builder $q) => $q->where('active', '!=', 2))
+            )
             ->columns([
                 TextColumn::make('user.name')
                     ->label("Ім'я")

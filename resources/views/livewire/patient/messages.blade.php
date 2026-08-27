@@ -1,9 +1,16 @@
 @php use Carbon\Carbon; @endphp
+
 <div class="spec_reviews">
     <!-- Таби -->
     <div class="_flex-display _justify-content-center _align-center" style="margin-bottom: 20px; gap: 10px;">
         <button wire:click="switchTab('messages')" class="btn {{ $activeTab === 'messages' ? 'rose_btn' : 'white_rose_btn' }}">
             {{__('Повідомлення')}}
+        </button>
+        <button wire:click="switchTab('signatures')" class="btn {{ $activeTab === 'signatures' ? 'rose_btn' : 'white_rose_btn' }}" style="position: relative;">
+            {{__('Підписи')}}
+            @if(isset($unreadSignaturesCount) && $unreadSignaturesCount > 0)
+                <span style="position: absolute; top: -5px; right: -5px; background: #f396a2; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; display: flex; align-items: center; justify-content: center;">{{ $unreadSignaturesCount }}</span>
+            @endif
         </button>
         <button wire:click="switchTab('notifications')" class="btn {{ $activeTab === 'notifications' ? 'rose_btn' : 'white_rose_btn' }}" style="position: relative;">
             {{__('Акції')}}
@@ -66,7 +73,7 @@
             @endforeach
         @endif
 
-        @if ($messages->hasPages())
+        @if (isset($messages) && $messages->hasPages())
             <ul class="_flex-display _justify-content-center _align-center pagination">
                 @if ($messages->onFirstPage())
                 @else
@@ -94,6 +101,93 @@
                 @endif
             </ul>
         @endif
+
+    @elseif($activeTab === 'signatures')
+        <!-- Підписи (user_signatures) -->
+        @if(!isset($signatures) || $signatures->count() == 0)
+    <p>{{__('Немає запитів на підпис.')}}</p>
+@else
+    @foreach($signatures as $signature)
+        @php
+            $doctor = $signature->doctorPhoto?->doctor;
+            $userSignature = $signature->userSignature;
+        @endphp
+        <div class="_flex-display _justify-content-between spec_review" style="{{ $signature->userSignature?->is_read ? '' : 'border-left: 4px solid #f396a2; background: rgba(243, 150, 162, 0.05);' }}">
+            <div class="spec_review_left">
+                <div class="_flex-display _align-center" style="gap: 10px; margin-bottom: 10px;">
+                    @if(!$signature->userSignature?->is_read)
+                        <span style="background: #f396a2; color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 11px;">{{__('Нове')}}</span>
+                    @endif
+                    <span style="color: #999; font-size: 12px;">{{ $signature->created_at->format('d.m.Y H:i') }}</span>
+                </div>
+
+                <h6>{{ $userSignature?->title ?? __('Згода на публікацію фотографій') }}</h6>
+
+                @if($doctor)
+                    <p><b>{{__('Лікар')}}: </b>{{ $doctor->user?->name ?? '' }} {{ $doctor->second_name ?? '' }}</p>
+                @endif
+
+                @if($userSignature?->description)
+                    <p style="white-space: pre-line;">{{ $userSignature->description }}</p>
+                @endif
+
+                <p>
+                    <b>{{__('Статус')}}: </b>
+                    @if($signature->status === 'signed')
+                        <span style="color: #38a169; font-weight: bold;">{{__('Підписано')}} ({{ $signature->updated_at?->format('d.m.Y H:i') }})</span>
+                    @elseif($signature->status === 'declined')
+                        <span style="color: #e53e3e; font-weight: bold;">{{__('Відхилено')}}</span>
+                    @else
+                        <span style="color: #dd6b20; font-weight: bold;">{{__('Очікує підпису')}}</span>
+                    @endif
+                </p>
+            </div>
+            <div class="_flex-display _align-center" style="gap: 8px;">
+                @if($signature->status === 'pending')
+                    <a href="{{ route('photo-consent.show', ['token' => $signature->token]) }}" 
+                       wire:click="markSignatureAsRead({{ $signature->id }})" 
+                       class="btn rose_btn" style="font-size: 13px; padding: 8px 16px;">
+                        {{__('Підписати')}}
+                    </a>
+                @else
+                    <a class="rose_btn client_not_btn _minwidth769">
+                        {{ $signature->status === 'signed' ? __('Підписано') : __('Відхилено') }}
+                    </a>
+                @endif
+            </div>
+        </div>
+    @endforeach
+@endif
+
+        @if (isset($signatures) && $signatures->hasPages())
+            <ul class="_flex-display _justify-content-center _align-center pagination">
+                @if ($signatures->onFirstPage())
+                @else
+                    <li><a wire:click="previousPage('signatures_page')" class="_flex-display _justify-content-center _align-center"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16.000000" height="16.000000" fill="none">
+                                <rect id="Icon / Pagination / Prev" width="16.000000" height="16.000000" x="0.000000" y="0.000000" fill="rgb(255,255,255)" fill-opacity="0" />
+                                <path id="Vector" d="M0.94 0L0 0.94L3.05333 4L0 7.06L0.94 8L4.94 4L0.94 0Z" fill="rgb(0,0,0)" fill-rule="nonzero" transform="matrix(-1,8.74228e-08,-8.74228e-08,-1,11,12)" />
+                            </svg>
+                        </a></li>
+                @endif
+                @foreach ($signatures->getUrlRange(1, $signatures->lastPage()) as $page => $url)
+                    @if($page === $signatures->currentPage())
+                        <li class="pagination_current"><a class="_flex-display _justify-content-center _align-center">{{ $page }}</a></li>
+                    @else
+                        <li><a wire:click="gotoPage({{ $page }}, 'signatures_page')" class="_flex-display _justify-content-center _align-center">{{ $page }}</a></li>
+                    @endif
+                @endforeach
+                @if ($signatures->hasMorePages())
+                    <li><a wire:click="nextPage('signatures_page')" class="_flex-display _justify-content-center _align-center">
+                            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16.000000" height="16.000000" fill="none">
+                                <rect id="Icon / Pagination / Next" width="16.000000" height="16.000000" x="0.000000" y="0.000000" fill="rgb(255,255,255)" fill-opacity="0" />
+                                <path id="Vector" d="M6.94 4L6 4.94L9.05333 8L6 11.06L6.94 12L10.94 8L6.94 4Z" fill="rgb(0,0,0)" fill-rule="nonzero" />
+                            </svg>
+                        </a>
+                    </li>
+                @endif
+            </ul>
+        @endif
+
     @elseif($activeTab === 'notifications')
         <!-- Сповіщення (акції) -->
         @if(!isset($notifications) || $notifications->count() == 0)
@@ -140,7 +234,7 @@
             @endforeach
         @endif
 
-        @if ($notifications->hasPages())
+        @if (isset($notifications) && $notifications->hasPages())
             <ul class="_flex-display _justify-content-center _align-center pagination">
                 @if ($notifications->onFirstPage())
                 @else

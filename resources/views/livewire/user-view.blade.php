@@ -42,6 +42,15 @@
                         </div>
                         <a class="doctor_left_link" href="{{route('patient.dashboard')}}">{{__('Змінити')}}</a>
                     @endif
+                    <button 
+                        type="button" 
+                        class="btn rose_btn"
+                        wire:click="deleteAccount"
+                        wire:confirm="{{ __('Ви дійсно бажаєте видалити свій акаунт? Цю дію неможливо скасувати.') }}"
+                        wire:loading.attr="disabled"
+                    >
+                        {{ __('Видалити акаунт') }}
+                    </button>
                 </div>
             </div>
         </div>

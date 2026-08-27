@@ -74,14 +74,16 @@ class SocialiteController extends Controller
         // Centralized logic to find or create the user and assign the role
         $user = $this->findOrCreateUser($socialiteUser, $provider);
 
+        // 🛑 Перевіряємо, чи акаунт активний (active === 1)
+        if ((int) $user->active !== 1) {
+            return redirect()->route('home')->withErrors([
+                'email' => __('Ваш акаунт деактивовано або видалено.')
+            ]);
+        }
+
         // Log the user into the application
         Auth::login($user, true);
         return $this->redirectByRole($user);
-
-
-        //return redirect()->intended('/'); // Add your dashboard link
-        //return redirect()->intended($user->role . '/dashboard');
-        //return redirect()->route($user->role . '.dashboard');
     }
 
     protected function redirectByRole($user) // <-- ИЗМЕНИТЕ ЗДЕСЬ
@@ -110,22 +112,21 @@ class SocialiteController extends Controller
         $providerKey = str_replace('-', '_', $provider);
         $providerIdField = "{$providerKey}_id";
 
-        // 1. Поиск пользователя по Social ID или Email (логика остается прежней)
+        // 1. Пошук користувача за Social ID або Email
         $user = User::where($providerIdField, $socialiteUser->getId())
             ->orWhere('email', $socialiteUser->getEmail())
             ->first();
 
-        // Разделение имени на части
-        // getName() обычно возвращает полное имя (Имя Фамилия)
+        // Розподіл імені на частини
         $fullName = $socialiteUser->getName() ?? $socialiteUser->getNickname() ?? 'New Social User';
         list($firstName, $lastName) = $this->splitName($fullName);
 
-        // Если пользователь найден (уже существует или связан по email)
+        // 2. Якщо користувача знайдено
         if ($user) {
-            // ... (логика обновления привязки остается прежней)
-
-            // ВАЖНО: Если пользователь существует, мы **не** меняем его имя/фамилию,
-            // а также **не** создаем новую запись в Doctor/Pacient.
+            // ❌ Забороняємо вхід, якщо акаунт неактивний (активовано видалення/active === 2)
+            if ((int) $user->active !== 1) {
+                throw new \Exception(__('Ваш акаунт деактивовано або видалено.'));
+            }
 
             if (!$user->{$providerIdField}) {
                 $user->update([
@@ -136,31 +137,30 @@ class SocialiteController extends Controller
             return $user;
         }
 
-        // 3. Пользователь не существует, создаем нового.
+        // 3. Користувач не існує, створюємо нового з active = 1
         $role = session('social_role', 'patient');
 
         $user = User::create([
-            // Сохраняем только имя в поле 'name' таблицы users
-            'name' => $firstName,
-            'email' => $socialiteUser->getEmail(),
-            'password' => bcrypt(Str::random(24)),
-            $providerIdField => $socialiteUser->getId(),
+            'name'              => $firstName,
+            'email'             => $socialiteUser->getEmail(),
+            'password'          => bcrypt(Str::random(24)),
+            $providerIdField    => $socialiteUser->getId(),
             'email_verified_at' => now(),
-            'role' => $role,
+            'role'              => $role,
+            'active'            => 1, // <--- Явно вказуємо активний статус для нового користувача
         ]);
 
-        // Создание связанной записи и сохранение фамилии
+        // Створення пов'язаного запису
         if ($role == 'doctor') {
             Doctor::create([
-                'user_id' => $user->id,
-                // Сохраняем фамилию/второе имя в поле 'second_name'
+                'user_id'     => $user->id,
                 'second_name' => $lastName,
             ]);
         }
+
         if ($role == 'patient') {
             Pacient::create([
-                'user_id' => $user->id,
-                // Сохраняем фамилию/второе имя в поле 'second_name'
+                'user_id'     => $user->id,
                 'second_name' => $lastName,
             ]);
         }

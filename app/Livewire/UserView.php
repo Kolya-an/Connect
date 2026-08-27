@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\Models\User;
 use App\Models\Appointment;
 use Livewire\WithPagination;
+use Illuminate\Support\Carbon;
 
 class UserView extends Component
 {
@@ -28,6 +29,13 @@ class UserView extends Component
         $this->user_id = $id->id;
         if (Auth::id() != $this->user_id) {
             abort(403, 'Доступ запрещен');
+        }
+        if ((int) Auth::user()?->active !== 1) {
+            Auth::logout();
+            session()->invalidate();
+            session()->regenerateToken();
+
+            return redirect()->to('/')->with('error', __('Акаунт неактивний.'));
         }
         $this->patient = $this->user->patient;
         $this->patient_history_agree = $this->user->patient->patient_history_agree;
@@ -85,6 +93,28 @@ class UserView extends Component
     public function closeAgree()
     {
         $this->modalAgree = true;
+    }
+
+    public function deleteAccount()
+    {
+        $user = Auth::user(); // Або $this->user, якщо редагуєте конкретного користувача
+
+        if ($user) {
+            $user->update([
+                'active'      => 2,
+                'date_delete' => Carbon::now(),
+            ]);
+
+            // Вихід із системи після деактивації
+            Auth::logout();
+
+            session()->invalidate();
+            session()->regenerateToken();
+
+            session()->flash('message', 'Ваш акаунт успішно деактивовано.');
+
+            return redirect()->route('home');
+        }
     }
 
 

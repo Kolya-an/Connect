@@ -19,6 +19,8 @@ class CheckRole
             abort(403, 'Unauthorized access');
         }
 
+        
+
         return $next($request);
     }
 }

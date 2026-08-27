@@ -27,21 +27,18 @@ class MyAppointments extends Component
     public $selectedPatientId = null;
     public $selectedPatientName = '';
 
-
     public function mount($doctorId)
     {
-        //dd ($doctorId);
         $this->doctorId = $doctorId;
     }
 
-
     public function updatedSearchPatient($value)
     {
-        // Сбрасываем выбранного пациента при изменении текста
         $this->selectedPatientId = null;
 
         if (strlen($value) >= 2) {
             $this->patients = User::where('role', 'patient')
+                ->where('active', 1) // 🛑 Тільки активні пацієнти
                 ->with('patient')
                 ->where(function($query) use ($value) {
                     $query->where('name', 'like', '%' . $value . '%')
@@ -54,7 +51,6 @@ class MyAppointments extends Component
                 ->limit(10)
                 ->get();
 
-            // ПРОСТО И ПОНЯТНО - если есть результаты, показываем
             $this->showSuggestions = count($this->patients) > 0;
 
         } else {
@@ -63,7 +59,6 @@ class MyAppointments extends Component
         }
     }
 
-    // Выбор пациента из списка
     public function selectPatient($patientId, $patientName, $patientSecondName = '')
     {
         $fullName = trim($patientName . ' ' . $patientSecondName);
@@ -72,18 +67,15 @@ class MyAppointments extends Component
         $this->showSuggestions = false;
         $this->patients = [];
 
-        // Автоматически выполняем поиск записей при выборе пациента
         $this->performSearch();
     }
 
-    // Поиск записей
     public function performSearch()
     {
         $this->resetPage();
         $this->showSuggestions = false;
     }
 
-    // Очистка поиска
     public function clearSearch()
     {
         $this->searchPatient = '';
@@ -93,16 +85,17 @@ class MyAppointments extends Component
         $this->resetPage();
     }
 
-    // Обработка фокуса
     public function onFocus()
     {
         if ($this->searchPatient && strlen($this->searchPatient) >= 2) {
             $this->performSearchOnFocus();
         }
     }
+
     public function performSearchOnFocus()
     {
         $this->patients = User::where('role', 'patient')
+            ->where('active', 1) // 🛑 Тільки активні пацієнти
             ->with('patient')
             ->where(function($query) {
                 $query->where('name', 'like', '%' . $this->searchPatient . '%')
@@ -115,18 +108,14 @@ class MyAppointments extends Component
             ->limit(10)
             ->get();
 
-        // Показываем подсказки если есть результаты
         $this->showSuggestions = $this->patients->count() > 0;
     }
 
-    // Обработка потери фокуса
     public function onBlur()
     {
-        // Задержка для обработки клика по подсказке
         usleep(200000);
         $this->showSuggestions = false;
     }
-
 
     public function showModal($appointmentId)
     {
@@ -169,7 +158,7 @@ class MyAppointments extends Component
             'appointment_id' => $appointment->id,
             'status'         => 'canceled',
         ]);
-        //session()->flash('success', 'Візит успішно скасовано');
+
         $this->closeModal();
     }
 
@@ -181,15 +170,16 @@ class MyAppointments extends Component
         $this->selectedReason = '';
         session()->forget(['success', 'error']);
     }
+
     public function bookingAppointment($id)
     {
         $appointment = Appointment::where('id', $id)
-           // ->where('doctor_id', $this->doctorId)
             ->first();
 
         $appointment->update([
             'status' => 'confirmed',
         ]);
+
         Message::create([
             'doctor_id'      => $appointment->doctor_id,
             'user_id'        => $appointment->user_id,
@@ -198,14 +188,15 @@ class MyAppointments extends Component
         ]);
     }
 
-
     public function render()
     {
         $query = Appointment::where('doctor_id', $this->doctorId)
             ->whereIn('status', ['booking', 'confirmed'])
+            ->whereHas('user', function ($q) {
+                $q->where('active', 1); // 🛑 Відсікаємо записи пацієнтів з active !== 1
+            })
             ->with(['doctor.user', 'user', 'service:id,name']);
 
-        // Фильтрация по выбранному пациенту
         if ($this->selectedPatientId) {
             $query->where('user_id', $this->selectedPatientId);
         }

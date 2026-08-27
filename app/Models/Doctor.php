@@ -114,7 +114,8 @@ class Doctor extends Model
     public function patients()
     {
         return $this->belongsToMany(Pacient::class, 'appointments', 'doctor_id', 'user_id')
-            ->withPivot('id');
+            
+        ->withPivot('id');
     }
 
     public function reviews()

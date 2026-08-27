@@ -18,6 +18,7 @@ class Homepage extends Component
     public $doctors;
     public $promotion;
     public $doctors_ids;
+    
     public function mount()
     {
         $this->settings = HomepageSetting::with([

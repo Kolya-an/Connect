@@ -10,15 +10,18 @@ use Livewire\Component;
 use App\Mail\PhotoReportMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Livewire\WithPagination;
 
 class ViewEducation extends Component
 {
+    use WithPagination;
+
     public $doctor;
     public $educations;
-    public $extras =[];
+    public $extras = [];
     public $description;
-    public $education_images =[];
-    public $extra_images =[];
+    public $education_images = [];
+    public $extra_images = [];
     public $photoId;
     public bool $showReportModal = false;
     public ?int $selectedPhotoId = null;
@@ -82,9 +85,15 @@ class ViewEducation extends Component
 
     public function render()
     {
+        // Показуємо тільки ті фото лікаря, які мають згоду зі статусом 'signed'
         $photos = DoctorPhoto::where('doctor_id', $this->photoId)
+            ->whereHas('photoConsent', function ($query) {
+                $query->where('status', 'signed');
+            })
+            ->with(['photoConsent'])
             ->orderByDesc('created_at')
             ->paginate(2);
+
         return view('livewire.doctor.view-education', [
             'photos' => $photos,
         ]);

@@ -17,6 +17,7 @@ use App\Livewire\Patient\Dashboard as PatientDashboard;
 use App\Livewire\Pages\Auth\ForgotPassword;
 use App\Livewire\Pages\Auth\ResetPassword;
 use App\Models\Page;
+use App\Livewire\Patient\PhotoConsentSign;
 
 
 Route::view('/', 'home.index')->name('home');
@@ -64,5 +65,7 @@ Route::get('/{slug}', function ($slug) {
 Route::get('/training-form', function () {
     return view('training-form');
 });
+
+Route::get('/consent/{token}', PhotoConsentSign::class)->name('photo-consent.show');
 
 require __DIR__.'/auth.php';

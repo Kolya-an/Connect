@@ -12,18 +12,18 @@ use Illuminate\Support\Facades\Mail;
 
 class ViewPhoto extends Component
 {
+    use WithPagination;
+
     public $doctor;
     public $photoId;
     public bool $showReportModal = false;
     public ?int $selectedPhotoId = null;
     public string $reportText = '';
 
-    use WithPagination;
     public function mount($id)
     {
         $this->photoId = $id;
         $this->doctor = Doctor::findOrFail($id);
-        //$this->photos = DoctorPhoto::where('doctor_id', $id)->get();
     }
 
     public function openReportModal(int $photoId)
@@ -45,19 +45,15 @@ class ViewPhoto extends Component
             'reportText' => 'required|string|min:5|max:1000',
         ]);
 
-        // Завантажуємо фото разом із лікарем та його користувачем
         $photo = DoctorPhoto::with(['doctor.user'])->findOrFail($this->selectedPhotoId);
         $user = Auth::user();
 
-        // Формуємо ім'я того, хто подає скаргу
         $reporterName = $user 
             ? trim($user->name . ' ' . ($user->patient?->second_name ?? $user->doctor?->second_name ?? '')) 
             : 'Неавторизований користувач';
 
-        // Формуємо ім'я лікаря
         $doctorName = trim(($photo->doctor?->user?->name ?? '') . ' ' . ($photo->doctor?->second_name ?? ''));
 
-        // Відправляємо лист
         Mail::to('kolyaan@gmail.com')->send(new PhotoReportMail(
             reportText: $this->reportText,
             reporterName: $reporterName,
@@ -72,7 +68,12 @@ class ViewPhoto extends Component
 
     public function render()
     {
+        // Виводимо ТІЛЬКИ ті фото, де userSignature має статус 'signed'
         $photos = DoctorPhoto::where('doctor_id', $this->photoId)
+            ->whereHas('photoConsent', function ($query) {
+                $query->where('status', 'signed');
+            })
+            ->with(['photoConsent'])
             ->orderByDesc('created_at')
             ->paginate(5);
 

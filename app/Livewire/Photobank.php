@@ -9,9 +9,11 @@ use Livewire\WithPagination;
 class Photobank extends Component
 {
     use WithPagination;
+
     public $initialPhotosByProcedure = [];
     public $selectedProcedure = null;
     public $isFiltered = false;
+
     public function mount()
     {
         $this->loadInitialPhotos();
@@ -19,28 +21,28 @@ class Photobank extends Component
 
     public function loadInitialPhotos()
     {
-        // Загружаем только фото с list == true для начального отображения
+        // Завантажуємо фото, де в photoConsent статус саме 'signed'
         $photos = DoctorPhoto::with(['doctor' => function ($query) {
-            $query->withCount('reviews');
-        }, 'doctor.user'])
+                $query->withCount('reviews');
+            }, 'doctor.user', 'photoConsent'])
             ->where('list', true)
+            ->whereHas('photoConsent', function ($query) {
+                $query->where('status', 'signed');
+            })
             ->get();
 
-        // Группируем по процедуре
         $this->initialPhotosByProcedure = $photos->groupBy(function($item) {
             return $item->procedure ?? 'Без процедури';
         })->toArray();
     }
 
-    // Метод для фильтрации
     public function filterByProcedure($procedure)
     {
         $this->selectedProcedure = $procedure;
         $this->isFiltered = true;
-        $this->resetPage(); // Сбрасываем пагинацию при фильтрации
+        $this->resetPage();
     }
 
-    // Метод для сброса фильтра
     public function resetFilter()
     {
         $this->selectedProcedure = null;
@@ -50,20 +52,21 @@ class Photobank extends Component
 
     public function render()
     {
-        // Если фильтр не применен, показываем только начальные фото
         if (!$this->isFiltered) {
             return view('livewire.photobank', [
                 'initialPhotosByProcedure' => $this->initialPhotosByProcedure,
-                'paginatedPhotos' => collect([]), // Пустая коллекция
+                'paginatedPhotos' => collect([]),
             ])->layout('livewire.pages.photobank');
         }
 
-        // Если фильтр применен, показываем все фото с пагинацией
-        $paginatedPhotos = DoctorPhoto::with(['doctor.user'])
+        $paginatedPhotos = DoctorPhoto::with(['doctor.user', 'photoConsent'])
+            ->whereHas('photoConsent', function ($query) {
+                $query->where('status', 'signed');
+            })
             ->when($this->selectedProcedure, function($query) {
                 $query->where('procedure', $this->selectedProcedure);
             })
-            ->paginate(24); // Укажите нужное количество элементов на странице
+            ->paginate(24);
 
         return view('livewire.photobank', [
             'initialPhotosByProcedure' => [],

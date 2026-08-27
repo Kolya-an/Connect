@@ -59,10 +59,11 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // TODO: Implement canAccessPanel() method.
-        return str_ends_with($this->role, 'admin') && $this->hasVerifiedEmail();
-        //return true;
+        return (int) $this->active === 1 
+            && str_ends_with($this->role, 'admin') 
+            && $this->hasVerifiedEmail();
     }
+    
     public function doctor()
     {
         return $this->hasOne(Doctor::class);

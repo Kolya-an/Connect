@@ -47,26 +47,27 @@
                 </ul>
             </div>
             <div class="_flex-display _justify-content-between _align-center header_button">
-                @guest
-                    <livewire:login-modal />
-                    <livewire:auth-modal />
-                @endguest
-                @auth
-                        @if(in_array(Auth::user()->role, ['doctor', 'patient']))
-                            <livewire:header-component />
-                        @endif
-                        @if(in_array(Auth::user()->role, ['admin']))
-                            <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                                <img src="{{asset('images/cab.png')}}" alt="Connect">
-                            </a>
-                        @endif
-                @endauth
-                @guest
+            @if(Auth::check() && (int)Auth::user()->active === 1)
+                {{-- Авторизований ТА активний користувач (active === 1) --}}
+                @if(in_array(Auth::user()->role, ['doctor', 'patient']))
+                    <livewire:header-component />
+                @endif
+
+                @if(in_array(Auth::user()->role, ['admin']))
                     <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                        <img src="{{asset('images/cab.png')}}" alt="Connect">
+                        <img src="{{ asset('images/cab.png') }}" alt="Connect">
                     </a>
-                @endguest
-            </div>
+                @endif
+            @else
+                {{-- Гість АБО користувач з active !== 1 --}}
+                <livewire:login-modal />
+                <livewire:auth-modal />
+
+                <a class="_flex-display _align-center cab_btn" style="cursor: default">
+                    <img src="{{ asset('images/cab.png') }}" alt="Connect">
+                </a>
+            @endif
+        </div>
         </div>
         <div class="_flex-display _justify-content-between _align-center header_mob">
             <div class="header_logo">
@@ -78,16 +79,21 @@
                         <livewire:login-modal />
                         <livewire:auth-modal />
                     @endguest
+
                     @auth
-                        @if(in_array(Auth::user()->role, ['doctor', 'patient']))
-                            <livewire:header-component />
-                        @endif
-                        @if(in_array(Auth::user()->role, ['admin']))
-                            <a class="_flex-display _align-center cab_btn" style="cursor: default">
-                                <img src="{{asset('images/cab.png')}}" alt="Connect">
-                            </a>
+                        @if((int)Auth::user()->active === 1)
+                            @if(in_array(Auth::user()->role, ['doctor', 'patient']))
+                                <livewire:header-component />
+                            @endif
+                            
+                            @if(in_array(Auth::user()->role, ['admin']))
+                                <a class="_flex-display _align-center cab_btn" style="cursor: default">
+                                    <img src="{{asset('images/cab.png')}}" alt="Connect">
+                                </a>
+                            @endif
                         @endif
                     @endauth
+
                     @guest
                         <a class="_flex-display _align-center cab_btn" style="cursor: default">
                             <img src="{{asset('images/cab.png')}}" alt="Connect">
