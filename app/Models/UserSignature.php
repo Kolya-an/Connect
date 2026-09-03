@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\DoctorPhoto;
 
 class UserSignature extends Model
 {
     protected $fillable = [
         'user_id',
         'doctor_id',
+        'photo_id',
         'title',
         'description',
         'token',
@@ -41,5 +43,11 @@ class UserSignature extends Model
     public function photoConsent()
     {
         return $this->hasOne(PhotoConsent::class, 'user_signature_id');
+    }
+    
+    // Зв'язок із фото лікаря
+    public function doctorPhoto(): BelongsTo
+    {
+        return $this->belongsTo(DoctorPhoto::class);
     }
 }

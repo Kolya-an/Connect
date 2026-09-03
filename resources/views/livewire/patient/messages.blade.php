@@ -124,7 +124,21 @@
                 <h6>{{ $userSignature?->title ?? __('Згода на публікацію фотографій') }}</h6>
 
                 @if($doctor)
-                    <p><b>{{__('Лікар')}}: </b>{{ $doctor->user?->name ?? '' }} {{ $doctor->second_name ?? '' }}</p>
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+                        @if($signature->doctorPhoto && ($signature->doctorPhoto->photo_before || $signature->doctorPhoto->photo_after))
+                            <div class="photo_item_img" style="max-width: 200px;">
+                                <div class="_flex-display comparison-container _flex-row">
+                                    @if($signature->doctorPhoto && $signature->doctorPhoto->photo_before)
+                                        <img src="{{ asset('uploads/' . $signature->doctorPhoto->photo_before) }}">
+                                    @endif
+                                    @if($signature->doctorPhoto && $signature->doctorPhoto->photo_after)
+                                        <img src="{{ asset('uploads/' . $signature->doctorPhoto->photo_after) }}">
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+                        <p><b>{{__('Лікар')}}: </b>{{ $doctor->user?->name ?? '' }} {{ $doctor->second_name ?? '' }}</p>
+                    </div>
                 @endif
 
                 @if($userSignature?->description)

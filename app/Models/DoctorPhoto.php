@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\UserSignature;
 
 class DoctorPhoto extends Model
 {
@@ -38,7 +38,7 @@ class DoctorPhoto extends Model
 
     public function userSignature(): HasOne
     {
-        return $this->hasOne(UserSignature::class, 'doctor_photo_id');
+        return $this->hasOne(UserSignature::class);
     }
 
    public function patient(): \Illuminate\Database\Eloquent\Relations\BelongsTo

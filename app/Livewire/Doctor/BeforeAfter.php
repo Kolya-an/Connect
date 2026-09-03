@@ -118,6 +118,7 @@ class BeforeAfter extends Component
         $signature = UserSignature::create([
             'user_id'     => $this->patient_id, // Береться напряму ID з таблиці users
             'doctor_id'   => $doctor->id,
+            'photo_id'    => $photo->id,
             'title'       => 'Згода на публікацію фотографій',
             'description' => "Лікар {$doctorName} просить надати згоду на публікацію фотографій «До / Після» по процедурі: {$this->procedure}.",
             'token'       => $token,
