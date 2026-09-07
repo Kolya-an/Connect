@@ -151,7 +151,7 @@
                             <input type="file" id="fileBefore" accept="image/*" x-on:change="initCropper($event, 'before')" style="display: none;">
                             <div class="upload-button">{{__('До процедури')}}</div>
                         </label>
-                        <div class="preview-container">
+                        <div class="preview-container" wire:ignore>
                             <div id="cropContainerBefore" style="width: 100%; height: 300px; display: none;">
                                 <img id="imageToCropBefore" style="max-width: 100%;">
                             </div>
@@ -159,7 +159,7 @@
                                 <span style="color: #999;">{{__('Попередній перегляд')}}</span>
                             </div>
                         </div>
-                        <div class="crop-controls" style="margin-top: 10px; display: none;" id="controlsBefore">
+                        <div class="crop-controls" style="margin-top: 10px; display: none;" id="controlsBefore" wire:ignore.self>
                             <button type="button" x-on:click="resetCrop('before')" class="btn small-btn">{{__('Скинути')}}</button>
                             <button type="button" x-on:click="removeImage('before')" class="btn small-btn">{{__('Видалити')}}</button>
                         </div>
@@ -171,7 +171,7 @@
                             <input type="file" id="fileAfter" accept="image/*" x-on:change="initCropper($event, 'after')" style="display: none;">
                             <div class="upload-button">{{__('Після процедури')}}</div>
                         </label>
-                        <div class="preview-container">
+                        <div class="preview-container" wire:ignore>
                             <div id="cropContainerAfter" style="width: 100%; height: 300px; display: none;">
                                 <img id="imageToCropAfter" style="max-width: 100%;">
                             </div>
@@ -179,7 +179,7 @@
                                 <span style="color: #999;">{{__('Попередній перегляд')}}</span>
                             </div>
                         </div>
-                        <div class="crop-controls" style="margin-top: 10px; display: none;" id="controlsAfter">
+                        <div class="crop-controls" style="margin-top: 10px; display: none;" id="controlsAfter" wire:ignore.self>
                             <button type="button" x-on:click="resetCrop('after')" class="btn small-btn">{{__('Скинути')}}</button>
                             <button type="button" x-on:click="removeImage('after')" class="btn small-btn">{{__('Видалити')}}</button>
                         </div>
