@@ -52,4 +52,12 @@ return [
         'timeout' => 10,
     ],
 
+    'diia' => [
+        'env'                 => env('DIIA_ENV', 'sandbox'),
+        'base_url'            => env('DIIA_BASE_URL', 'https://api2s.diia.gov.ua'),
+        'acquirer_token'      => env('DIIA_ACQUIRER_TOKEN'),
+        'auth_acquirer_token' => env('DIIA_AUTH_ACQUIRER_TOKEN'),
+        'redirect_uri'        => env('DIIA_REDIRECT_URI'),
+    ],
+
 ];

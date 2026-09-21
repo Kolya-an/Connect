@@ -1,40 +1,52 @@
-<div class="container" style="max-width: 700px; margin: 40px auto; padding: 20px;">
-    @if($consent->status === 'signed')
-        <div class="alert alert-success" style="background: #e6fffa; border: 1px solid #319795; padding: 20px; border-radius: 8px;">
-            <h3>✓ Згоду вже підписано!</h3>
-            <p>Дякуємо. Ви підписали цю згоду <strong>{{ $consent->signed_at->format('d.m.Y H:i') }}</strong>.</p>
+<div class="max-w-xl mx-auto my-10 p-6 bg-white rounded-2xl shadow-lg border text-center space-y-6"
+
+     @if($signStatus === 'pending') wire:poll.3s="checkDiiaStatus" @endif>
+
+    <h2 class="text-xl font-bold text-gray-800">Згода на використання фотоматеріалів</h2>
+
+    @if($consent->doctorPhoto?->path)
+        <div class="border rounded-xl p-3 bg-gray-50">
+            <img src="{{ Storage::url($consent->doctorPhoto->path) }}" class="max-h-64 mx-auto rounded-lg shadow-sm" alt="Фото для згоди">
         </div>
-    @elseif($consent->status === 'declined')
-        <div class="alert alert-danger" style="background: #fff5f5; border: 1px solid #e53e3e; padding: 20px; border-radius: 8px;">
-            <h3>Ви відхилили надання згоди.</h3>
+    @endif
+
+    <div class="text-sm text-gray-600 text-left space-y-2 bg-blue-50 p-4 rounded-xl border border-blue-100">
+        <p>Я надаю дозвіл на використання та публікацію вищевказаних фотоматеріалів у медичних та інформаційних цілях.</p>
+    </div>
+
+    @if($signStatus === 'signed' || $consent->status === 'signed')
+        <div class="p-4 bg-green-100 text-green-800 rounded-xl font-semibold">
+            ✓ Цю згоду успішно підписано КЕП через Дія.Підпис!
         </div>
+        @if($consent->pdf_path)
+            <div class="pt-2">
+                <a href="{{ Storage::disk('public')->url($consent->pdf_path) }}" target="_blank" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700">
+                    Завантажити підписаний PDF
+                </a>
+            </div>
+        @endif
     @else
-        <div class="card" style="box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 12px; padding: 30px; background: #fff;">
-            <h2>Згода на публікацію фотографій</h2>
-            <p><strong>Лікар:</strong> {{ $consent->photo->doctor->user->name ?? '' }} {{ $consent->photo->doctor->second_name ?? '' }}</p>
+        <div class="space-y-4">
+            <p class="text-sm font-medium text-gray-700">Відскануйте QR-код застосунком Дія для підпису:</p>
+            
+            @if($qrCodeUrl)
+                <div class="inline-block p-3 bg-white border-2 border-black rounded-2xl shadow">
+                    <img src="{{ $qrCodeUrl }}" alt="Дія.Підпис QR" class="w-56 h-56 mx-auto">
+                </div>
+            @endif
 
-            <!-- Перегляд фото -->
-            <div style="display: flex; gap: 10px; margin: 20px 0;">
-                <img src="{{ asset('uploads/' . $consent->photo->photo_before) }}" style="width: 50%; border-radius: 8px;" alt="До">
-                <img src="{{ asset('uploads/' . $consent->photo->photo_after) }}" style="width: 50%; border-radius: 8px;" alt="Після">
-            </div>
+            @if($deepLink)
+                <div class="block sm:hidden pt-2">
+                    <a href="{{ $deepLink }}" target="_blank" class="block w-full py-3 bg-black text-white rounded-xl font-semibold text-sm hover:bg-gray-800">
+                        Підписати в застосунку Дія
+                    </a>
+                </div>
+            @endif
 
-            <!-- Текст офіційного документа -->
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; max-height: 200px; overflow-y: auto; font-size: 14px; margin-bottom: 20px;">
-                <p>Я, надаю дозвіл лікарю на безстрокове розміщення зображень (фотографій "До" та "Після" процедури {{ $consent->photo->procedure }}) на веб-платформі Connect з метою демонстрації результатів процедури.</p>
-                <p>Я підтверджую, що цей підпис здійснюється добровільно та має силу кваліфікованого електронного підпису (КЕП).</p>
-            </div>
-
-            <!-- Блок Підпису (КЕП / Дія.Підпис) -->
-            <div id="sign-widget-container">
-                <p><strong>Оберіть спосіб підпису:</strong></p>
-                
-                <!-- Інтеграція віджета Дія.Підпис або КЕП -->
-                <button id="btn-sign-diia" class="btn rose_btn" style="width: 100%; padding: 12px; font-size: 16px;">
-                    Підписати за допомогою Дія.Підпис / КЕП
-                </button>
+            <div class="text-xs text-gray-400 flex items-center justify-center gap-2 mt-2">
+                <span class="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-500"></span>
+                Очікування підтвердження з Дії...
             </div>
         </div>
     @endif
 </div>
-

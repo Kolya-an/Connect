@@ -18,6 +18,8 @@ use App\Livewire\Pages\Auth\ForgotPassword;
 use App\Livewire\Pages\Auth\ResetPassword;
 use App\Models\Page;
 use App\Livewire\Patient\PhotoConsentSign;
+use App\Http\Controllers\ConsentController; 
+
 
 
 Route::view('/', 'home.index')->name('home');
@@ -61,11 +63,14 @@ Route::get('/{slug}', function ($slug) {
 
     return view('page.show', compact('page'));
 });
-
 Route::get('/training-form', function () {
     return view('training-form');
 });
 
-Route::get('/consent/{token}', PhotoConsentSign::class)->name('photo-consent.show');
+Route::get('/consent/{token}/success', function() {
+    return "Дякуємо! Підпис успішно збережено.";
+})->name('consent.success');
+
+Route::get('/consent/{token}', PhotoConsentSign::class)->name('consent.show');
 
 require __DIR__.'/auth.php';

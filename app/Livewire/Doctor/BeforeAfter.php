@@ -12,6 +12,8 @@ use Livewire\WithFileUploads;
 use App\Models\PhotoConsent;
 use App\Models\UserSignature;
 use App\Models\Pacient;
+use App\Services\DiiaService;
+use App\Enums\ConsentStatus;
 
 class BeforeAfter extends Component
 {
@@ -30,6 +32,7 @@ class BeforeAfter extends Component
     public $accept_zgoda = false;
     public $patient_id; // Властивість для збереження обраного пацієнта
     public $patients = [];
+    public $consent = null;
 
     public $orientation = 'horizontal';
 
@@ -169,6 +172,27 @@ class BeforeAfter extends Component
 
         $this->loadPhotos();
         session()->flash('message', 'Фото успішно видалено!');
+    }
+
+    public function generateConsentLink(int $photoId)
+    {
+        // 2. Зберігаємо згоду у $this->consent
+        $this->consent = PhotoConsent::firstOrCreate(
+            ['doctor_photo_id' => $photoId],
+            [
+                'token' => Str::random(32),
+                'status' => ConsentStatus::PENDING,
+            ]
+        );
+
+        if (! $this->consent->wasRecentlyCreated) {
+            $this->consent->update([
+                'token' => Str::random(32),
+                'status' => ConsentStatus::PENDING,
+            ]);
+        }
+
+        session()->flash('success', 'Посилання успішно згенеровано!');
     }
 
     public function render()

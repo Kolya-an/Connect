@@ -9,6 +9,8 @@ use App\Models\UserSignature;
 class DoctorPhoto extends Model
 {
     //use HasFactory;
+    protected $guarded = [];
+    
     protected $fillable = [
         'doctor_id', 
         'photo', 

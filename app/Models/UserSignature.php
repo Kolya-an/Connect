@@ -8,6 +8,8 @@ use App\Models\DoctorPhoto;
 
 class UserSignature extends Model
 {
+    protected $guarded = [];
+    
     protected $fillable = [
         'user_id',
         'doctor_id',

@@ -76,19 +76,81 @@
                 </a>
                 <p><b>{{__('Процедура:')}}</b> {{ $item->procedure }}</p>
                 <p><b>{{__('Клінічний кейс:')}}</b> {{ $item->product }}</p>
-                <p><b>{{__('Статус:')}}</b> @switch($item->photoConsent?->status)
-                    @case('signed')
-                        <span class="text-success">{{ __('Підписано') }}</span>
-                        @break
-                    @case('pending')
-                        <span class="text-warning">{{ __('Очікує підпису') }}</span>
-                        @break
-                    @case('declined')
-                        <span class="text-danger">{{ __('Відхилено') }}</span>
-                        @break
-                    @default
-                        <span class="text-muted">{{ __('Немає згоди') }}</span>
-                @endswitch</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ $item->is_active ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                        {{ $item->is_active ? 'Активне' : 'Неактивне' }}
+                    </span>
+                </div>
+
+                @if(!$item->is_active)
+                    @if(isset($generatedLinks[$item->id]))
+                        <div x-data="{ copied: false }" class="space-y-2">
+                            <input type="text" readonly value="{{ $generatedLinks[$item->id] }}" class="w-full text-xs p-2 border rounded bg-gray-50">
+                            <button 
+                                type="button" 
+                                @click="navigator.clipboard.writeText('{{ $generatedLinks[$item->id] }}'); copied = true; setTimeout(() => copied = false, 2000)"
+                                class="w-full py-1.5 bg-gray-800 text-white rounded text-xs">
+                                <span x-show="!copied">Скопіювати посилання</span>
+                                <span x-show="copied" class="text-green-400">Скопійовано!</span>
+                            </button>
+                        </div>
+                    @else
+                        <div>
+    <button 
+        type="button"
+        wire:click="generateConsentLink({{ $item->id }})" 
+        wire:loading.attr="disabled"
+        wire:target="generateConsentLink({{ $item->id }})"
+        class="w-full py-2 px-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-medium rounded-lg transition-all flex items-center justify-center min-h-[38px] cursor-pointer">
+        
+        <!-- Текст за замовчуванням (ховається при завантаженні) -->
+        <span wire:loading.remove wire:target="generateConsentLink({{ $item->id }})">
+            Сформувати посилання для підпису
+        </span>
+
+        <!-- Стан завантаження (показується ТІЛЬКИ під час запиту) -->
+        <span wire:loading wire:target="generateConsentLink({{ $item->id }})" class="inline-flex items-center gap-2">
+            <span class="inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            Генерація посилання...
+        </span>
+    </button>
+</div>
+@if($consent)
+    <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+            Посилання для клієнта на Дія.Підпис:
+        </label>
+
+        <div class="flex items-center gap-2" x-data="{ copied: false }">
+            {{-- Вхідне поле з повним URL --}}
+            <input 
+                type="text" 
+                readonly 
+                value="{{ $consent->consent_url }}" 
+                id="consent-link"
+                class="w-full text-sm p-2 border rounded border-gray-300 bg-white focus:outline-none"
+            >
+
+            {{-- Кнопка скопіювати за допомогою Alpine.js --}}
+            <button 
+                type="button"
+                @click="navigator.clipboard.writeText('{{ $consent->consent_url }}'); copied = true; setTimeout(() => copied = false, 2000)"
+                class="px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 transition"
+            >
+                <span x-show="!copied">Скопіювати</span>
+                <span x-show="copied" x-cloak class="text-green-200">Скопійовано!</span>
+            </button>
+        </div>
+    </div>
+@endif
+                    @endif
+                @endif
+
+                @if($item->photoConsent?->pdf_path)
+                    <a href="{{ Storage::url($item->photoConsent->pdf_path) }}" target="_blank" class="block text-center text-xs text-blue-600 underline">
+                        Переглянути підписаний PDF
+                    </a>
+                @endif
 
             </div>
         @empty
