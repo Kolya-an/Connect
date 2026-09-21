@@ -71,6 +71,10 @@ Route::get('/consent/{token}/success', function() {
     return "Дякуємо! Підпис успішно збережено.";
 })->name('consent.success');
 
-Route::get('/consent/{token}', PhotoConsentSign::class)->name('consent.show');
+// Замість безпосереднього виклику Livewire-класу
+Route::get('/consent/{token}', function ($token) {
+    return view('page.photo-consent-sign', ['token' => $token]);
+})->name('consent.show');
+
 
 require __DIR__.'/auth.php';

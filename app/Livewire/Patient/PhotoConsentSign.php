@@ -5,8 +5,8 @@ namespace App\Livewire\Patient;
 use App\Models\PhotoConsent;
 use App\Services\DiiaSignService;
 use Illuminate\Support\Facades\Storage;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class PhotoConsentSign extends Component
 {
@@ -15,7 +15,10 @@ class PhotoConsentSign extends Component
 
     public ?string $qrCodeUrl = null;
     public ?string $deepLink = null;
-    public string $signStatus = 'pending';
+    public string $signStatus = 'pending'; // 'pending', 'signed', 'expired'
+    
+    // Час закінчення дії сесії (3 хвилини від моменту ініціалізації)
+    public ?int $expiresAt = null;
 
     public function mount(string $token, DiiaSignService $diiaService)
     {
@@ -30,14 +33,15 @@ class PhotoConsentSign extends Component
             return;
         }
 
-        // Формуємо сесію та QR-код одразу при завантаженні сторінки
+        // Встановлюємо таймаут сесії на 3 хвилини (180 секунд)
+        $this->expiresAt = now()->addMinutes(3)->timestamp;
+
         $this->initiateDiiaSession($diiaService);
     }
 
     private function initiateDiiaSession(DiiaSignService $diiaService)
     {
         try {
-            // Формуємо SHA-256 хеш документа
             $documentHash = hash('sha256', "PhotoConsent #{$this->consent->id} Token: {$this->token}");
 
             $sessionData = $diiaService->createSignSession([
@@ -50,8 +54,19 @@ class PhotoConsentSign extends Component
                 ],
             ]);
 
-            $this->qrCodeUrl = $sessionData['qrCodeUrl'] ?? null;
-            $this->deepLink  = $sessionData['deepLink'] ?? null;
+            $this->deepLink = $sessionData['deepLink'] ?? null;
+
+            if (!empty($sessionData['qrCodeUrl']) && $sessionData['qrCodeUrl'] !== '...') {
+                $this->qrCodeUrl = $sessionData['qrCodeUrl'];
+            } elseif ($this->deepLink) {
+                if (class_exists(QrCode::class)) {
+                    $this->qrCodeUrl = 'data:image/svg+xml;base64,' . base64_encode(
+                        QrCode::format('svg')->size(224)->margin(1)->generate($this->deepLink)
+                    );
+                } else {
+                    $this->qrCodeUrl = 'https://quickchart.io/qr?size=224&margin=1&text=' . urlencode($this->deepLink);
+                }
+            }
 
         } catch (\Throwable $e) {
             logger()->error('Diia Session Creation Error: ' . $e->getMessage());
@@ -60,7 +75,13 @@ class PhotoConsentSign extends Component
 
     public function checkDiiaStatus()
     {
-        if ($this->signStatus === 'signed') {
+        if ($this->signStatus !== 'pending') {
+            return;
+        }
+
+        // Перевіряємо, чи не вичерпано ліміт у 3 хвилини
+        if (now()->timestamp > $this->expiresAt) {
+            $this->signStatus = 'expired';
             return;
         }
 
@@ -79,21 +100,37 @@ class PhotoConsentSign extends Component
         }
     }
 
+    public function retrySign(DiiaSignService $diiaService)
+    {
+        // Перезапуск сесії за запитом користувача
+        $this->signStatus = 'pending';
+        $this->expiresAt = now()->addMinutes(3)->timestamp;
+        $this->initiateDiiaSession($diiaService);
+    }
+
     private function generatePdfDocument()
     {
+        $photoBase64 = null;
+        $photoPath = $this->consent->doctorPhoto?->path;
+
+        if ($photoPath && Storage::disk('public')->exists($photoPath)) {
+            $photoBase64 = base64_encode(Storage::disk('public')->get($photoPath));
+        }
+
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.photo-consent', [
             'consent' => $this->consent,
+            'photoBase64' => $photoBase64,
+            'signerInfo' => $this->consent->signer_info ?? [],
         ]);
 
         $filename = 'consents/consent_' . $this->consent->id . '_' . time() . '.pdf';
-        Storage::disk('public_uploads')->put($filename, $pdf->output());
+        Storage::disk('public')->put($filename, $pdf->output());
 
         $this->consent->update([
             'pdf_path' => $filename,
         ]);
     }
 
-    #[Layout('layouts.base')]
     public function render()
     {
         return view('livewire.patient.photo-consent-sign');
