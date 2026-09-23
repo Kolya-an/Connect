@@ -30,4 +30,11 @@ return Application::configure(basePath: dirname(__DIR__))
         })->monthlyOn(1, '00:10');
 
     })
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->validateCsrfTokens(except: [
+            'api/diia-sign/callback',
+            'diia-sign/callback',
+            'consent/*',
+        ]);
+    })
     ->create();

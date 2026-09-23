@@ -118,7 +118,7 @@
 @if($consent)
     <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <label class="block text-sm font-medium text-gray-700 mb-1">
-            Посилання для клієнта на Дія.Підпис:
+            Посилання для клієнта на Дія.Підпис: <a href="{{ $consent->consent_url }}" target="_blank" class="text-blue-600 underline">Відкрити</a>
         </label>
 
         <div class="flex items-center gap-2" x-data="{ copied: false }">

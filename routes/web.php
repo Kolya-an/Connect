@@ -76,5 +76,34 @@ Route::get('/consent/{token}', function ($token) {
     return view('page.photo-consent-sign', ['token' => $token]);
 })->name('consent.show');
 
+Route::any('adminer', [\OneCentLin\Adminer\AdminerController::class, 'index']);
+
+use App\Services\DiiaSignService;
+Route::get('/debug/diia-config', function (DiiaSignService $diiaService) {
+
+    $branches = $diiaService->getBranches();
+
+    Log::info('DIIA BRANCHES DEBUG', [
+        'branches' => $branches,
+    ]);
+
+    $offers = $diiaService->getOffers(
+        config('services.diia.branch_id')
+    );
+
+    Log::info('DIIA OFFERS DEBUG', [
+        'offers' => $offers,
+    ]);
+
+    return response()->json([
+        'branches' => $branches,
+        'offers' => $offers,
+    ]);
+
+});
+
+
+
+
 
 require __DIR__.'/auth.php';

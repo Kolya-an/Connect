@@ -63,7 +63,15 @@
                         @endif
                     </div>
                 @endif
-
+{{-- ДОДАЄМО ТЕКСТОВИЙ DEEPLINK ДЛЯ ВІДЛАГОДЖЕННЯ ТУТ --}}
+                @if($deepLink)
+                    <div class="px-4">
+                        <p class="text-[10px] text-gray-400 uppercase font-mono tracking-wider mb-1">DeepLink для Дія:</p>
+                        <p class="text-xs break-all text-gray-500 font-mono bg-gray-50 p-2 rounded-lg border border-gray-200 select-all">
+                            {{ $deepLink }}
+                        </p>
+                    </div>
+                @endif
                 @if($deepLink)
                     <div class="block sm:hidden pt-2">
                         <a href="{{ $deepLink }}" target="_blank" class="block w-full py-3 bg-black text-white rounded-xl font-semibold text-sm hover:bg-gray-800">

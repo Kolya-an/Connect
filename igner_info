@@ -1,0 +1,25 @@
+[90m= [39m[34;4mIlluminate\Support\Carbon @1790157266[39;24m {#7136
+    #[33mendOfTime[39m: [36mfalse[39m,
+    #[33mstartOfTime[39m: [36mfalse[39m,
+    #[33mconstructedObjectId[39m: "[32m0000000000001be00000000000000000[39m",
+    -[31mclock[39m: [36mnull[39m,
+    #[33mlocalMonthsOverflow[39m: [36mnull[39m,
+    #[33mlocalYearsOverflow[39m: [36mnull[39m,
+    #[33mlocalStrictModeEnabled[39m: [36mnull[39m,
+    #[33mlocalHumanDiffOptions[39m: [36mnull[39m,
+    #[33mlocalToStringFormat[39m: [36mnull[39m,
+    #[33mlocalSerializer[39m: [36mnull[39m,
+    #[33mlocalMacros[39m: [36mnull[39m,
+    #[33mlocalGenericMacros[39m: [36mnull[39m,
+    #[33mlocalFormatFunction[39m: [36mnull[39m,
+    #[33mlocalTranslator[39m: [36mnull[39m,
+    #[33mdumpProperties[39m: [
+      "[32mdate[39m",
+      "[32mtimezone_type[39m",
+      "[32mtimezone[39m",
+    ],
+    #[33mdumpLocale[39m: [36mnull[39m,
+    #[33mdumpDateProperties[39m: [36mnull[39m,
+    [34mdate[39m: [36m2026-09-23 09:54:26.0 UTC (+00:00)[39m,
+  }
+
