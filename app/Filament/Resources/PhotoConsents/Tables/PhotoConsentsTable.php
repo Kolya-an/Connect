@@ -21,7 +21,29 @@ class PhotoConsentsTable
             ->columns([
                 TextColumn::make('id')->sortable(),
                 TextColumn::make('token')->label('Токен')->searchable(),
-                TextColumn::make('status')->label('Статус')->badge(),
+                TextColumn::make('status')
+    ->label('Статус')
+    ->badge()
+    ->formatStateUsing(function ($state): string {
+        $value = is_object($state) ? ($state->value ?? (string) $state) : (string) $state;
+
+        return match ($value) {
+            'pending' => 'Очікує',
+            'signed' => 'Підписано',
+            'declined' => 'Активний',
+            default    => $value,
+        };
+    })
+    ->color(function ($state): string {
+        $value = is_object($state) ? ($state->value ?? (string) $state) : (string) $state;
+
+        return match ($value) {
+            'pending'  => 'danger',
+            'signed'   => 'warning',
+            'declined' => 'success',
+            default    => 'gray',
+        };
+    }),
                 TextColumn::make('created_at')->label('Створено')->dateTime('d.m.Y H:i'),
             ])
             ->filters([
@@ -30,7 +52,7 @@ class PhotoConsentsTable
                     ->options([
                         'pending' => 'Очікує',
                         'signed' => 'Підписано',
-                        'rejected' => 'Відхилено',
+                        'declined' => 'Активний',
                     ]),
             ])
             ->actions([
