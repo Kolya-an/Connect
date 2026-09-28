@@ -4,11 +4,13 @@ namespace App\Livewire\Patient;
 
 use App\Models\PhotoConsent;
 use App\Services\DiiaSignService;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 
 class PhotoConsentSign extends Component
 {
@@ -20,10 +22,12 @@ class PhotoConsentSign extends Component
 
     public ?string $deepLink = null;
 
-    public string $signStatus = 'pending'; // 'pending', 'signed', 'expired'
+    public string $signStatus = 'pending'; // pending, signed, expired
 
-    // Час закінчення дії сесії (3 хвилини від моменту ініціалізації)
+    // Час закінчення дії сесії (3 хвилини)
     public ?int $expiresAt = null;
+
+    public bool $isSigned = false;
 
     public function mount(string $token, DiiaSignService $diiaService)
     {
@@ -42,7 +46,7 @@ class PhotoConsentSign extends Component
             return;
         }
 
-        // Встановлюємо таймаут сесії на 3 хвилини (180 секунд)
+        // Встановлюємо таймаут сесії на 3 хвилини
         $this->expiresAt = now()->addMinutes(3)->timestamp;
 
         $this->initiateDiiaSession($diiaService);
@@ -86,14 +90,15 @@ class PhotoConsentSign extends Component
             | 2. Формуємо PDF
             |--------------------------------------------------------------------------
             |
-            | ЦЕЙ PDF є оригінальним документом, hash якого буде
-            | переданий у Дію.
+            | PDF необхідно сформувати ДО підпису, оскільки саме його hash
+            | передається у Дію.
             |
-            | Після цього PDF більше НЕ повинен генеруватися повторно.
+            | Але цей PDF до підпису НЕ є фінальним документом consent.
+            | Він зберігається тільки тимчасово у storage/app/diia-pending.
             |
             */
 
-            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
+            $pdf = Pdf::loadView(
                 'pdf.photo-consent',
                 [
                     'consent' => $this->consent,
@@ -111,115 +116,88 @@ class PhotoConsentSign extends Component
 
             /*
             |--------------------------------------------------------------------------
-            | 3. Зберігаємо ОРИГІНАЛЬНИЙ PDF
+            | 3. Генеруємо унікальний requestId
             |--------------------------------------------------------------------------
             |
-            | Важливо:
-            | саме ці байти використовуються для SHA-256.
+            | До БД його НЕ записуємо.
+            | Він буде використовуватися для тимчасового зв'язку
+            | між сесією Дія та PhotoConsent через Cache.
             |
-            */
-
-          $pdfPath = 'storage/consents/consent_' .
-    $this->consent->token .
-    '.pdf';
-
-$fullPdfPath = public_path($pdfPath);
-
-$directory = public_path('storage/consents');
-
-if (!is_dir($directory)) {
-    if (!mkdir($directory, 0775, true) && !is_dir($directory)) {
-        throw new \RuntimeException(
-            "Не вдалося створити каталог: {$directory}"
-        );
-    }
-}
-
-if (file_put_contents($fullPdfPath, $pdfOutput) === false) {
-    throw new \RuntimeException(
-        "Не вдалося зберегти PDF: {$fullPdfPath}"
-    );
-}
-
-/*
-|--------------------------------------------------------------------------
-| 4. Перевіряємо, що файл реально збережений
-|--------------------------------------------------------------------------
-*/
-
-if (
-    !file_exists($fullPdfPath) ||
-    filesize($fullPdfPath) === 0
-) {
-    throw new \RuntimeException(
-        "Збережений PDF не знайдений або порожній: {$fullPdfPath}"
-    );
-}
-
-            /*
-            |--------------------------------------------------------------------------
-            | 5. Рахуємо SHA-256 саме збереженого PDF
-            |--------------------------------------------------------------------------
-            */
-
-            $fileHash = base64_encode(
-                hash('sha256', $pdfOutput, true)
-            );
-
-            Log::info('DIIA PDF DEBUG', [
-                'consent_id' => $this->consent->id,
-                'pdf_path' => $pdfPath,
-                'pdf_size' => strlen($pdfOutput),
-                'pdf_sha256_hex' => hash('sha256', $pdfOutput),
-                'pdf_sha256_base64' => $fileHash,
-            ]);
-
-            /*
-            |--------------------------------------------------------------------------
-            | 6. Зберігаємо шлях до PDF у PhotoConsent
-            |--------------------------------------------------------------------------
-            */
-
-            $this->consent->pdf_path = $pdfPath;
-            $this->consent->save();
-
-            /*
-            |--------------------------------------------------------------------------
-            | 7. Генеруємо унікальний requestId
-            |--------------------------------------------------------------------------
             */
 
             $requestId = (string) Str::uuid();
 
-            $this->consent->diia_session_id = $requestId;
-            $this->consent->save();
+            /*
+            |--------------------------------------------------------------------------
+            | 4. Тимчасово зберігаємо PDF
+            |--------------------------------------------------------------------------
+            |
+            | Файл НЕ потрапляє у public/storage/consents.
+            |
+            | Він зберігається тут:
+            |
+            | storage/app/diia-pending/{requestId}.pdf
+            |
+            */
 
-            $this->consent->refresh();
+            $temporaryPdfPath = 'diia-pending/' . $requestId . '.pdf';
 
-            Log::info('DIIA SESSION ID SAVE DEBUG', [
-                'consent_id' => $this->consent->id,
-                'requestId' => $requestId,
-                'saved_diia_session_id' => $this->consent->diia_session_id,
-            ]);
+            if (
+                !Storage::disk('local')->put(
+                    $temporaryPdfPath,
+                    $pdfOutput
+                )
+            ) {
+                throw new \RuntimeException(
+                    "Не вдалося зберегти тимчасовий PDF: {$temporaryPdfPath}"
+                );
+            }
+
+            if (!Storage::disk('local')->exists($temporaryPdfPath)) {
+                throw new \RuntimeException(
+                    "Тимчасовий PDF не знайдений: {$temporaryPdfPath}"
+                );
+            }
 
             /*
             |--------------------------------------------------------------------------
-            | 8. Перевіряємо значення напряму з БД
+            | 5. Рахуємо SHA-256 саме збереженого temporary PDF
             |--------------------------------------------------------------------------
             */
 
-            $check = PhotoConsent::find($this->consent->id);
+            $pdfBytes = Storage::disk('local')->get($temporaryPdfPath);
 
-            Log::info('DIIA DB DIRECT CHECK', [
-                'consent_id' => $this->consent->id,
-                'requestId' => $requestId,
-                'db_diia_session_id' => $check?->diia_session_id,
-                'db_pdf_path' => $check?->pdf_path,
-            ]);
+            $fileHash = base64_encode(
+                hash('sha256', $pdfBytes, true)
+            );
 
             /*
             |--------------------------------------------------------------------------
-            | 9. Формуємо payload для Дії
+            | 6. Зберігаємо технічні дані сесії у Cache
+            |--------------------------------------------------------------------------
+            |
+            | ВАЖЛИВО:
+            | тут немає signed/status/pdf_path у PhotoConsent.
+            |
+            | Дані потрібні webhook після завершення підпису.
+            |
+            */
+
+            Cache::put(
+                'diia_consent:' . $requestId,
+                [
+                    'consent_id' => $this->consent->id,
+                    'token' => $this->consent->token,
+                    'temporary_pdf_path' => $temporaryPdfPath,
+                    'file_name' => "Zgoda_na_pidpys_{$this->consent->id}.pdf",
+                    'file_hash' => $fileHash,
+                ],
+                now()->addMinutes(10)
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | 7. Формуємо payload для Дії
             |--------------------------------------------------------------------------
             */
 
@@ -238,19 +216,9 @@ if (
                 ],
             ];
 
-            Log::info('DIIA HASH DEBUG', [
-                'requestId' => $requestId,
-                'fileHash' => $fileHash,
-                'pdf_path' => $pdfPath,
-            ]);
-
-            Log::info('DIIA OFFER REQUEST BODY', [
-                'payload' => $payload,
-            ]);
-
             /*
             |--------------------------------------------------------------------------
-            | 10. Робимо запит до Дії
+            | 8. Робимо запит до Дії
             |--------------------------------------------------------------------------
             */
 
@@ -262,7 +230,7 @@ if (
 
             /*
             |--------------------------------------------------------------------------
-            | 11. Обробка отриманого deepLink
+            | 9. Обробка отриманого deepLink
             |--------------------------------------------------------------------------
             */
 
@@ -290,7 +258,7 @@ if (
 
             /*
             |--------------------------------------------------------------------------
-            | 12. Обробка QR-коду
+            | 10. Обробка QR-коду
             |--------------------------------------------------------------------------
             */
 
@@ -367,13 +335,8 @@ if (
             return;
         }
 
-        // Перевіряємо, чи не вичерпано ліміт у 3 хвилини
-        if (
-            $this->expiresAt !== null
-            && now()->timestamp > $this->expiresAt
-        ) {
+        if ($this->expiresAt !== null && now()->timestamp > $this->expiresAt) {
             $this->signStatus = 'expired';
-
             return;
         }
 
@@ -381,26 +344,7 @@ if (
 
         if ($this->consent->status === 'signed') {
             $this->signStatus = 'signed';
-
-            if (
-                $this->consent->doctorPhoto
-                && !$this->consent->doctorPhoto->is_published
-            ) {
-                $this->consent->doctorPhoto->update([
-                    'is_published' => true,
-                ]);
-            }
-
-            /*
-            |--------------------------------------------------------------------------
-            | PDF більше НЕ генеруємо тут.
-            |--------------------------------------------------------------------------
-            |
-            | Він уже був створений до підписання,
-            | його hash переданий Дії,
-            | і саме цей файл зберігається у pdf_path.
-            |
-            */
+            $this->isSigned = true;
         }
     }
 
@@ -409,6 +353,9 @@ if (
         $this->signStatus = 'pending';
 
         $this->expiresAt = now()->addMinutes(3)->timestamp;
+
+        $this->qrCodeUrl = null;
+        $this->deepLink = null;
 
         $this->initiateDiiaSession($diiaService);
     }

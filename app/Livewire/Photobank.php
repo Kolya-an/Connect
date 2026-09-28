@@ -21,13 +21,13 @@ class Photobank extends Component
 
     public function loadInitialPhotos()
     {
-        // Завантажуємо фото, де в photoConsent статус саме 'signed'
+        // Завантажуємо фото, де статус у photoConsent саме 'declined'
         $photos = DoctorPhoto::with(['doctor' => function ($query) {
                 $query->withCount('reviews');
             }, 'doctor.user', 'photoConsent'])
-            ->where('list', true)
+           // ->where('list', true)
             ->whereHas('photoConsent', function ($query) {
-                $query->where('status', 'signed');
+                $query->where('status', 'declined'); // 👈 Змінено з 'signed' на 'declined'
             })
             ->get();
 
@@ -61,7 +61,7 @@ class Photobank extends Component
 
         $paginatedPhotos = DoctorPhoto::with(['doctor.user', 'photoConsent'])
             ->whereHas('photoConsent', function ($query) {
-                $query->where('status', 'signed');
+                $query->where('status', 'declined'); // 👈 Змінено з 'signed' на 'declined'
             })
             ->when($this->selectedProcedure, function($query) {
                 $query->where('procedure', $this->selectedProcedure);

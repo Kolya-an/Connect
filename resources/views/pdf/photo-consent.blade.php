@@ -39,6 +39,14 @@
             text-align: justify;
         }
 
+        .doctor-details {
+            margin-bottom: 20px;
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px 15px;
+        }
+
         .photo-container {
             text-align: center;
             margin: 20px 0;
@@ -105,9 +113,20 @@
         <div class="subtitle">на публікацію та використання фотоматеріалів</div>
     </div>
 
+    @if(!empty($doctor))
+        <div class="doctor-details">
+            <strong>Лікар:</strong> 
+            {{ data_get($doctor, 'name') }} {{ data_get($doctor, 'second_name') }}<br>
+            
+            @if(data_get($doctor, 'phone'))
+                <strong>Телефон лікаря:</strong> {{ data_get($doctor, 'phone') }}
+            @endif
+        </div>
+    @endif
+
     <div class="content">
         <p>
-            Я, <strong>{{ $signerInfo['name'] ?? 'Пацієнт' }}</strong> 
+            Я, <strong>{{ $signerInfo['name'] ?? 'Згідно з даними системи' }}</strong> 
             @if(!empty($signerInfo['drfo']))
                 (РНОКПП: <strong>{{ $signerInfo['drfo'] }}</strong>)
             @endif,
@@ -134,7 +153,7 @@
         <table class="stamp-details" width="100%" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="label">Підписувач:</td>
-                <td><strong>{{ $signerInfo['name'] ?? 'Відомості відсутні' }}</strong></td>
+                <td><strong>{{ $signerInfo['name'] ?? '—' }}</strong></td>
             </tr>
             @if(!empty($signerInfo['drfo']))
             <tr>
@@ -148,11 +167,11 @@
             </tr>
             <tr>
                 <td class="label">Токен сесії:</td>
-                <td><small>{{ $consent->token }}</small></td>
+                <td><small>{{ $consent->token ?? '—' }}</small></td>
             </tr>
             <tr>
                 <td class="label">Статус перевірки:</td>
-                <td><strong>Цілісність та валидність підпису підтверджено</strong></td>
+                <td><strong>Цілісність та валідність підпису підтверджено</strong></td>
             </tr>
         </table>
     </div>

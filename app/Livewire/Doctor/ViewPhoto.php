@@ -71,7 +71,7 @@ class ViewPhoto extends Component
         // Виводимо ТІЛЬКИ ті фото, де userSignature має статус 'signed'
         $photos = DoctorPhoto::where('doctor_id', $this->photoId)
             ->whereHas('photoConsent', function ($query) {
-                $query->where('status', 'signed');
+                $query->where('status', 'declined');
             })
             ->with(['photoConsent'])
             ->orderByDesc('created_at')

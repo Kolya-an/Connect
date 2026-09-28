@@ -198,15 +198,6 @@ $response = Http::withHeaders($this->defaultHeaders($sessionToken))
     ->asJson()
     ->post($url, $body);
 
-
-Log::info('DIIA CREATE SESSION FULL RESPONSE DEBUG', [
-    'status' => $response->status(),
-    'json' => $response->json(),
-    'headers' => [
-        'content-type' => $response->header('content-type'),
-    ],
-]);
-
         if (!$response->successful()) {
             Log::error('Diia Create Hashed Files Session Error', [
                 'url'    => $url,
@@ -278,5 +269,47 @@ Log::info('DIIA CREATE SESSION FULL RESPONSE DEBUG', [
 
     return $response->json();
 }
+
+    public function parseSignerInfo(string $p7sContent): array
+    {
+        $signerInfo = [
+            'name' => 'Невідомо',
+            'drfo' => 'Невідомо',
+        ];
+
+        // Перетворюємо DER у PEM для обробки OpenSSL
+        $pem = "-----BEGIN PKCS7-----\n" . chunk_split(base64_encode($p7sContent), 64, "\n") . "-----END PKCS7-----\n";
+
+        $certs = [];
+        if (openssl_pkcs7_unpack($pem, $certs)) {
+            // Або витягаємо сертифікат через openssl CLI / certparse
+            $tempCertPath = tempnam(sys_get_temp_dir(), 'cert_');
+            file_put_contents($tempCertPath, $pem);
+            
+            $output = [];
+            exec("openssl pkcs7 -in {$tempCertPath} -inform PEM -print_certs", $output);
+            unlink($tempCertPath);
+
+            $certText = implode("\n", $output);
+            
+            // Витягаємо РНОКПП / ІПН
+            if (preg_match('/TINUA-(\d{8,10})/', $certText, $matches)) {
+                $signerInfo['drfo'] = $matches[1];
+            }
+
+            // Витягаємо ПІБ (GN - Given Name, SN - Surname або CN)
+            $gn = ''; $sn = '';
+            if (preg_match('/GN=([^\/\n,]+)/u', $certText, $m)) $gn = $m[1];
+            if (preg_match('/SN=([^\/\n,]+)/u', $certText, $m)) $sn = $m[1];
+
+            if ($gn || $sn) {
+                $signerInfo['name'] = trim("{$sn} {$gn}");
+            } elseif (preg_match('/CN=([^\/\n,]+)/u', $certText, $m)) {
+                $signerInfo['name'] = $m[1];
+            }
+        }
+
+        return $signerInfo;
+    }
     
 }

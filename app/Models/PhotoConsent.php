@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class PhotoConsent extends Model
 {
@@ -42,10 +43,34 @@ class PhotoConsent extends Model
         return $this->belongsTo(DoctorPhoto::class, 'doctor_photo_id');
     }
 
+    public function doctor(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Doctor::class,
+            DoctorPhoto::class,
+            'id',              // Зовнішній ключ у таблиці doctor_photos (id)
+            'id',              // Зовнішній ключ у таблиці doctors (id)
+            'doctor_photo_id', // Локальний ключ у таблиці photo_consents
+            'doctor_id'        // Локальний ключ у таблиці doctor_photos
+        );
+    }
+
     protected function consentUrl(): Attribute
     {
         return Attribute::make(
             get: fn () => route('consent.show', ['token' => $this->token])
+        );
+    }
+
+       public function patient(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Pacient::class,     // Цільова модель - Пацієнт
+            DoctorPhoto::class, // Проміжна модель - Фото
+            'id',               // Foreign key у doctor_photos (id)
+            'id',               // Foreign key у pacients (id)
+            'doctor_photo_id',  // Local key у photo_consents
+            'patient_id'        // Local key у doctor_photos
         );
     }
 }

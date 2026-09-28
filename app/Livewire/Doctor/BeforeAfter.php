@@ -14,6 +14,7 @@ use App\Models\UserSignature;
 use App\Models\Pacient;
 use App\Services\DiiaService;
 use App\Enums\ConsentStatus;
+use Livewire\Attributes\Computed;
 
 class BeforeAfter extends Component
 {
@@ -30,9 +31,11 @@ class BeforeAfter extends Component
     public $photo_after_data;
     public $accept_umov = false;
     public $accept_zgoda = false;
-    public $patient_id; // Властивість для збереження обраного пацієнта
+    public $patient_id;
     public $patients = [];
-    public $consent = null;
+
+    // ✅ Замість одиничного $consent використовуємо масив посилань по photo_id
+    public array $generatedLinks = [];
 
     public $orientation = 'horizontal';
 
@@ -58,13 +61,11 @@ class BeforeAfter extends Component
         $doctor = Doctor::where('user_id', Auth::id())->first();
 
         if ($doctor) {
-            // 1. Беремо унікальні user_id пацієнтів з таблиці appointments для цього лікаря
             $userIds = \App\Models\Appointment::where('doctor_id', $doctor->id)
                 ->whereNotNull('user_id')
                 ->pluck('user_id')
                 ->unique();
 
-            // 2. Завантажуємо пацієнтів із таблиці pacients разом із name з таблиці users
             $this->patients = Pacient::whereIn('user_id', $userIds)
                 ->with('user')
                 ->get();
@@ -78,7 +79,8 @@ class BeforeAfter extends Component
         $doctor = Doctor::where('user_id', Auth::id())->first();
 
         if ($doctor) {
-            $this->photos = $doctor->photos()->get();
+            // ✅ Додаємо eager loading для photoConsent
+            $this->photos = $doctor->photos()->with('photoConsent')->get();
         } else {
             $this->photos = collect();
         }
@@ -98,12 +100,10 @@ class BeforeAfter extends Component
         $pathBefore = $this->saveBase64($this->photo_before_data, 'before');
         $pathAfter = $this->saveBase64($this->photo_after_data, 'after');
 
-        // Знаходимо модель Pacient за її user_id, щоб отримати її реальний pacient.id
         $pacientModel = Pacient::where('user_id', $this->patient_id)->first();
 
-        // 1. Створюємо фото з прив'язкою до pacients.id
         $photo = $doctor->photos()->create([
-            'patient_id'   => $pacientModel?->id, // Зберігаємо ID з таблиці pacients
+            'patient_id'   => $pacientModel?->id,
             'photo_before' => $pathBefore,
             'photo_after'  => $pathAfter,
             'photo'        => $pathBefore,
@@ -114,12 +114,10 @@ class BeforeAfter extends Component
         ]);
 
         $token = Str::random(64);
-
-        // 2. Створюємо запис підпису, передаючи ID користувача з таблиці users ($this->patient_id)
         $doctorName = trim(($doctor->user?->name ?? '') . ' ' . ($doctor->second_name ?? ''));
 
         $signature = UserSignature::create([
-            'user_id'     => $this->patient_id, // Береться напряму ID з таблиці users
+            'user_id'     => $this->patient_id,
             'doctor_id'   => $doctor->id,
             'photo_id'    => $photo->id,
             'title'       => 'Згода на публікацію фотографій',
@@ -129,12 +127,11 @@ class BeforeAfter extends Component
             'is_read'     => false,
         ]);
 
-        // 3. Створюємо PhotoConsent
         PhotoConsent::create([
             'doctor_photo_id'   => $photo->id,
             'user_signature_id' => $signature->id,
             'token'             => $token,
-            'status'            => 'pending',
+            'status'            => ConsentStatus::PENDING,
         ]);
 
         $this->reset(['photo_before_data', 'photo_after_data', 'procedure', 'product', 'patient_id']);
@@ -174,26 +171,42 @@ class BeforeAfter extends Component
         session()->flash('message', 'Фото успішно видалено!');
     }
 
+    /**
+     * ✅ Генерація унікального посилання для конкретного фото за ID
+     */
     public function generateConsentLink(int $photoId)
     {
-        // 2. Зберігаємо згоду у $this->consent
-        $this->consent = PhotoConsent::firstOrCreate(
+        $token = Str::random(32);
+
+        $consent = PhotoConsent::firstOrCreate(
             ['doctor_photo_id' => $photoId],
             [
-                'token' => Str::random(32),
+                'token'  => $token,
                 'status' => ConsentStatus::PENDING,
             ]
         );
 
-        if (! $this->consent->wasRecentlyCreated) {
-            $this->consent->update([
-                'token' => Str::random(32),
+        if (!$consent->wasRecentlyCreated) {
+            $consent->update([
+                'token'  => $token,
                 'status' => ConsentStatus::PENDING,
             ]);
         }
 
+        // ✅ Записуємо згенероване посилання у масив за ключем photo_id
+        $this->generatedLinks[$photoId] = route('consent.show', ['token' => $consent->token]);
+
+        $this->loadPhotos(); // Перезавантажуємо список для актуальності статусів
         session()->flash('success', 'Посилання успішно згенеровано!');
     }
+
+    public function hasPendingConsents(): bool
+{
+    return $this->photos->contains(function ($photo) {
+        $status = $photo->photoConsent?->status?->value ?? $photo->photoConsent?->status;
+        return $status === 'pending';
+    });
+}
 
     public function render()
     {

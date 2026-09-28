@@ -1,12 +1,13 @@
-<div class="spec_register_wrapper" x-data="beforeAfterComponent" wire:ignore.self>
+<div class="spec_register_wrapper" 
+x-data="beforeAfterComponent" 
+wire:ignore.self
+@if($this->hasPendingConsents()) wire:poll.3s @endif>
     <style>
-
         .upload-label {
             display: block;
             margin-bottom: 10px;
             cursor: pointer;
         }
-
         .upload-button {
             display: inline-block;
             padding: 8px 16px;
@@ -17,11 +18,9 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-
         .upload-button:hover {
             background: #e08792;
         }
-
         .preview-container {
             position: relative;
             width: 100%;
@@ -30,12 +29,10 @@
             border-radius: 8px;
             overflow: hidden;
         }
-
         .crop-controls {
             display: flex;
             gap: 10px;
         }
-
         .small-btn {
             padding: 5px 15px;
             font-size: 14px;
@@ -45,25 +42,27 @@
             border-radius: 4px;
             cursor: pointer;
         }
-
         .small-btn:hover {
             background: #5a6268;
         }
     </style>
+
     <h5>{{__('Ваші - До процедури/Після процедури')}}</h5>
+
     <button wire:click="$set('showAddModal', true)"
-    class="_flex-display _justify-content-center _align-center btn white_rose_btn add_photo add_photo_page add_photo_btn">
+            class="_flex-display _justify-content-center _align-center btn white_rose_btn add_photo add_photo_page add_photo_btn">
         <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.000000" height="14.000000" fill="none">
             <rect id="ic:round-plus" width="14.000000" height="14.000000" x="0.000000" y="0.000000" fill="rgb(255,255,255)" fill-opacity="0" />
             <path id="Vector" d="M13 8L8 8L8 13C8 13.2652 7.89464 13.5196 7.70711 13.7071C7.51957 13.8946 7.26522 14 7 14C6.73478 14 6.48043 13.8946 6.29289 13.7071C6.10536 13.5196 6 13.2652 6 13L6 8L1 8C0.734784 8 0.48043 7.89464 0.292893 7.70711C0.105357 7.51957 0 7.26522 0 7C0 6.73478 0.105357 6.48043 0.292893 6.29289C0.48043 6.10536 0.734784 6 1 6L6 6L6 1C6 0.734784 6.10536 0.480429 6.29289 0.292893C6.48043 0.105357 6.73478 -8.88178e-16 7 0C7.26522 -8.88178e-16 7.51957 0.105357 7.70711 0.292893C7.89464 0.480429 8 0.734784 8 1L8 6L13 6C13.2652 6 13.5196 6.10536 13.7071 6.29289C13.8946 6.48043 14 6.73478 14 7C14 7.26522 13.8946 7.51957 13.7071 7.70711C13.5196 7.89464 13.2652 8 13 8Z" fill="rgb(243,150,162)" fill-rule="nonzero" />
         </svg> {{__('Додати фото')}}
     </button>
+
     <p>{{__('Додаючи фото, лікар повинен мати згоду на це від пацієнта!')}}</p>
+
     <div class="_flex-display _align-stretch photo_list_block">
-    @forelse($photos as $item)
-            <div class="photo_item">
+        @forelse($photos as $item)
+            <div class="photo_item" wire:key="photo-card-{{ $item->id }}">
                 <a wire:click="deletePhoto({{ $item->id }})" class="photo_item_img">
-                    {{--<img src="{{ asset('uploads/'.$item->photo) }}" alt="{{ $item->procedure }}">--}}
                     <div class="_flex-display comparison-container {{ $item->orientation === 'vertical' ? '_flex-column' : '_flex-row' }}">
                         <img src="{{ asset('uploads/'.$item->photo_before) }}">
                         <img src="{{ asset('uploads/'.$item->photo_after) }}">
@@ -74,82 +73,74 @@
                         </svg>
                     </div>
                 </a>
+
                 <p><b>{{__('Процедура:')}}</b> {{ $item->procedure }}</p>
                 <p><b>{{__('Клінічний кейс:')}}</b> {{ $item->product }}</p>
+
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ $item->is_active ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                        {{ $item->is_active ? 'Активне' : 'Неактивне' }}
+                    @php
+                        $statusValue = $item->photoConsent?->status?->value ?? $item->photoConsent?->status;
+                        $isActive = $item->is_active || $statusValue === 'declined';
+                    @endphp
+                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ $isActive ? 'text-green' : 'text-red' }}">
+                        {{ $isActive ? 'Активне' : 'Неактивне' }}
                     </span>
                 </div>
 
-                @if(!$item->is_active)
+                {{-- Блок генерації посилання для непідписаних кейсів --}}
+                @if(!$item->is_active && (is_null($item->photoConsent) || $item->photoConsent?->status?->value === 'pending'))
                     @if(isset($generatedLinks[$item->id]))
-                        <div x-data="{ copied: false }" class="space-y-2">
-                            <input type="text" readonly value="{{ $generatedLinks[$item->id] }}" class="w-full text-xs p-2 border rounded bg-gray-50">
-                            <button 
-                                type="button" 
+                        <div x-data="{ copied: false }" class="space-y-2 mt-2">
+                            <div class="search_field search_field_input">
+                                <input type="text" readonly value="{{ $generatedLinks[$item->id] }}" class="add_spec">
+                            </div>
+                            <button
+                                type="button"
                                 @click="navigator.clipboard.writeText('{{ $generatedLinks[$item->id] }}'); copied = true; setTimeout(() => copied = false, 2000)"
-                                class="w-full py-1.5 bg-gray-800 text-white rounded text-xs">
-                                <span x-show="!copied">Скопіювати посилання</span>
-                                <span x-show="copied" class="text-green-400">Скопійовано!</span>
+                                class="w-full py-1.5 bg-gray-800 text-white rounded text-xs cursor-pointer">
+                                <span style="color:green" x-show="!copied">Скопіювати посилання</span>
+                                <span style="color:rgba(243, 150, 162, 1)" x-show="copied" class="text-green-400">Скопійовано!</span>
                             </button>
                         </div>
                     @else
-                        <div>
-    <button 
-        type="button"
-        wire:click="generateConsentLink({{ $item->id }})" 
-        wire:loading.attr="disabled"
-        wire:target="generateConsentLink({{ $item->id }})"
-        class="w-full py-2 px-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-medium rounded-lg transition-all flex items-center justify-center min-h-[38px] cursor-pointer">
-        
-        <!-- Текст за замовчуванням (ховається при завантаженні) -->
-        <span wire:loading.remove wire:target="generateConsentLink({{ $item->id }})">
-            Сформувати посилання для підпису
-        </span>
+                        <div class="mt-2" x-data="{ loading: false }">
 
-        <!-- Стан завантаження (показується ТІЛЬКИ під час запиту) -->
-        <span wire:loading wire:target="generateConsentLink({{ $item->id }})" class="inline-flex items-center gap-2">
-            <span class="inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-            Генерація посилання...
-        </span>
-    </button>
-</div>
-@if($consent)
-    <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-            Посилання для клієнта на Дія.Підпис: <a href="{{ $consent->consent_url }}" target="_blank" class="text-blue-600 underline">Відкрити</a>
-        </label>
+                            <button 
+                                type="button" 
+                                @click="loading = true; $wire.generateConsentLink({{ $item->id }}).then(() => loading = false)" 
+                                :disabled="loading"
+                                class="btn rose_btn disabled:opacity-50"
+                                style="margin-top: 12px;height:60px;">
 
-        <div class="flex items-center gap-2" x-data="{ copied: false }">
-            {{-- Вхідне поле з повним URL --}}
-            <input 
-                type="text" 
-                readonly 
-                value="{{ $consent->consent_url }}" 
-                id="consent-link"
-                class="w-full text-sm p-2 border rounded border-gray-300 bg-white focus:outline-none"
-            >
+                                <span x-show="!loading">
+                                    Сформувати посилання для підпису
+                                </span>
 
-            {{-- Кнопка скопіювати за допомогою Alpine.js --}}
-            <button 
-                type="button"
-                @click="navigator.clipboard.writeText('{{ $consent->consent_url }}'); copied = true; setTimeout(() => copied = false, 2000)"
-                class="px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 transition"
-            >
-                <span x-show="!copied">Скопіювати</span>
-                <span x-show="copied" x-cloak class="text-green-200">Скопійовано!</span>
-            </button>
-        </div>
-    </div>
-@endif
+                                <span x-show="loading" x-cloak>
+                                    Генерація посилання...
+                                </span>
+                            </button>
+                        </div>
                     @endif
                 @endif
 
-                @if($item->photoConsent?->pdf_path)
-                    <a href="{{ Storage::url($item->photoConsent->pdf_path) }}" target="_blank" class="block text-center text-xs text-blue-600 underline">
-                        Переглянути підписаний PDF
-                    </a>
+                {{-- Блок показаних статусах та завантаженні підписаного PDF --}}
+                @if($item->photoConsent?->status?->value === 'signed' || $item->photoConsent?->status === 'signed' || $item->photoConsent?->pdf_path)
+                    <div class="mt-2 text-center">
+                        <span class="block text-xs font-medium text-green-600 mb-1">
+                            ✓ Згода підписана
+                        </span>
+                        
+                        @if($item->photoConsent?->pdf_path)
+                            <a href="{{ Storage::url($item->photoConsent->pdf_path) }}" target="_blank" class="btn rose_btn">
+                                Переглянути підписаний PDF
+                            </a>
+                        @elseif(Route::has('consent.pdf') && $item->photoConsent?->id)
+                            <a href="{{ route('consent.pdf', $item->photoConsent->id) }}" target="_blank" class="btn white_rose_btn">
+                                Переглянути підписаний PDF
+                            </a>
+                        @endif
+                    </div>
                 @endif
 
             </div>
@@ -158,14 +149,13 @@
         @endforelse
     </div>
 
-@if($showAddModal)
+    @if($showAddModal)
         <div id="add_photo" class="_flex-display _justify-content-center _align-center screen">
             <div class="window add_info_window" style="padding: 20px">
                 <div class="_flex-display _justify-content-between _align-center window_top">
-                    {{--<h4>{{__('Додати До/Після')}}</h4>--}}
                     <button @click="saveImages()" class="btn rose_btn" @disabled(!$accept_umov || !$accept_zgoda)>{{__('Зберегти')}}</button>
                     <button wire:click="$set('showAddModal', false)" id="window_close" class="window_close">
-                        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" clip-path="url(#clipPath_6)" customFrame="url(#clipPath_6)">
+                        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" clip-path="url(#clipPath_6)">
                             <defs>
                                 <clipPath id="clipPath_6">
                                     <rect width="48.000000" height="48.000000" x="0.000000" y="0.000000" rx="24.000000" fill="rgb(255,255,255)" />
@@ -175,13 +165,14 @@
                                 </clipPath>
                             </defs>
                             <rect id="Frame 1153" width="48.000000" height="48.000000" x="0.000000" y="0.000000" rx="24.000000" fill="rgb(255,225,228)" />
-                            <g id="material-symbols:close-rounded" clip-path="url(#clipPath_7)" customFrame="url(#clipPath_7)">
+                            <g id="material-symbols:close-rounded" clip-path="url(#clipPath_7)">
                                 <rect id="material-symbols:close-rounded" width="28.000000" height="28.000000" x="10.000000" y="10.000000" fill="rgb(255,255,255)" fill-opacity="0" />
                                 <path id="Vector" d="M24.0009 25.6333L18.2842 31.3499C18.0704 31.5638 17.7981 31.6708 17.4676 31.6708C17.137 31.6708 16.8648 31.5638 16.6509 31.3499C16.437 31.136 16.3301 30.8638 16.3301 30.5333C16.3301 30.2027 16.437 29.9305 16.6509 29.7166L22.3676 23.9999L16.6509 18.2833C16.437 18.0694 16.3301 17.7972 16.3301 17.4666C16.3301 17.136 16.437 16.8638 16.6509 16.6499C16.8648 16.436 17.137 16.3291 17.4676 16.3291C17.7981 16.3291 18.0704 16.436 18.2842 16.6499L24.0009 22.3666L29.7176 16.6499C29.9315 16.436 30.2037 16.3291 30.5342 16.3291C30.8648 16.3291 31.137 16.436 31.3509 16.6499C31.5648 16.8638 31.6717 17.136 31.6717 17.4666C31.6717 17.7972 31.5648 18.0694 31.3509 18.2833L25.6342 23.9999L31.3509 29.7166C31.5648 29.9305 31.6717 30.2027 31.6717 30.5333C31.6717 30.8638 31.5648 31.136 31.3509 31.3499C31.137 31.5638 30.8648 31.6708 30.5342 31.6708C30.2037 31.6708 29.9315 31.5638 29.7176 31.3499L24.0009 25.6333Z" fill="rgb(0,0,0)" fill-rule="nonzero" />
                             </g>
                         </svg>
                     </button>
                 </div>
+
                 <div class="form-group mb-3">
                     <label for="patient_id"><b>{{ __('Пацієнт') }}</b></label>
                     <select wire:model="patient_id" class="form-control">
@@ -194,6 +185,7 @@
                     </select>
                     @error('patient_id') <span class="text-danger" style="font-size: 12px;">{{ $message }}</span> @enderror
                 </div>
+
                 <div class="_flex-display _justify-content-between _align-center orientation-selector" style="margin: 15px 0; gap: 10px;">
                     <label class="custom-radio" style="width:45%">
                         <input type="radio" wire:model.live="orientation" value="horizontal" x-on:change="updateAspectRatio">
@@ -205,11 +197,9 @@
                     </label>
                 </div>
 
-
                 <div class="_flex-display _justify-content-between _align-center">
                     <div style="flex: 1;">
                         <label class="upload-label">
-                           {{-- <span>{{__('Фото ДО')}}</span>--}}
                             <input type="file" id="fileBefore" accept="image/*" x-on:change="initCropper($event, 'before')" style="display: none;">
                             <div class="upload-button">{{__('До процедури')}}</div>
                         </label>
@@ -226,10 +216,8 @@
                             <button type="button" x-on:click="removeImage('before')" class="btn small-btn">{{__('Видалити')}}</button>
                         </div>
                     </div>
-
                     <div style="flex: 1;">
                         <label class="upload-label">
-                            {{--<span>{{__('Фото ПІСЛЯ')}}</span>--}}
                             <input type="file" id="fileAfter" accept="image/*" x-on:change="initCropper($event, 'after')" style="display: none;">
                             <div class="upload-button">{{__('Після процедури')}}</div>
                         </label>
@@ -247,6 +235,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="_flex-display _justify-content-between" style="margin: 15px 0; gap: 10px;">
                     <div class="_flex-display _justify-content-between orientation-selector" style="width:45%;">
                         <input wire:model.live="accept_umov" id="check_umov" type="checkbox" name="check_politik" class="form-check-input @error('accept_umov') is-invalid @enderror">
@@ -270,31 +259,23 @@
                     </div>
                 </div>
 
+                <div class="search_field search_field_input" style="max-width: 100%;">
+                    <input type="text"
+                    wire:model="procedure"
+                    placeholder="{{__('Процедура')}}"
+                    class="add_desc_photo"
+                    style="padding:0 10px;background:none">
+                    @error('procedure') <span class="error">{{ $message }}</span> @enderror
+                </div>
 
-
-
-
-
-                    <div class="search_field search_field_input" style="max-width: 100%;">
-                        <input type="text"
-                        wire:model="procedure"
-                        placeholder="{{__('Процедура')}}"
-                        class="add_desc_photo"
-                        style="padding:0 10px;background:none">
-                        @error('procedure') <span class="error">{{ $message }}</span> @enderror
-                    </div>
-                
-                
-                    <div class="search_field search_field_input" style="max-width: 100%;border:0;">
-                        <textarea
-                        wire:model="product"
-                        placeholder="{{__('Тут ви можете описати приклад клінічного кейсу, уникаючі слів і виразів: «результат», «ефект», «прибрали», «виправили», «омолодили», «до / після», "покращення".Можливо так: пацієнтка ... років, з ... морфотипом обличчя, була проведена процедура контурної пластики нижньої третини обличчя. Використовувався препарат... в кількості мл на зону.')}}"
-                        class="add_desc_photo"
-                        style="padding:10px;background:none;font-size: 12px;width: calc(100% - 8px);">
-                    </textarea>
-                    </div>
-                
-                {{--<button @click="saveImages()" class="btn rose_btn">{{__('Зберегти')}}</button>--}}
+                <div class="search_field search_field_input" style="max-width: 100%;border:0;">
+                    <textarea
+                    wire:model="product"
+                    placeholder="{{__('Тут ви можете описати приклад клінічного кейсу, уникаючі слів і виразів: «результат», «ефект», «прибрали», «виправили», «омолодили», «до / після», "покращення*".Можливо* так: пацієнтка ... років, з ... морфотипом обличчя, була проведена процедура контурної пластики нижньої третини обличчя. Використовувався препарат... в кількості мл на зону.')}}"
+                    class="add_desc_photo"
+                    style="padding:10px;background:none;font-size: 12px;width: calc(100% - 8px);">
+                </textarea>
+                </div>
             </div>
         </div>
     @endif

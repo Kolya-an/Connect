@@ -19,6 +19,7 @@ use App\Livewire\Pages\Auth\ResetPassword;
 use App\Models\Page;
 use App\Livewire\Patient\PhotoConsentSign;
 use App\Http\Controllers\ConsentController; 
+use App\Models\PhotoConsent;
 
 
 
@@ -67,8 +68,13 @@ Route::get('/training-form', function () {
     return view('training-form');
 });
 
-Route::get('/consent/{token}/success', function() {
-    return "Дякуємо! Підпис успішно збережено.";
+
+Route::get('/consent/{token}/success', function (string $token) {
+    $consent = PhotoConsent::where('token', $token)->firstOrFail();
+
+    return view('consent.success', [
+        'consent' => $consent,
+    ]);
 })->name('consent.success');
 
 // Замість безпосереднього виклику Livewire-класу
@@ -77,30 +83,6 @@ Route::get('/consent/{token}', function ($token) {
 })->name('consent.show');
 
 Route::any('adminer', [\OneCentLin\Adminer\AdminerController::class, 'index']);
-
-use App\Services\DiiaSignService;
-Route::get('/debug/diia-config', function (DiiaSignService $diiaService) {
-
-    $branches = $diiaService->getBranches();
-
-    Log::info('DIIA BRANCHES DEBUG', [
-        'branches' => $branches,
-    ]);
-
-    $offers = $diiaService->getOffers(
-        config('services.diia.branch_id')
-    );
-
-    Log::info('DIIA OFFERS DEBUG', [
-        'offers' => $offers,
-    ]);
-
-    return response()->json([
-        'branches' => $branches,
-        'offers' => $offers,
-    ]);
-
-});
 
 
 

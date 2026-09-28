@@ -2878,3 +2878,9 @@ input.add_address {
     margin-bottom: 10px;
     box-sizing: border-box;
 }
+.text-red {
+    color: red;
+}
+.text-green {
+    color: green;
+}
