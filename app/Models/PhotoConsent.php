@@ -20,6 +20,7 @@ class PhotoConsent extends Model
         'signer_info',
         'pdf_path',
         'diia_session_id',
+        'file_document',
     ];
 
     protected $casts = [

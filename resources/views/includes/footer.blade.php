@@ -61,7 +61,7 @@
                         </svg>
                     </a>
                 </div>
-                <div class="footer_subscribe">
+                <div class="footer_subscribe" style="margin-bottom:10px;">
                     <div class="footer_subscribe_block">
                         <p>{{__('Підписатись')}} <br>{{__('на новини')}}</p>
                         @livewire('subscribe-form')
@@ -75,6 +75,7 @@
                         {{ __('Правила користування сайтом') }}
                     </a>
                     <a target="_blank" href="{{ asset('doc/personal.pdf') }}">{{__('Політика конфіденційності')}}</a>
+                    <a target="_blank" href="{{ asset('doc/zgoda.pdf') }}">{{__('Згода на фото і відеофіксацію')}}</a>
                 </div>
             </div>
         </div>

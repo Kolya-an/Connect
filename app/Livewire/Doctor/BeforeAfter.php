@@ -33,6 +33,7 @@ class BeforeAfter extends Component
     public $accept_zgoda = false;
     public $patient_id;
     public $patients = [];
+    public $file_document;
 
     // ✅ Замість одиничного $consent використовуємо масив посилань по photo_id
     public array $generatedLinks = [];
@@ -47,6 +48,7 @@ class BeforeAfter extends Component
             'product'           => 'nullable|string|max:255',
             'photo_before_data' => 'required',
             'photo_after_data'  => 'required',
+            'file_document'     => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240', // До 10MB
         ];
     }
 
@@ -87,59 +89,69 @@ class BeforeAfter extends Component
     }
 
     public function addPhoto()
-    {
-        $this->validate();
+{
+    
+    $this->validate();
 
-        $doctor = Doctor::where('user_id', Auth::id())->first();
+    $doctor = Doctor::where('user_id', Auth::id())->first();
 
-        if (!$doctor) {
-            session()->flash('error', 'Доктор не знайдений.');
-            return;
-        }
-
-        $pathBefore = $this->saveBase64($this->photo_before_data, 'before');
-        $pathAfter = $this->saveBase64($this->photo_after_data, 'after');
-
-        $pacientModel = Pacient::where('user_id', $this->patient_id)->first();
-
-        $photo = $doctor->photos()->create([
-            'patient_id'   => $pacientModel?->id,
-            'photo_before' => $pathBefore,
-            'photo_after'  => $pathAfter,
-            'photo'        => $pathBefore,
-            'procedure'    => $this->procedure,
-            'product'      => $this->product,
-            'orientation'  => $this->orientation,
-            'is_published' => false, 
-        ]);
-
-        $token = Str::random(64);
-        $doctorName = trim(($doctor->user?->name ?? '') . ' ' . ($doctor->second_name ?? ''));
-
-        $signature = UserSignature::create([
-            'user_id'     => $this->patient_id,
-            'doctor_id'   => $doctor->id,
-            'photo_id'    => $photo->id,
-            'title'       => 'Згода на публікацію фотографій',
-            'description' => "Лікар {$doctorName} просить надати згоду на публікацію фотографій «До / Після» по процедурі: {$this->procedure}.",
-            'token'       => $token,
-            'status'      => 'pending',
-            'is_read'     => false,
-        ]);
-
-        PhotoConsent::create([
-            'doctor_photo_id'   => $photo->id,
-            'user_signature_id' => $signature->id,
-            'token'             => $token,
-            'status'            => ConsentStatus::PENDING,
-        ]);
-
-        $this->reset(['photo_before_data', 'photo_after_data', 'procedure', 'product', 'patient_id']);
-        $this->showAddModal = false;
-        $this->loadPhotos();
-
-        session()->flash('message', 'Фото успішно додано!');
+    if (!$doctor) {
+        session()->flash('error', 'Доктор не знайдений.');
+        return;
     }
+
+    $pathBefore = $this->saveBase64($this->photo_before_data, 'before');
+    $pathAfter = $this->saveBase64($this->photo_after_data, 'after');
+
+    // Збереження завантаженого документа/фото
+    $documentPath = null;
+    if ($this->file_document) {
+        $documentPath = $this->file_document->store('consents_docs', 'public_uploads');
+    }
+
+    $pacientModel = Pacient::where('user_id', $this->patient_id)->first();
+
+    $photo = $doctor->photos()->create([
+        'patient_id'   => $pacientModel?->id,
+        'photo_before' => $pathBefore,
+        'photo_after'  => $pathAfter,
+        'photo'        => $pathBefore,
+        'procedure'    => $this->procedure,
+        'product'      => $this->product,
+        'orientation'  => $this->orientation,
+        'is_published' => false, 
+    ]);
+
+    $token = Str::random(64);
+    $doctorName = trim(($doctor->user?->name ?? '') . ' ' . ($doctor->second_name ?? ''));
+
+    $signature = UserSignature::create([
+        'user_id'     => $this->patient_id,
+        'doctor_id'   => $doctor->id,
+        'photo_id'    => $photo->id,
+        'title'       => 'Згода на публікацію фотографій',
+        'description' => "Лікар {$doctorName} просить надати згоду на публікацію фотографій «До / Після» по процедурі: {$this->procedure}.",
+        'token'       => $token,
+        'status'      => 'pending',
+        'is_read'     => false,
+    ]);
+
+    // Створюємо згоду та передаємо шлях у 'file_document'
+    PhotoConsent::create([
+        'doctor_photo_id'   => $photo->id,
+        'user_signature_id' => $signature->id,
+        'token'             => $token,
+        'status'            => ConsentStatus::PENDING,
+        'file_document'     => $documentPath, // 👈 Зберігаємо шлях у нову колонку file_document
+    ]);
+
+    // Скидаємо поля форми
+    $this->reset(['photo_before_data', 'photo_after_data', 'procedure', 'product', 'patient_id', 'file_document']);
+    $this->showAddModal = false;
+    $this->loadPhotos(); // 👈 Виправлено о друкарську помилку ($thisloadPhotos -> $this->loadPhotos)
+
+    session()->flash('message', 'Фото та документ успішно додано!');
+}
 
     private function saveBase64($base64Data, $type)
     {

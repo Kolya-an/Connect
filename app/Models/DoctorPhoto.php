@@ -21,6 +21,7 @@ class DoctorPhoto extends Model
         'photo_after', 
         'orientation', 
         'patient_id',
+        'file_document',
     ];
 
     public function doctor()

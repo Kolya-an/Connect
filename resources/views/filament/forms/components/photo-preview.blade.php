@@ -13,7 +13,7 @@
         ?? $doctorPhoto?->after 
         ?? $doctorPhoto?->after_image;
 
-    // Хелпер для формування коректного URL (підтримує як uploads/doctor/..., так і storage/... або повні URL)
+    // Хелпер для формування коректного URL
     $helperGetUrl = function ($path) {
         if (!$path) return null;
         if (filter_var($path, FILTER_VALIDATE_URL)) return $path;
@@ -33,39 +33,46 @@
 @endphp
 
 <div class="rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-800 dark:bg-gray-900/50">
-    <div class="flex flex-col gap-4">
+    <div style="display: flex; flex-direction: row; width: 320px; height: 320px; overflow: hidden;border-radius: 20px;">
         @if($urlBefore || $urlAfter)
-            <div class="photo_list_block">
-                <div class="photo_item">
-                    <div style="display: flex; flex-direction: row; width: 100%; height: 320px; overflow: hidden;">
-                        
-                        <!-- Фото ДО (Left) -->
-                        <div>
-                            @if($urlBefore)
-                                <a href="{{ $urlBefore }}" target="_blank">
-                                    <img  src="{{ $urlBefore }}" alt="Фото ДО" class="w-full object-cover" style="border-radius: 20px 0 0 20px; height: 320px; display: block;">
-                                </a>
-                            @else
-                                <div class="flex items-center justify-center bg-gray-100 dark:bg-gray-800" style="height: 320px;">
-                                    <span class="text-xs text-gray-400">Фото ДО відсутнє</span>
-                                </div>
-                            @endif
-                        </div>
-
-                        <!-- Фото ПІСЛЯ (Right) -->
-                        <div>
-                            @if($urlAfter)
-                                <a href="{{ $urlAfter }}" target="_blank">
-                                    <img src="{{ $urlAfter }}" alt="Фото ПІСЛЯ" class="w-full object-cover" style="border-radius: 0 20px 20px 0; height: 320px; display: block;">
-                                </a>
-                             @else
-                                <div class="flex items-center justify-center bg-gray-100 dark:bg-gray-800" style="height: 320px;">
-                                    <span class="text-xs text-gray-400">Фото ПІСЛЯ відсутнє</span>
-                                </div>
-                            @endif
-                        </div>
-
+            <!-- Контейнер обмежено за шириною max-w-md та зроблено квадратним (aspect-square) -->
+            <div style="aspect-ratio: 1 / 1;">
+                
+                <!-- Flex-ряд: 2 колонки строго по 50% ширини та 100% висоти -->
+                <div style="display: flex; width: 100%; height: 100%;">
+                    
+                    <!-- Фото ДО (Left - 50%) -->
+                    <div style="width: 50%; height: 100%; position: relative; border-right: 1px solid rgba(255,255,255,0.3);">
+                        @if($urlBefore)
+                            <a href="{{ $urlBefore }}" target="_blank" style="display: block; width: 100%; height: 100%;">
+                                <img src="{{ $urlBefore }}" alt="Фото ДО" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
+                            </a>
+                        @else
+                            <div class="flex items-center justify-center bg-gray-100 dark:bg-gray-800" style="width: 100%; height: 100%;">
+                                <span class="text-xs text-gray-400">Фото ДО відсутнє</span>
+                            </div>
+                        @endif
+                        <span class="absolute bottom-2 left-2 px-2 py-0.5 text-[11px] font-semibold text-white bg-black/60 backdrop-blur-sm rounded">
+                            ДО
+                        </span>
                     </div>
+
+                    <!-- Фото ПІСЛЯ (Right - 50%) -->
+                    <div style="width: 50%; height: 100%; position: relative;">
+                        @if($urlAfter)
+                            <a href="{{ $urlAfter }}" target="_blank" style="display: block; width: 100%; height: 100%;">
+                                <img src="{{ $urlAfter }}" alt="Фото ПІСЛЯ" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;">
+                            </a>
+                        @else
+                            <div class="flex items-center justify-center bg-gray-100 dark:bg-gray-800" style="width: 100%; height: 100%;">
+                                <span class="text-xs text-gray-400">Фото ПІСЛЯ відсутнє</span>
+                            </div>
+                        @endif
+                        <span class="absolute bottom-2 right-2 px-2 py-0.5 text-[11px] font-semibold text-white bg-black/60 backdrop-blur-sm rounded">
+                            ПІСЛЯ
+                        </span>
+                    </div>
+
                 </div>
             </div>
         @else

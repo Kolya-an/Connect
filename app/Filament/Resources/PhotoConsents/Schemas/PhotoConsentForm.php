@@ -25,52 +25,52 @@ class PhotoConsentForm
                         // ПІБ Пацієнта
                       
 
-Placeholder::make('patient_info')
-    ->label('ПІБ Пацієнта / Користувача')
-    ->content(function ($record) {
-        if (!$record) {
-            return '—';
-        }
+                    Placeholder::make('patient_info')
+                        ->label('ПІБ Пацієнта / Користувача')
+                        ->content(function ($record) {
+                            if (!$record) {
+                                return '—';
+                            }
 
-        // 1. Отримуємо модель Pacient
-        $pacient = $record->patient ?? $record->doctorPhoto?->patient;
+                            // 1. Отримуємо модель Pacient
+                            $pacient = $record->patient ?? $record->doctorPhoto?->patient;
 
-        if ($pacient) {
-            // Отримуємо ім'я з таблиці users або з самої моделі Pacient
-            $userName = $pacient->user?->name ?? $pacient->name ?? '';
-            
-            // Отримуємо прізвище та по батькові з таблиці pacients
-            $lastName = $pacient->last_name ?? '';
-            $secondName = $pacient->second_name ?? $pacient->middle_name ?? '';
+                            if ($pacient) {
+                                // Отримуємо ім'я з таблиці users або з самої моделі Pacient
+                                $userName = $pacient->user?->name ?? $pacient->name ?? '';
+                                
+                                // Отримуємо прізвище та по батькові з таблиці pacients
+                                $lastName = $pacient->last_name ?? '';
+                                $secondName = $pacient->second_name ?? $pacient->middle_name ?? '';
 
-            // Якщо у pacients є окреме прізвище або по батькові
-            if (!empty($lastName) || !empty($secondName)) {
-                $fullName = trim("{$lastName} {$userName} {$secondName}");
-                if (!empty(trim($fullName))) {
-                    return $fullName;
-                }
-            }
+                                // Якщо у pacients є окреме прізвище або по батькові
+                                if (!empty($lastName) || !empty($secondName)) {
+                                    $fullName = trim("{$lastName} {$userName} {$secondName}");
+                                    if (!empty(trim($fullName))) {
+                                        return $fullName;
+                                    }
+                                }
 
-            // Якщо є тільки name із таблиці users
-            if (!empty($userName)) {
-                return $userName;
-            }
-        }
+                                // Якщо є тільки name із таблиці users
+                                if (!empty($userName)) {
+                                    return $userName;
+                                }
+                            }
 
-        // 2. Резервний варіант: якщо є дані з Дії в signer_info
-        if (is_array($record->signer_info)) {
-            $info = $record->signer_info;
-            $lastName   = $info['last_name'] ?? $info['lastName'] ?? '';
-            $firstName  = $info['first_name'] ?? $info['firstName'] ?? $info['name'] ?? '';
-            $secondName = $info['middle_name'] ?? $info['second_name'] ?? $info['middleName'] ?? '';
+                            // 2. Резервний варіант: якщо є дані з Дії в signer_info
+                            if (is_array($record->signer_info)) {
+                                $info = $record->signer_info;
+                                $lastName   = $info['last_name'] ?? $info['lastName'] ?? '';
+                                $firstName  = $info['first_name'] ?? $info['firstName'] ?? $info['name'] ?? '';
+                                $secondName = $info['middle_name'] ?? $info['second_name'] ?? $info['middleName'] ?? '';
 
-            $result = trim("{$lastName} {$firstName} {$secondName}");
+                                $result = trim("{$lastName} {$firstName} {$secondName}");
 
-            return $result ?: '—';
-        }
+                                return $result ?: '—';
+                            }
 
-        return '—';
-    }),
+                            return '—';
+                        }),
                         
 
                         // ПІБ Лікаря
@@ -154,15 +154,22 @@ Placeholder::make('patient_info')
                                     return $formatted;
                                 })
                             ->columnSpanFull(),
-                    ]),
-
-                Section::make('Порівняння фото До / Після ')
+                            Section::make('Порівняння фото До / Після ')
                     ->schema([
                         ViewField::make('before_after_comparison')
                             ->label('Фото До / Після')
-                            ->view('filament.forms.components.photo-preview')
-                            ->columnSpanFull(), // Займає всю ширину секції
+                            ->view('filament.forms.components.photo-preview'), 
                     ])
+                    ]),
+                    Section::make('Документ згоди')
+                    ->schema([
+                        ViewField::make('file_document')
+                            ->label('Фото / файл згоди')
+                            ->view('filament.forms.components.file-document-preview')
+                            ->columnSpanFull(),
+                    ]),
+
+                
             ]);
     }
 }
