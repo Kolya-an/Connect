@@ -47,19 +47,76 @@
             padding: 10px 15px;
         }
 
+        /* Таблиця для інформації про процедуру та продукт */
+        .procedure-info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .procedure-info-table td {
+            width: 50%;
+            padding: 10px 12px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+
+        .info-label {
+            font-size: 8pt;
+            color: #718096;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 11pt;
+            color: #1a202c;
+            font-weight: bold;
+        }
+
+        /* Контейнер для фото ДО / ПІСЛЯ */
         .photo-container {
             text-align: center;
             margin: 20px 0;
             page-break-inside: avoid;
         }
 
-        .photo-container img {
-            max-width: 320px;
-            max-height: 300px;
+        .photo-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .photo-cell {
+            width: 50%;
+            text-align: center;
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        .photo-wrapper {
             border: 1px solid #cbd5e0;
             border-radius: 6px;
             padding: 4px;
             background-color: #ffffff;
+            display: inline-block;
+        }
+
+        .photo-wrapper img {
+            max-width: 280px;
+            max-height: 260px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .photo-badge {
+            margin-top: 6px;
+            font-size: 8pt;
+            font-weight: bold;
+            color: #4a5568;
+            text-transform: uppercase;
         }
 
         /* Штамп цифрового підпису КЕП / Дія.Підпис */
@@ -108,6 +165,20 @@
 </head>
 <body>
 
+@php
+    $doctorPhoto = $consent?->doctorPhoto;
+
+    // Отримання назви процедури
+    $procedureName = is_object($doctorPhoto?->procedure) 
+        ? $doctorPhoto?->procedure?->name 
+        : ($doctorPhoto?->procedure ?? '—');
+
+    // Отримання назви препарату / продукту
+    $productName = is_object($doctorPhoto?->product) 
+        ? $doctorPhoto?->product?->name 
+        : ($doctorPhoto?->product ?? '—');
+@endphp
+
     <div class="header">
         <h1 class="title">ЗГОДА</h1>
         <div class="subtitle">на публікацію та використання фотоматеріалів</div>
@@ -138,13 +209,55 @@
         </p>
     </div>
 
+    <!-- Блок з Процедурою та Препаратом -->
+    <table class="procedure-info-table">
+        <tr>
+            <td>
+                <span class="info-label">Процедура:</span>
+                <span class="info-value">{{ $procedureName }}</span>
+            </td>
+            <td>
+                <span class="info-label">Препарат / Продукт:</span>
+                <span class="info-value">{{ $productName }}</span>
+            </td>
+        </tr>
+    </table>
+
     <!-- Фотографічний матеріал -->
-    @if(!empty($photoBase64))
-        <div class="photo-container">
-            <img src="data:image/jpeg;base64,{{ $photoBase64 }}" alt="Фотоматеріал згоди">
-            <div class="subtitle">Ідентифікатор фото: #{{ $consent->doctor_photo_id }}</div>
-        </div>
-    @endif
+    <div class="photo-container">
+        @if(!empty($photoBeforeBase64) || !empty($photoAfterBase64))
+            <table class="photo-table">
+                <tr>
+                    @if(!empty($photoBeforeBase64))
+                        <td class="photo-cell">
+                            <div class="photo-wrapper">
+                                <img src="data:image/jpeg;base64,{{ $photoBeforeBase64 }}" alt="Фото ДО">
+                            </div>
+                            <div class="photo-badge">Фото ДО</div>
+                        </td>
+                    @endif
+
+                    @if(!empty($photoAfterBase64))
+                        <td class="photo-cell">
+                            <div class="photo-wrapper">
+                                <img src="data:image/jpeg;base64,{{ $photoAfterBase64 }}" alt="Фото ПІСЛЯ">
+                            </div>
+                            <div class="photo-badge">Фото ПІСЛЯ</div>
+                        </td>
+                    @endif
+                </tr>
+            </table>
+        @elseif(!empty($photoBase64))
+            <!-- Фоллбек для єдиного зображення -->
+            <div class="photo-wrapper">
+                <img src="data:image/jpeg;base64,{{ $photoBase64 }}" alt="Фотоматеріал згоди">
+            </div>
+        @endif
+
+        @if(!empty($consent->doctor_photo_id))
+            <div class="subtitle" style="margin-top: 8px;">Ідентифікатор фото: #{{ $consent->doctor_photo_id }}</div>
+        @endif
+    </div>
 
     <!-- Штамп електронного цифрового підпису -->
     <div class="stamp-box">

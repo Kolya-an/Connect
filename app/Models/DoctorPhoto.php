@@ -48,4 +48,5 @@ class DoctorPhoto extends Model
     {
         return $this->belongsTo(Pacient::class, 'patient_id');
     }
+    
 }

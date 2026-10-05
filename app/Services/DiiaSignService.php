@@ -98,18 +98,18 @@ class DiiaSignService
         $url = "{$this->baseUrl}/api/v2/acquirers/branch";
 
         $payload = array_merge([
-            'name'              => 'Connect Clinic',
-            'email'             => 'info@connect-cosmetology.com',
-            'region'            => 'Київська обл.',
-            'district'          => 'м. Київ',
-            'location'          => 'м. Київ',
-            'street'            => 'вул. Хрещатик',
-            'house'             => '1',
-            'customFullName'    => 'ТОВ "Коннект Косметологія"',
-            'customFullAddress' => 'м. Київ, вул. Хрещатик, 1',
-            'deliveryTypes'     => ['api'],
-            'offerRequestType'  => 'dynamic',
-            'scopes'            => [
+            'name'            => 'Connect Cosmetology',
+            'email'           => 'connectcosmetologist@gmail.com',
+            'region'          => 'м. Київ',
+            'district'        => 'м. Київ',
+            'location'        => 'м. Київ',
+            'street'          => 'вул. Народного Ополчення',
+            'house'           => '19',
+            'customFullName'  => 'Товариство з обмеженою відповідальністю "Інститут Гіалуаль"',
+            'customFullAddress' => 'вул. Народного Ополчення, буд. 19, м. Київ, 03151',
+            'deliveryTypes'   => ['api'],
+            'offerRequestType'=> 'dynamic',
+            'scopes'          => [
                 'diiaId' => ['hashedFilesSigning']
             ]
         ], $data);

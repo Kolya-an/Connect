@@ -53,12 +53,11 @@ return [
     ],
 
     'diia' => [
-        'env'                 => env('DIIA_ENV', 'sandbox'),
-        'base_url'            => env('DIIA_BASE_URL', 'https://api2s.diia.gov.ua'),
+        'env'                 => env('DIIA_ENV', 'production'),
+        'base_url'            => env('DIIA_BASE_URL', 'https://api2.diia.gov.ua'),
         'acquirer_token'      => env('DIIA_ACQUIRER_TOKEN'),
         'auth_acquirer_token' => env('DIIA_AUTH_ACQUIRER_TOKEN'),
         'redirect_uri'        => env('DIIA_REDIRECT_URI'),
-        //'webhook_url' => env('DIIA_WEBHOOK_URL', 'https://connect-cosmetology.com/api/diia/webhook'),
         'branch_id' => env('DIIA_BRANCH_ID'),
         'offer_id' => env('DIIA_OFFER_ID'),
         'webhook_url' => env('DIIA_WEBHOOK_URL', rtrim(env('APP_URL'), '/') . '/api/diia/webhook'),

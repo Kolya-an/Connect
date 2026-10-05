@@ -3,18 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\PhotoConsent;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class ConsentController extends Controller
 {
-    public function show(string $token)
+    public function show(string $token): View
     {
-        // Знаходимо згоду за токеном разом із пов'язаним фото
-        $consent = PhotoConsent::with('doctorPhoto')
+        $consent = PhotoConsent::with(['doctorPhoto', 'doctor', 'doctorPhoto.doctor'])
             ->where('token', $token)
             ->firstOrFail();
 
-        // Повертаємо Blade-шаблон або Livewire-компонент сторінки підпису
+        // Відображаємо спеціальне подання, якщо згоду вже підписано
+        if ($consent->status === 'signed') {
+            return view('consent.already-signed', compact('consent'));
+        }
+
         return view('consent.show', compact('consent'));
     }
 }

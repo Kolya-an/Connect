@@ -113,7 +113,7 @@ wire:ignore.self
                                 style="margin-top: 12px;height:60px;">
 
                                 <span x-show="!loading">
-                                    Сформувати посилання для підпису
+                                    Підписати за допомогою Дія.Підпису
                                 </span>
 
                                 <span x-show="loading" x-cloak>
