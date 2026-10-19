@@ -18,11 +18,20 @@
             <x-input-error :messages="$errors->get('second_name')" class="mt-2 error-message" />
         </div>
         <div class="search_field search_field_input">
-            <x-text-input wire:model="email" type="email"
-                          placeholder="{{__('Ваш e-mail')}}"
-                          required autocomplete="email" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2 error-message" />
-        </div>
+    <x-text-input
+        wire:model="email"
+        type="text"
+        inputmode="email"
+        placeholder="{{ __('Ваш e-mail') }}"
+        required
+        autocomplete="email"
+    />
+
+    <x-input-error
+        :messages="$errors->get('email')"
+        class="mt-2 error-message"
+    />
+</div>
         <div class="search_field search_field_input">
             <x-text-input wire:model="phone" type="tel"
                           placeholder="{{__('Ваш номер телефону')}}"
@@ -61,7 +70,7 @@
             <span class="checkmark"></span>
             <span class="check_title">{{__('Я прочитав(ла)')}} <a target="_blank" href="{{ asset('doc/personal.pdf') }}">{{__('Політику приватності')}}</a></span>
             @error('accept_politik')
-                <div class="text-danger small mt-1">{{ $message }}</div>
+                <div class="text-danger small mt-1" style="color: red; display: block;">{{ $message }}</div>
             @enderror
         </label>
 
@@ -70,12 +79,12 @@
             <span class="checkmark"></span>
             <span class="check_title">{{__('Я прочитав(ла) та приймаю')}} <a target="_blank" href="{{ asset('doc/' . ($type === 'doctor' ? 'umovi_doc' : 'umovi_user') . '.pdf') }}">{{__('Умови використання')}}</a></span>
             @error('accept_terms')
-                <div class="text-danger small mt-1">{{ $message }}</div>
+                <div class="text-danger small mt-1" style="color: red; display: block;">{{ $message }}</div>
             @enderror
         </label>
 
         <!-- Кнопка реєстрації блокується, якщо НЕ обрано хоча б один чекбокс -->
-        <x-primary-button class="btn rose_btn" :disabled="!$accept_politik || !$accept_terms">
+        <x-primary-button class="btn rose_btn">
             {{ __('Зареєструватись') }}
         </x-primary-button>
     </form>
@@ -99,4 +108,52 @@
        @if(!$isAgreementAccepted) tabindex="-1" aria-disabled="true" style="pointer-events: none; opacity: 0.6;" @endif>
         {{__('Вхід за допомогою Facebook')}}
     </a>
+    <script>
+document.addEventListener('input', function (event) {
+    const field = event.target;
+
+    if (!field.matches('input, textarea')) {
+        return;
+    }
+
+    const wrapper = field.closest('.search_field, .form-group, .mb-3');
+
+    if (!wrapper) {
+        return;
+    }
+
+    wrapper.querySelectorAll('.error-message, .text-danger').forEach(function (error) {
+        error.style.display = 'none';
+    });
+});
+
+document.addEventListener('change', function (event) {
+    const field = event.target;
+
+    if (!field.matches('input, select, textarea')) {
+        return;
+    }
+
+    const wrapper = field.closest('.search_field, .form-group, .mb-3, .more_filter_checkbox');
+
+    if (!wrapper) {
+        return;
+    }
+
+    wrapper.querySelectorAll('.error-message, .text-danger').forEach(function (error) {
+        error.style.display = 'none';
+    });
+});
+
+document.querySelectorAll('input[required]').forEach(input => {
+    input.addEventListener('invalid', function() {
+        if (this.validity.valueMissing) {
+            this.setCustomValidity('Заповніть це поле.');
+        }
+    });
+    input.addEventListener('input', function() {
+        this.setCustomValidity('');
+    });
+});
+</script>
 </div>

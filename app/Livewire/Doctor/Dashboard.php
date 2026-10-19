@@ -37,10 +37,10 @@ class Dashboard extends Component
         }
 
         $doctor = Doctor::updateOrCreate(
-            //['id' => $this->doctorId],
+            
             [
                 'user_id' => Auth::id(),
-                //'phone' => $this->phone,
+                
             ]
         );
 
@@ -74,7 +74,7 @@ class Dashboard extends Component
         // Автоматично відкриваємо "Історію візитів" після підтвердження
         $this->step = 5;
 
-        session()->flash('message', 'Згоду на обробку даних успішно надано!');
+        
     }
 
     public function closeAgreeModal()
@@ -83,6 +83,13 @@ class Dashboard extends Component
     }
     public function saveAgree()
     {
+        // Валідація: чекбокс обов'язково повинен бути відзначений
+        $this->validate([
+            'doc_agree' => ['accepted'], // або ['required', 'accepted']
+        ], [
+            'doc_agree.accepted' => __('Ви повинні погодитися з умовами, щоб продовжити.'),
+        ]);
+
         $user = Auth::user();
 
         if ($user->doctor) {
@@ -92,10 +99,6 @@ class Dashboard extends Component
         } 
 
         $this->modalAgree = true;
-
-      
-
-        session()->flash('message', 'Згоду на обробку даних успішно надано!');
     }
 
     public function closeAgree()
@@ -110,7 +113,7 @@ class Dashboard extends Component
             return view('livewire.doctor.dashboard')
                 ->layout('doctor.index');
         } catch (\Exception $e) {
-            \Log::error('Livewire Doctor Dashboard Error: ' . $e->getMessage());
+           
             return view('home.index');
         }
 

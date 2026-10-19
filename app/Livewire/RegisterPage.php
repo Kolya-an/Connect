@@ -29,23 +29,33 @@ class RegisterPage extends Component
     public $experience;
 
     protected function rules()
-    {
-        $rules = [
-            'name' => 'required|min:3',
-            'second_name' => 'required|min:3',
-            'phone' => 'required|regex:/^\+?[0-9]{10,15}$/',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-        ];
+{
+    return [
+        'name' => ['required', 'string', 'min:3', 'max:255'],
+        'second_name' => ['required', 'string', 'min:3', 'max:255'],
 
+        'phone' => [
+            'required',
+            'regex:/^\+380\d{9}$/',
+        ],
 
+        'email' => [
+            'required',
+            'email',
+            'max:255',
+            'unique:users,email',
+        ],
 
-        /*if ($this->type === 'doctor') {
-            $rules['specialization'] = 'required|min:2';
-        }*/
+        'password' => [
+            'required',
+            'min:6',
+            'confirmed',
+        ],
 
-        return $rules;
-    }
+        'accept_politik' => 'accepted', 
+        'accept_terms' => 'accepted',
+    ];
+}
 
     public function setType($type)
     {
@@ -56,7 +66,21 @@ class RegisterPage extends Component
 
     public function register()
     {
-        $this->validate();
+
+    $this->phone = preg_replace('/[\s\-\(\)]/', '', $this->phone);
+
+    if (str_starts_with($this->phone, '0')) {
+        $this->phone = '+38' . $this->phone;
+    }
+        $this->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'second_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'phone' => ['required', 'string'],
+            'password' => ['required', 'min:6', 'confirmed'],
+            'accept_politik' => ['accepted'],
+            'accept_terms' => ['accepted'],
+        ]);
 
         $role = $this->type === 'doctor' ? 'doctor' : 'patient';
         $user = User::create([
@@ -87,7 +111,7 @@ class RegisterPage extends Component
         }
 
         Auth::login($user);
-//dd($role);
+
 
         //return redirect()->route('home');
         return $this->redirectByRole(request(), $user);
@@ -109,6 +133,33 @@ class RegisterPage extends Component
                 return redirect()->route('home');
         }
     }
+
+    protected function messages()
+{
+    return [
+        'name.required' => 'Введіть ім’я.',
+        'name.min' => 'Ім’я повинно містити щонайменше 3 символи.',
+
+        'second_name.required' => 'Введіть прізвище.',
+        'second_name.min' => 'Прізвище повинно містити щонайменше 3 символи.',
+
+        'phone.required' => 'Введіть номер телефону.',
+        'phone.regex' => 'Введіть номер у форматі +380XXXXXXXXX.',
+
+        'email.required' => 'Введіть e-mail.',
+        'email.email' => 'Введіть коректну адресу e-mail.',
+        'email.max' => 'E-mail занадто довгий.',
+        'email.unique' => 'Користувач з таким e-mail вже зареєстрований.',
+
+        'password.required' => 'Введіть пароль.',
+        'password.min' => 'Пароль повинен містити щонайменше 6 символів.',
+        'password.confirmed' => 'Паролі не співпадають.',
+        
+        'accept_politik.accepted' => 'Ви повинні прочитати та прийняти Політику приватності.',
+        'accept_terms.accepted' => 'Ви повинні прийняти Умови використання.',
+    ];
+}
+
     public function render()
     {
         return view('livewire.register-page');

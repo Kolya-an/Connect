@@ -21,7 +21,7 @@ class ForgotPassword extends Component
         $status = Password::sendResetLink(['email' => $this->email]);
 
         if ($status == Password::RESET_LINK_SENT) {
-            session()->flash('status', __($status));
+            session()->flash('status', __('Ми надіслали посилання для скидання пароля на ваш e-mail.'));
             $this->reset('email');
         } else {
             throw ValidationException::withMessages([

@@ -1,4 +1,9 @@
 <main>
+    @if ($errors->any())
+    @foreach ($errors->all() as $error)
+        <div class="text-danger" style="color: red;text-align:center;">{{ $error }}</div>
+    @endforeach
+@endif
     @if($settings)
     <div id="home_search">
         <div class="container">

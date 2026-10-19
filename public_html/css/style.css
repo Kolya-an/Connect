@@ -412,7 +412,7 @@ footer {
     border: 1px solid #F396A2;
 }
 .cab_btn img {
-    border-radius: 50%;
+    border-radius: 140px;
     border: 1px solid #F396A2;
     max-width: 47px;
     max-height: 47px;
@@ -1088,6 +1088,10 @@ p.platform-action-title a {
 }
 .more_filter_checkboxes {
     gap: 12px;
+     cursor: pointer;
+}
+.more_filter_checkboxes input, .more_filter_checkboxes label {
+    cursor: pointer;
 }
 .more_filter_buttons {
     margin-top: 12px;
@@ -1856,6 +1860,7 @@ a.about_photo span.about_photo_title {
 }
 .spec_info .doctor_photo {
     margin: 20px auto 0;
+        text-align: center;
 }
 .spec_info .doctor_left_bottom, .spec_info .doctor_left_address {
     width: 100%;
@@ -2127,9 +2132,6 @@ a.about_photo span.about_photo_title {
     background: rgba(255, 255, 255, 1);
     width: 670px;
 }
-.window h4 {
-    /*width: calc(100% - 53px);*/
-}
 #window_close {
     cursor: pointer;
 }
@@ -2154,7 +2156,7 @@ a.about_photo span.about_photo_title {
     position: relative;
 }
 .window .search_field .text-red-600 {
-    top: 25px;
+    top: 42px;
     position: absolute;
 }
 .window .search_field input {
@@ -2339,6 +2341,7 @@ input[type="radio"]:checked + span {
     border-radius: 12px;
     padding: 0;
     height: 26px;
+    margin: 0;
 }
 .spec-register .window .search_field_input input {
     padding-left: 35px;
@@ -2703,6 +2706,12 @@ p.client_address span {
     padding: 5px;
     border: 1px solid red;
 }
+ul.error-message li {
+    line-height: 1;
+}
+ul.error-message li:last-child {
+    margin-bottom: 0;
+}
 .page_banner_block b {
     color: #F396A2;
 }
@@ -2760,7 +2769,7 @@ p.client_address span {
 
 .autocomplete-suggestions {
     position: absolute;
-    /*top: 100%;*/
+    top: 45px;
     left: 0;
     right: 0;
     background: white;

@@ -75,6 +75,12 @@ class UserView extends Component
 
     public function saveAgree()
     {
+        $this->validate([
+            'doc_agree' => ['accepted'], // або ['required', 'accepted']
+        ], [
+            'doc_agree.accepted' => __('Ви повинні погодитися з умовами, щоб продовжити.'),
+        ]);
+        
         $user = Auth::user();
 
         if ($user->patient) {

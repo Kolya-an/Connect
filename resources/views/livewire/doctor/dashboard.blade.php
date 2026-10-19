@@ -116,23 +116,31 @@
                  
                 
                  <div class="_flex-display _justify-content-center _align-center">
-                     <div class="_flex-display _align-center spec_register_buttons">
-                        <label class="_flex-display _align-top more_filter_checkbox" style="flex-wrap: nowrap;">
-                   
-                            <input id="doc_agree" type="checkbox" wire:model.live="doc_agree">
-                            <span class="checkmark"></span>
-                            <span class="check_title" style="width: calc(100% - 30px);">{{ __('отримувати повідомлення про нові сервіси, персональні знижки, добірки фахівців та новини платформи (через email, SMS, push).') }}</span>
-                        </label>
-                         <button 
-                             type="button" 
-                             wire:click="saveAgree" 
-                             class="rose_btn register_prev" 
-                             @disabled(!$doc_agree)
-                         >
-                             {{__('Підтвердити та відправити')}}
-                         </button>
-                     </div>
-                 </div>
+    <div class="_flex-display _align-center spec_register_buttons">
+        <label class="_flex-display _align-top more_filter_checkbox" style="flex-wrap: nowrap;">
+            <input id="doc_agree" type="checkbox" wire:model.live="doc_agree">
+            <span class="checkmark"></span>
+            <span class="check_title" style="width: calc(100% - 30px);">
+                {{ __('отримувати повідомлення про нові сервіси, персональні знижки, добірки фахівців та новини платформи (через email, SMS, push).') }}
+            </span>
+        </label>
+
+        <!-- Повідомлення про помилку валідації -->
+        @error('doc_agree')
+            <span class="text-red-500 text-sm mt-1" style="color: red; width: 100%; display: block;">
+                {{ $message }}
+            </span>
+        @enderror
+
+        <button 
+            type="button" 
+            wire:click="saveAgree" 
+            class="rose_btn register_prev" 
+        >
+            {{__('Підтвердити та відправити')}}
+        </button>
+    </div>
+</div>
             </div>
         </div>
     @endif

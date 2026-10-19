@@ -43,19 +43,23 @@ class Areas extends Component
         $this->area = $areaName;
         $this->search = '';
         $this->showAreaModal = false;
+        $this->saveToDatabase($areaName);
     }
 
-    // Сохраняем то, что в поле
+    // Зберігаємо вибране або введене значення
     public function save()
     {
-        $user = Auth::user();
-
-        // Если поле не пустое, сохраняем его; иначе выбранную область
         $areaToSave = $this->search ?: $this->area;
 
-        if (!$areaToSave) return;
+        if (!empty($areaToSave)) {
+            $this->saveToDatabase($areaToSave);
+        }
+    }
 
-        $data = ['area' => $areaToSave];
+    private function saveToDatabase($value)
+    {
+        $user = Auth::user();
+        $data = ['area' => $value];
 
         if ($user->doctor) {
             $user->doctor->update($data);
@@ -63,26 +67,47 @@ class Areas extends Component
             $user->doctor()->create($data);
         }
 
-        $this->area = $areaToSave; // сохраняем выбранное значение
-        $this->search = ''; // очищаем поле поиска
+        $this->area = $value;
+        $this->search = '';
         $this->showAreaModal = false;
 
         session()->flash('message', 'Інформацію оновлено!');
     }
+
     public function setAreaStep($areaStepNumber)
     {
         $this->areaStep = $areaStepNumber;
     }
 
+    public function resetArea()
+    {
+        $this->area = '';
+        $this->search = '';
+        $this->saveToDatabase('');
+    }
+
     public function render()
     {
+        // Нормалізуємо пошуковий запит (нижній регістр + прибираємо пробіли)
+        $search = mb_strtolower(trim($this->search));
+
         $filteredAreas = collect($this->allAreas)
-            ->filter(fn($area) => stripos($area, $this->search) !== false)
+            ->filter(function ($item) use ($search) {
+                if (empty($search)) {
+                    return true; // Показуємо всі, якщо пошук пустий
+                }
+                return mb_strpos(mb_strtolower($item), $search) !== false;
+            })
             ->values()
             ->take(5);
 
         $filteredMetros = collect($this->allMetros)
-            ->filter(fn($metro) => stripos($metro, $this->search) !== false)
+            ->filter(function ($item) use ($search) {
+                if (empty($search)) {
+                    return true; // Показуємо всі, якщо пошук пустий
+                }
+                return mb_strpos(mb_strtolower($item), $search) !== false;
+            })
             ->values()
             ->take(5);
 

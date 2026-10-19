@@ -70,10 +70,17 @@
         @if(!empty($photos))
             <div class="_flex-display _justify-content-between spec_about_docs_list">
                 @foreach($photos as $photo)
-                    <a target="_blank"
-                       wire:contextmenu.prevent="removeCertificateImage('{{ $photo }}')"
-                       title="Правий клік — видалити"
-                    ><img src="{{ asset('uploads/' . $photo) }}" alt=""></a>
+                    <a target="_blank" class="photo_item_img" style="border-radius: 0;"
+                       wire:contextmenu.prevent="removeImage('{{ $photo }}')"
+                       title="Видалити"
+                    >
+                        <img src="{{ asset('uploads/' . $photo) }}" alt="">
+                        <div wire:click="removeCertificateImage('{{ $photo }}')" class="_flex-display _justify-content-center _align-center delete_image _display_none" style="border-radius: 0;">
+                            <svg width="23" height="29" viewBox="0 0 23 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.58333 25.3333C1.58333 26.1732 1.91696 26.9786 2.51083 27.5725C3.10469 28.1664 3.91015 28.5 4.75 28.5H17.4167C18.2565 28.5 19.062 28.1664 19.6558 27.5725C20.2497 26.9786 20.5833 26.1732 20.5833 25.3333V6.33333H1.58333V25.3333ZM4.75 9.5H17.4167V25.3333H4.75V9.5ZM16.625 1.58333L15.0417 0H7.125L5.54167 1.58333H0V4.75H22.1667V1.58333H16.625Z" fill="white"/>
+                            </svg>
+                        </div>
+                    </a>
                 @endforeach
             </div>
         @endif

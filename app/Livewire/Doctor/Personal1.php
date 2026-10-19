@@ -126,16 +126,23 @@ class Personal1 extends Component
     }
 
     public function render()
-    {
-        $filteredCities = collect($this->allCities)
-            ->filter(function ($city) {
-                return stripos($city, $this->search) !== false;
-            })
-            ->values()
-            ->take(10);
+{
+    $search = mb_strtolower(trim($this->search));
 
-        return view('livewire.doctor.personal1', [
-            'filteredCities' => $filteredCities,
-        ]);
-    }
+    $filteredCities = collect($this->allCities)
+        ->filter(function ($city) use ($search) {
+            
+            if (empty($search)) {
+                return false; 
+            }
+           
+            return mb_strpos(mb_strtolower($city), $search) !== false;
+        })
+        ->values()
+        ->take(10);
+
+    return view('livewire.doctor.personal1', [
+        'filteredCities' => $filteredCities,
+    ]);
+}
 }

@@ -126,11 +126,16 @@
                             <span class="checkmark"></span>
                             <span class="check_title" style="width: calc(100% - 30px);">{{ __('на передачу моїх даних про місцезнаходження зареєстрованим косметологам для надсилання мені персоналізованих пропозицій у радіусі 50 км їхнього розташування') }}</span>
                         </label>
+                        @error('doc_agree')
+                            <span class="text-red-500 text-sm mt-1" style="color: red; width: 100%; display: block;">
+                                {{ $message }}
+                            </span>
+                        @enderror
                          <button 
                              type="button" 
                              wire:click="saveAgree" 
                              class="rose_btn register_prev" 
-                             @disabled(!$doc_agree)
+                             
                          >
                              {{__('Підтвердити та відправити')}}
                          </button>

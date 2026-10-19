@@ -46,20 +46,22 @@ new #[Layout('layouts.guest')] class extends Component
         @csrf
         <input type="hidden" name="return_to_booking" value="1">
         <!-- Email Address -->
-        <div class="search_field search_field_input">
+        <div class="search_field search_field_input" style="margin-bottom: 20px;" x-data="{ hasError: true }">
             <x-text-input wire:model="form.email" id="email" type="email" name="email"
                           placeholder="{{__('Ваш e-mail')}}"
+                          x-on:input="hasError = false"
                           required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
+            <x-input-error :messages="$errors->get('form.email')" class="error-message"/>
         </div>
 
         <!-- Password -->
-        <div class="search_field search_field_input">
+        <div class="search_field search_field_input" x-data="{ hasError: true }">
 
             <x-text-input wire:model="form.password" id="password"
                             type="password"
                             name="password"
                             placeholder="{{__('Пароль')}}"
+                            x-on:input="hasError = false"
                             required autocomplete="current-password" />
 
             <x-input-error :messages="$errors->get('form.password')" class="error-message" />

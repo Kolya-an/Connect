@@ -124,9 +124,9 @@ class SocialiteController extends Controller
         // 2. Якщо користувача знайдено
         if ($user) {
             // ❌ Забороняємо вхід, якщо акаунт неактивний (активовано видалення/active === 2)
-            if ((int) $user->active !== 1) {
-                throw new \Exception(__('Ваш акаунт деактивовано або видалено.'));
-            }
+           // if ((int) $user->active !== 1) {
+           //     throw new \Exception(__('Ваш акаунт деактивовано або видалено.'));
+          //  }
 
             if (!$user->{$providerIdField}) {
                 $user->update([

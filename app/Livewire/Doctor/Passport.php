@@ -12,7 +12,7 @@ class Passport extends Component
 {
     use WithFileUploads;
 
-    public $passportFile;    // Тимчасовий файл паспорта (окремо від основного $photo)
+    public $passportFile;    // Тимчасовий файл паспорта
     public $passportPhoto;   // Шлях до збереженого фото з бази даних
 
     public function mount()
@@ -20,7 +20,6 @@ class Passport extends Component
         $this->passportPhoto = Auth::user()->doctor?->passport ?? null;
     }
 
-    // Хук, який спрацьовує при виборі файлу в $passportFile
     public function updatedPassportFile()
     {
         $this->validate([
@@ -46,13 +45,38 @@ class Passport extends Component
         $filename = Str::uuid() . '.' . $this->passportFile->getClientOriginalExtension();
         $path = $this->passportFile->storeAs('', $filename, 'public_uploads');
 
-        // Оновлюємо саме колонку 'passport' у таблиці doctors
+        // Оновлюємо колонку 'passport'
         $doctor->update(['passport' => $path]);
 
         $this->passportPhoto = $path;
         $this->passportFile = null;
 
         session()->flash('message', 'Селфі з документом успішно оновлено!');
+    }
+
+    // Новий метод для видалення фото
+    public function deletePassport()
+    {
+        $user = Auth::user();
+        $doctor = $user->doctor;
+
+        if (!$doctor || !$doctor->passport) {
+            return;
+        }
+
+        // Видаляємо файл з диска
+        if (Storage::disk('public_uploads')->exists($doctor->passport)) {
+            Storage::disk('public_uploads')->delete($doctor->passport);
+        }
+
+        // Очищаємо поле у базі даних
+        $doctor->update(['passport' => null]);
+
+        // Скидаємо стан у компоненті
+        $this->passportPhoto = null;
+        $this->passportFile = null;
+
+        session()->flash('message', 'Фото успішно видалено!');
     }
 
     public function render()

@@ -48,7 +48,7 @@ class Dashboard extends Component
             return view('livewire.patient.dashboard')
                 ->layout('patient.index');
         } catch (\Exception $e) {
-            \Log::error('Livewire Doctor Dashboard Error: ' . $e->getMessage());
+            
             return view('home.index');
         }
     }

@@ -3,7 +3,7 @@
     <div class="_flex-display _align-center spec_register1_addresses">
         <div class="_flex-display _align-center spec_register1_line spec_register1_address">
             <span>{{ $address ?: 'Адреса' }}</span>
-            <button wire:click="resetAddress">
+            <button wire:click="clearAddress">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.000000" height="24.000000" fill="none" clip-path="url(#clipPath_0)" customFrame="url(#clipPath_0)">
                     <defs>
                         <clipPath id="clipPath_0">
@@ -30,112 +30,55 @@
         </svg> {{__('Додати адресу')}}
     </button>
     @if ($showAddressModal)
-    <div wire:key="address-modal" id="add_address" class="_flex-display _justify-content-center _align-center screen">
-        <div class="window add_info_window">
-            <div class="_flex-display _justify-content-between _align-center window_top">
-                <h4>{{__('Адреса')}}</h4>
-                <button wire:click="$set('showAddressModal', false)" id="window_close" class="window_close">
-                    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" clip-path="url(#clipPath_6)" customFrame="url(#clipPath_6)">
-                        <defs>
-                            <clipPath id="clipPath_6">
-                                <rect width="48.000000" height="48.000000" x="0.000000" y="0.000000" rx="24.000000" fill="rgb(255,255,255)" />
-                            </clipPath>
-                            <clipPath id="clipPath_7">
-                                <rect width="28.000000" height="28.000000" x="10.000000" y="10.000000" fill="rgb(255,255,255)" />
-                            </clipPath>
-                        </defs>
-                        <rect id="Frame 1153" width="48.000000" height="48.000000" x="0.000000" y="0.000000" rx="24.000000" fill="rgb(255,225,228)" />
-                        <g id="material-symbols:close-rounded" clip-path="url(#clipPath_7)" customFrame="url(#clipPath_7)">
-                            <rect id="material-symbols:close-rounded" width="28.000000" height="28.000000" x="10.000000" y="10.000000" fill="rgb(255,255,255)" fill-opacity="0" />
-                            <path id="Vector" d="M24.0009 25.6333L18.2842 31.3499C18.0704 31.5638 17.7981 31.6708 17.4676 31.6708C17.137 31.6708 16.8648 31.5638 16.6509 31.3499C16.437 31.136 16.3301 30.8638 16.3301 30.5333C16.3301 30.2027 16.437 29.9305 16.6509 29.7166L22.3676 23.9999L16.6509 18.2833C16.437 18.0694 16.3301 17.7972 16.3301 17.4666C16.3301 17.136 16.437 16.8638 16.6509 16.6499C16.8648 16.436 17.137 16.3291 17.4676 16.3291C17.7981 16.3291 18.0704 16.436 18.2842 16.6499L24.0009 22.3666L29.7176 16.6499C29.9315 16.436 30.2037 16.3291 30.5342 16.3291C30.8648 16.3291 31.137 16.436 31.3509 16.6499C31.5648 16.8638 31.6717 17.136 31.6717 17.4666C31.6717 17.7972 31.5648 18.0694 31.3509 18.2833L25.6342 23.9999L31.3509 29.7166C31.5648 29.9305 31.6717 30.2027 31.6717 30.5333C31.6717 30.8638 31.5648 31.136 31.3509 31.3499C31.137 31.5638 30.8648 31.6708 30.5342 31.6708C30.2037 31.6708 29.9315 31.5638 29.7176 31.3499L24.0009 25.6333Z" fill="rgb(0,0,0)" fill-rule="nonzero" />
-                        </g>
-                    </svg>
-                </button>
-            </div>
-
-            <div class="search_field search_field_input">
-                <input
-                    id="add_address_input"
-                    class="add_address w-full p-3 border border-gray-300 rounded"
-                    type="text"
-                    placeholder="{{__('Введіть назву вулиці...')}}"
-                    wire:model.live="search"
-                    wire:keydown.enter="saveCustomAddress"
-                    wire:keydown.escape="$set('showAddressModal', false)"
-                    autofocus
-                />
-                @if($isLoading)
-                    <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
-                    </div>
-                @endif
-            </div>
-            <div x-data
-                 x-on:search-debounced.window="setTimeout(() => { @this.performSearch() }, 300)">
-            </div>
-            <div class="max-h-64 overflow-y-auto">
-                @if($isLoading)
-                    <div class="text-center py-4">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-                        <div class="text-gray-500 mt-2">{{__('Пошук вулиць...')}}</div>
-                    </div>
-                @elseif(count($suggestions) > 0)
-                    <div class="border border-gray-300 rounded-md">
-                        <div class="bg-gray-50 px-4 py-2 text-sm text-gray-600 border-b">
-                            {{__('Знайдено')}} {{ count($suggestions) }} {{__('вулиць')}}
-                        </div>
-                        <ul class="divide-y divide-gray-200">
-                            @foreach($suggestions as $index => $suggestion)
-                                <li wire:click="selectAddress({{ $index }})"
-                                    class="px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors duration-150">
-                                    <div class="font-medium text-gray-800">
-                                        {{ $suggestion['display_name'] }}
-                                    </div>
-                                    @if(isset($suggestion['street_name']))
-                                        <div class="text-xs text-gray-500 mt-1">
-                                            {{ $suggestion['street_name'] }}
-                                        </div>
-                                    @endif
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                {{--@elseif($search && strlen($search) >= 2 && !$isLoading)
-                    <div class="text-center py-6 text-gray-500">
-                        <div class="mb-2">Вулиць за запитом "{{ $search }}" не знайдено</div>
-                        <button wire:click="saveAddress"
-                                class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition-colors">
-                            Використати цю назву
-                        </button>
-                    </div>
-                @elseif(!$search)
-                    <div class="text-center py-8 text-gray-400">
-                        ✏️ Введіть назву вулиці для пошуку
-                    </div>--}}
-                @endif
-                @if($search && strlen($search) >= 2 && !$isLoading)
-                <div class="text-center py-6 text-gray-500">
-                    <div class="mb-2">{{__('Вулиць за запитом')}} "{{ $search }}" {{__('не знайдено')}}</div>
-                    <button wire:click="saveAddress"
-                            class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition-colors">
-                        {{__('Використати цю назву')}}
-                    </button>
-                </div>
-                @elseif(!$search)
-                    <div class="text-center py-8 text-gray-400">
-                        ✏️ {{__('Введіть назву вулиці для пошуку')}}
-                    </div>
-                @endif
-            </div>
-
-
-
-            @if (session()->has('message'))
-                <div class="mt-3 p-3 bg-green-100 text-green-700 rounded text-sm">
-                    {{ session('message') }}
-                </div>
-            @endif
+   <div wire:key="address-modal" id="add_address" class="_flex-display _justify-content-center _align-center screen">
+    <div class="window add_info_window">
+        <div class="_flex-display _justify-content-between _align-center window_top">
+            <h4>{{__('Адреса')}}</h4>
+            <button wire:click="$set('showAddressModal', false)" id="window_close" class="window_close">
+                <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" clip-path="url(#clipPath_6)" customFrame="url(#clipPath_6)">
+                    <defs>
+                        <clipPath id="clipPath_6">
+                            <rect width="48.000000" height="48.000000" x="0.000000" y="0.000000" rx="24.000000" fill="rgb(255,255,255)" />
+                        </clipPath>
+                        <clipPath id="clipPath_7">
+                            <rect width="28.000000" height="28.000000" x="10.000000" y="10.000000" fill="rgb(255,255,255)" />
+                        </clipPath>
+                    </defs>
+                    <rect id="Frame 1153" width="48.000000" height="48.000000" x="0.000000" y="0.000000" rx="24.000000" fill="rgb(255,225,228)" />
+                    <g id="material-symbols:close-rounded" clip-path="url(#clipPath_7)" customFrame="url(#clipPath_7)">
+                        <rect id="material-symbols:close-rounded" width="28.000000" height="28.000000" x="10.000000" y="10.000000" fill="rgb(255,255,255)" fill-opacity="0" />
+                        <path id="Vector" d="M24.0009 25.6333L18.2842 31.3499C18.0704 31.5638 17.7981 31.6708 17.4676 31.6708C17.137 31.6708 16.8648 31.5638 16.6509 31.3499C16.437 31.136 16.3301 30.8638 16.3301 30.5333C16.3301 30.2027 16.437 29.9305 16.6509 29.7166L22.3676 23.9999L16.6509 18.2833C16.437 18.0694 16.3301 17.7972 16.3301 17.4666C16.3301 17.136 16.437 16.8638 16.6509 16.6499C16.8648 16.436 17.137 16.3291 17.4676 16.3291C17.7981 16.3291 18.0704 16.436 18.2842 16.6499L24.0009 22.3666L29.7176 16.6499C29.9315 16.436 30.2037 16.3291 30.5342 16.3291C30.8648 16.3291 31.137 16.436 31.3509 16.6499C31.5648 16.8638 31.6717 17.136 31.6717 17.4666C31.6717 17.7972 31.5648 18.0694 31.3509 18.2833L25.6342 23.9999L31.3509 29.7166C31.5648 29.9305 31.6717 30.2027 31.6717 30.5333C31.6717 30.8638 31.5648 31.136 31.3509 31.3499C31.137 31.5638 30.8648 31.6708 30.5342 31.6708C30.2037 31.6708 29.9315 31.5638 29.7176 31.3499L24.0009 25.6333Z" fill="rgb(0,0,0)" fill-rule="nonzero" />
+                    </g>
+                </svg>
+            </button>
         </div>
+
+        <div class="search_field search_field_input" style="margin-bottom: 20px;">
+            <input
+                id="add_address_input"
+                class="add_address w-full p-3 border border-gray-300 rounded"
+                type="text"
+                placeholder="{{__('Введіть вулицю та номер будинку...')}}"
+                wire:model="search"
+                wire:keydown.enter="saveAddress"
+                wire:keydown.escape="$set('showAddressModal', false)"
+                style="background: none; padding-left:8px"
+                autofocus
+            />
+        </div>
+
+        <div class="text-center">
+            <button wire:click="saveAddress" class="btn rose_btn">
+                {{__('Зберегти адресу')}}
+            </button>
+        </div>
+
+        @if (session()->has('message'))
+            <div class="mt-3 p-3 bg-green-100 text-green-700 rounded text-sm">
+                {{ session('message') }}
+            </div>
+        @endif
     </div>
+</div>
 @endif
 </div>

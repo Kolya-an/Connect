@@ -10,10 +10,10 @@
                    style="border:0 none"
                   placeholder="{{ __('Ваш e-mail') }}"
                   required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2"  style="margin-top: 10px;color: red;" />
         </div>
 
-        <x-primary-button class="btn rose_btn">
+        <x-primary-button class="btn rose_btn" style="margin-top: 30px">
             {{ __('Відправити посилання для заміни паролю') }}
         </x-primary-button>
     </form>
