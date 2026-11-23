@@ -9,7 +9,7 @@
                     id="spec_field"
                     class="spec_field"
                     type="text"
-                    placeholder="{{__('Кислотний пілінг')}}"
+                    placeholder="{{__('Назва послуги')}}"
                     wire:model="query"
                     wire:keydown="performSearch"
                     autocomplete="off"

@@ -32,7 +32,7 @@
                 <ul>
                     <li><a href="{{route('map')}}">{{__('Мапа косметологів')}}</a></li>
                     <li><a href="{{route('about')}}">{{__('Про сервіс')}}</a></li>
-                    <li><a href="{{route('photobank')}}">{{__('Банк кейсів')}}</a></li>
+                    <li><a href="{{route('photobank')}}">{{__('Банк клінічних кейсів')}}</a></li>
                     <li><a href="{{route('news')}}">{{__('Новини')}}</a></li>
                     <li><a target="_blank" href="/cookies">{{__('Політика Cookies')}}</a></li>
                 </ul>

@@ -44,14 +44,24 @@ class Type extends Component
         $this->updateDoctorServices();
     }
 
-    protected function updateDoctorServices()
+    /*protected function updateDoctorServices()
     {
         if ($this->user && $this->user->doctor) {
             $this->user->doctor->update([
                 'services' => $this->types,
             ]);
         }
-    }
+    }*/
+        protected function updateDoctorServices()
+        {
+            if ($this->user) {
+                // Оновлюємо або створюємо запис Doctor для поточного користувача
+                \App\Models\Doctor::updateOrCreate(
+                    ['user_id' => $this->user->id],
+                    ['types' => $this->types]
+                );
+            }
+        }
     public function render()
     {
         return view('livewire.doctor.type');

@@ -24,10 +24,16 @@ class Licensy extends Component
     public function updatedLicensyFile()
     {
         $this->validate([
-            'licensyFile' => 'image|max:4096', // максимум 4 МБ
-        ]);
+                'licensyFile' => 'file|mimes:jpg,jpeg,png,webp,pdf|max:4096',
+            ],
+            [
+                'licensyFile.file'  => __('Некоректний файл.'),
+                'licensyFile.mimes' => __('Дозволені формати: JPG, JPEG, PNG, WEBP, PDF.'),
+                'licensyFile.max'   => __('Максимальний розмір файлу — 4 МБ.'),
+            ]);
 
         $this->saveLicensy();
+        $this->reset('licensyFile');
     }
 
     private function saveLicensy()

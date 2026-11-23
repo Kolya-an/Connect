@@ -255,7 +255,7 @@ input:-moz-placeholder { /* Firefox 18- */
 }
 input:focus, select:focus {
     outline: none !important; /* убираем подсветку */
-    border: none !important;   /* если нужен совсем без рамки */
+    /*border: none !important;    если нужен совсем без рамки */
     box-shadow: none !important; /* в некоторых браузерах */
 }
 input#photo-input {

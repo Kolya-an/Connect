@@ -77,22 +77,21 @@
                                      style="margin:0">{{__('Історія візитів')}}</div>
                             </div>
                             @if(!$historyVisible)
-                                @if($p->doctorPatient && $p->doctorPatient->text)
-                                    @php //dd($p->doctorPatient); @endphp
-                                    <div class="doctor-patient-extra">
-                                        <p>{{ $p->doctorPatient->text }}</p>
-                                        <a wire:click="showModal({{ $p->id }})">
-                                            {{ __('Редагувати') }}
-                                        </a>
-                                    </div>
-                                @else
-                                    <div class="doctor-patient-extra">
-                                        <a wire:click="showModal({{ $p->id }})">
-                                            {{ __('Додати опис') }}
-                                        </a>
-                                    </div>
-                                @endif
-                            @else
+    @if(optional($p->doctorPatient)->text)
+        <div class="doctor-patient-extra">
+            <p>{{ $p->doctorPatient->text }}</p>
+            <a wire:click="showModal({{ $p->id }})">
+                {{ __('Редагувати') }}
+            </a>
+        </div>
+    @else
+        <div class="doctor-patient-extra">
+            <a wire:click="showModal({{ $p->id }})">
+                {{ __('Додати опис') }}
+            </a>
+        </div>
+    @endif
+@else
                                 <div class="my_patients_appointments">
                                     @if($appointmentsByPatient->has($p->id))
                                         @foreach($appointmentsByPatient[$p->id] as $appointment)
@@ -109,7 +108,7 @@
                                                     @if($appointment->status === 'confirmed')
                                                         <div class="_flex-display _justify-content-center _align-center">
                                                             <div class="_flex-display _align-center spec_register_buttons">
-                                                                <button type="submit" wire:click="showModalHistory({{ $appointment->id }})" class="rose_btn register_prev">{{__('Візіт відбувся')}}</button>
+                                                                <button type="button" wire:click="showModalHistory({{ $appointment->id }})" class="rose_btn register_prev">{{__('Візіт відбувся')}}</button>
                                                                 <button type="button" wire:click="canceledAppointment({{ $appointment->id }})" class="white_rose_btn register_prev">{{__('Пацієнт не прийшов')}}</button>
                                                             </div>
                                                         </div>
@@ -225,7 +224,6 @@
     @endif
 
     @if($modalHistory)
-    {{ $appointment->id }}
     <div class="_flex-display _justify-content-center _align-center screen">
         <div class="window add_info_window">
             <div class="_flex-display _justify-content-between _align-center window_top">

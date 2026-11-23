@@ -261,7 +261,7 @@ input:-moz-placeholder { /* Firefox 18- */
 }
 input:focus, select:focus {
     outline: none !important; /* убираем подсветку */
-    border: none !important;   /* если нужен совсем без рамки */
+    /*border: none !important;    если нужен совсем без рамки */
     box-shadow: none !important; /* в некоторых браузерах */
 }
 input#photo-input {
@@ -403,13 +403,14 @@ footer {
     margin-top: 10px;
 }
 .footer_links {
-    gap: 20px;
+    gap: 10px;
 }
 .footer_links a {
-    font-family: "GilroyExtraBold", Arial, sans-serif;
+    color: #fff;
+    font-family: "GilroyMedium", Arial, sans-serif;
 }
 .footer_links a:hover {
-    color: #fff;
+    color: #000;
 }
 .cab_btn {
     border-radius: 140px;
@@ -979,12 +980,19 @@ p.platform-action-title a {
 .sort_block select {
     font-size: 14px;
 }
-#search select, #register_window select, .add_info_window select, .sort_block select {
+#search select, #register_window select, .sort_block select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     background: url("../images/select.png") no-repeat right 16px center;
     background-size: 10px 6px;
+    border: 0 none;
+    cursor: pointer;
+}
+.add_info_window select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     border: 0 none;
     cursor: pointer;
 }
@@ -1107,6 +1115,7 @@ p.platform-action-title a {
 .more_filter_checkbox {
     position: relative;
     user-select: none;
+    cursor: pointer;
 }
 .more_filter_checkbox span {
     color: #25324B;
@@ -2455,6 +2464,8 @@ textarea.add_desc {
 .window.add_info_window {
     width: 100%;
     max-width: 460px;
+    max-height: 95vh;
+    overflow-y: auto;
 }
 .add_info_window ul {
     list-style-type: none;
@@ -2481,10 +2492,12 @@ textarea.add_desc {
 }
 .window.add_info_window .search_field.add_service_nobg  {
     padding-left: 8px;
+    background: url(../images/select.png) no-repeat right 16px center;
 }
 .add_info_window .search_field.add_service_nobg input {
     background: none;
     padding-left: 0;
+    width: 94%;
 }
 .search_field.search_field_for {
     padding: 0;
@@ -2889,9 +2902,19 @@ input.add_address {
     margin-bottom: 10px;
     box-sizing: border-box;
 }
-.text-red {
+.text-red, .error {
     color: red;
+}
+.error {
+    font-size: 13px;
+    line-height: 1;
 }
 .text-green {
     color: green;
+}
+footer .error {
+    background: #fff;
+    display: table;
+    padding: 5px;
+    border: 1px solid #ccc;
 }

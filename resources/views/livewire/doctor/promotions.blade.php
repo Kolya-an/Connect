@@ -95,12 +95,17 @@
                 </div>
                 <form wire:submit.prevent="save" id="form_action">
                     <div class="_flex-display _justify-content-between _align-center">
+                        
                         <div class="search_field search_field_input add_service_nobg" style="width: 49%">
-                            <input wire:model="date_from" type="date" style="display: block;">
+                            <input wire:model="date_from" type="date" style="display: block;; cursor: pointer;" onclick="this.showPicker()">
+                            
                         </div>
                         <div class="search_field search_field_input add_service_nobg" style="width: 49%">
-                            <input wire:model="date_to" type="date" style="display: block;">
+                            <input wire:model="date_to" type="date" style="display: block;; cursor: pointer;" onclick="this.showPicker()">
+                            
                         </div>
+                        @error('date_from') <span class="error" style="color: red; display: block; margin-top: 5px;">{{ $message }}</span> @enderror
+                        @error('date_to') <span class="error" style="color: red; display: block; margin-top: 5px;">{{ $message }}</span> @enderror
                     </div>
                     <div class="search_field search_field_input add_service_nobg" style="max-width: 100%;width: 100%">
                         <input wire:model.defer="title" id="add_action_title" style="max-width: 100%;width: 100%" type="text" placeholder="{{__('Назва послуги')}}">
@@ -123,4 +128,13 @@
             </div>
         </div>
     @endif
+    <script>
+        $document.querySelectorAll('input[type="date"]').forEach(input => {
+            input.addEventListener('click', function() {
+                if (typeof this.showPicker === 'function') {
+                    this.showPicker();
+                }
+            });
+        });
+    </script>
 </div>

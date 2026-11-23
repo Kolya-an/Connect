@@ -70,7 +70,9 @@
             <span class="checkmark"></span>
             <span class="check_title">{{__('Я прочитав(ла)')}} <a target="_blank" href="{{ asset('doc/personal.pdf') }}">{{__('Політику приватності')}}</a></span>
             @error('accept_politik')
-                <div class="text-danger small mt-1" style="color: red; display: block;">{{ $message }}</div>
+                @unless($accept_politik)
+                    <div class="text-danger small mt-1" style="color: red; display: block;">{{ $message }}</div>
+                @endunless
             @enderror
         </label>
 
@@ -79,7 +81,9 @@
             <span class="checkmark"></span>
             <span class="check_title">{{__('Я прочитав(ла) та приймаю')}} <a target="_blank" href="{{ asset('doc/' . ($type === 'doctor' ? 'umovi_doc' : 'umovi_user') . '.pdf') }}">{{__('Умови використання')}}</a></span>
             @error('accept_terms')
-                <div class="text-danger small mt-1" style="color: red; display: block;">{{ $message }}</div>
+                @unless($accept_terms)
+                    <div class="text-danger small mt-1" style="color: red; display: block;">{{ $message }}</div>
+                @endunless
             @enderror
         </label>
 
@@ -109,51 +113,71 @@
         {{__('Вхід за допомогою Facebook')}}
     </a>
     <script>
-document.addEventListener('input', function (event) {
-    const field = event.target;
+        document.addEventListener('input', function (event) {
+            const field = event.target;
 
-    if (!field.matches('input, textarea')) {
-        return;
-    }
+            if (!field.matches('input, textarea')) {
+                return;
+            }
 
-    const wrapper = field.closest('.search_field, .form-group, .mb-3');
+            const wrapper = field.closest('.search_field, .form-group, .mb-3');
 
-    if (!wrapper) {
-        return;
-    }
+            if (!wrapper) {
+                return;
+            }
 
-    wrapper.querySelectorAll('.error-message, .text-danger').forEach(function (error) {
-        error.style.display = 'none';
-    });
-});
+            wrapper.querySelectorAll('.error-message, .text-danger').forEach(function (error) {
+                error.style.display = 'none';
+            });
+        });
 
-document.addEventListener('change', function (event) {
-    const field = event.target;
+        document.addEventListener('change', function (event) {
+            const field = event.target;
 
-    if (!field.matches('input, select, textarea')) {
-        return;
-    }
+            if (!field.matches('input, select, textarea')) {
+                return;
+            }
 
-    const wrapper = field.closest('.search_field, .form-group, .mb-3, .more_filter_checkbox');
+            const wrapper = field.closest('.search_field, .form-group, .mb-3, .more_filter_checkbox');
 
-    if (!wrapper) {
-        return;
-    }
+            if (!wrapper) {
+                return;
+            }
 
-    wrapper.querySelectorAll('.error-message, .text-danger').forEach(function (error) {
-        error.style.display = 'none';
-    });
-});
+            wrapper.querySelectorAll('.error-message, .text-danger').forEach(function (error) {
+                error.style.display = 'none';
+            });
+        });
 
-document.querySelectorAll('input[required]').forEach(input => {
-    input.addEventListener('invalid', function() {
-        if (this.validity.valueMissing) {
-            this.setCustomValidity('Заповніть це поле.');
-        }
-    });
-    input.addEventListener('input', function() {
-        this.setCustomValidity('');
-    });
-});
-</script>
+        document.querySelectorAll('input[required]').forEach(input => {
+            input.addEventListener('invalid', function() {
+                if (this.validity.valueMissing) {
+                    this.setCustomValidity('Заповніть це поле.');
+                }
+            });
+            input.addEventListener('input', function() {
+                this.setCustomValidity('');
+            });
+        });
+        document.addEventListener('change', function (event) {
+            const field = event.target;
+
+            if (!field.matches('input, select, textarea')) {
+                return;
+            }
+
+            const wrapper = field.closest('.search_field, .form-group, .mb-3, .more_filter_checkbox');
+
+            if (!wrapper) {
+                return;
+            }
+
+            // Якщо це чекбокс згоди і він тепер обраний — одразу ховаємо помилку
+            if (field.type === 'checkbox' && field.checked) {
+                wrapper.querySelectorAll('.error-message, .text-danger').forEach(function (error) {
+                    error.style.display = 'none';
+                });
+            }
+        });
+    </script>
 </div>

@@ -50,7 +50,9 @@ new #[Layout('layouts.guest')] class extends Component
             <x-text-input wire:model="form.email" id="email" type="email" name="email"
                           placeholder="{{__('Ваш e-mail')}}"
                           x-on:input="hasError = false"
-                          required autofocus autocomplete="username" />
+                          required autofocus autocomplete="username"
+                          oninput="this.value = this.valuenis /[^a-zA-Z0-9@._-]/g, '');" 
+                           />
             <x-input-error :messages="$errors->get('form.email')" class="error-message"/>
         </div>
 

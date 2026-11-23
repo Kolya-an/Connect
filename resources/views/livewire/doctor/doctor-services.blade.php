@@ -73,11 +73,11 @@
                         </svg>
                     </button>
                 </div>
-                <div class="search_field search_field_input add_service_nobg">
-                    <select wire:model="service_id" class="add_name_service">
+                <div class="search_field search_field_input add_service_nobg" style="max-width: 100%;">
+                    <select wire:model="service_id" class="add_name_service" style="width: 95%;">
                         <option value="">{{__('Оберіть послугу')}}</option>
                         @foreach($allServices as $s)
-                            <option value="{{ $s['id'] }}">{{ $s['name'] }}</option>
+                            <option style="width:80%" value="{{ $s['id'] }}">{{ $s['name'] }}</option>
                         @endforeach
                     </select>
                 </div>

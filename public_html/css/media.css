@@ -90,6 +90,9 @@
     }
     .header_mob_buttons {
         gap: 24px;
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 5px;
     }
     .cab_btn img {
         width: 25px;

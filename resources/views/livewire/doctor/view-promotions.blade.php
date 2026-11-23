@@ -2,25 +2,32 @@
     @forelse($promotions as $promotion)
         <div class="_flex-display _justify-content-between _align-center spec_action">
             <div class="spec_action_content">
-                <div class="_flex-display client_action_date _minwidth769"><div class="btn white_rose_btn spec_action_date">{{__('Діє до')}} {{ $promotion->date_to->format('j.n.Y') }}</div></div>
+                <div class="_flex-display client_action_date _minwidth769">
+                    @if($promotion->date_to)
+                        <div class="btn white_rose_btn spec_action_date">{{__('Діє до')}} {{ $promotion->date_to->format('j.n.Y') }}</div>
+                    @endif
+                </div>
                 <h5>{{ $promotion->title }}</h5>
                 <p class="client_action_cost _maxwidth768"><span>{{ $promotion->old_price }}₴</span> {{ $promotion->new_price }}₴</p>
                 <p>{{ $promotion->description }}</p>
             </div>
             <div class="spec_action_price">
-                <div class="_flex-display _justify-content-end client_action_date _maxwidth768"><div class="btn white_rose_btn spec_action_date">{{__('Діє до')}} {{ $promotion->date_to->format('j.n.Y') }}</div></div>
+                <div class="_flex-display _justify-content-end client_action_date _maxwidth768">
+                    @if($promotion->date_to)
+                        <div class="btn white_rose_btn spec_action_date">{{__('Діє до')}} {{ $promotion->date_to->format('j.n.Y') }}</div>
+                    @endif
+                </div>
                 <p class="_minwidth769"><span>{{ $promotion->old_price }}₴</span> {{ $promotion->new_price }}₴</p>
             </div>
         </div>
     @empty
         <p>{{__('Акції відсутні')}}</p>
     @endforelse
+
     @if($promotions->hasPages())
         <ul class="_flex-display _justify-content-center _align-center pagination">
             {{-- Previous Page --}}
-            @if($promotions->onFirstPage())
-
-            @else
+            @if(!$promotions->onFirstPage())
                 <li><a wire:click="previousPage" class="_flex-display _justify-content-center _align-center">
                     <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16.000000" height="16.000000" fill="none">
                         <rect id="Icon / Pagination / Prev" width="16.000000" height="16.000000" x="0.000000" y="0.000000" fill="rgb(255,255,255)" fill-opacity="0" />
@@ -43,8 +50,6 @@
                         <path id="Vector" d="M6.94 4L6 4.94L9.05333 8L6 11.06L6.94 12L10.94 8L6.94 4Z" fill="rgb(0,0,0)" fill-rule="nonzero" />
                     </svg>
                 </a></li>
-            @else
-
             @endif
         </ul>
     @endif

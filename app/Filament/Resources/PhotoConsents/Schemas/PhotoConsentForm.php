@@ -23,7 +23,7 @@ class PhotoConsentForm
                 Section::make('Учасники згоди')
                     ->schema([
                         // ПІБ Пацієнта
-                      
+                      /*
 
                     Placeholder::make('patient_info')
                         ->label('ПІБ Пацієнта / Користувача')
@@ -72,7 +72,7 @@ class PhotoConsentForm
                             return '—';
                         }),
                         
-
+*/
                         // ПІБ Лікаря
                         TextInput::make('doctor_name')
                             ->label('ПІБ Лікаря')
@@ -86,7 +86,7 @@ class PhotoConsentForm
                             ->disabled(),
 
                         
-                    ])->columns(1),
+                    ])->columns(1), 
 
                 Section::make('Деталі згоди')
                     ->schema([

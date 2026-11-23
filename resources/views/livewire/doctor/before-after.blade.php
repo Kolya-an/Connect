@@ -152,8 +152,34 @@ wire:ignore.self
     @if($showAddModal)
         <div id="add_photo" class="_flex-display _justify-content-center _align-center screen">
             <div class="window add_info_window" style="padding: 20px">
+                @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
                 <div class="_flex-display _justify-content-between _align-center window_top">
-                    <button @click="saveImages()" class="btn rose_btn" @disabled(!$accept_umov || !$accept_zgoda)>{{__('Зберегти')}}</button>
+                    <button type="button"
+        wire:click="addPhoto"
+        onclick="(function(btn){
+            const beforeImg = document.getElementById('imageToCropBefore');
+            const afterImg = document.getElementById('imageToCropAfter');
+            const wireEl = btn.closest('[wire\\:id]');
+            const comp = wireEl && window.Livewire ? window.Livewire.find(wireEl.getAttribute('wire:id')) : null;
+            if (!comp) return;
+            if (beforeImg && beforeImg.cropper) {
+                const c = beforeImg.cropper.getCroppedCanvas({ imageSmoothingQuality: 'high' });
+                if (c) comp.set('photo_before_data', c.toDataURL('image/jpeg', 0.9), false);
+            }
+            if (afterImg && afterImg.cropper) {
+                const c = afterImg.cropper.getCroppedCanvas({ imageSmoothingQuality: 'high' });
+                if (c) comp.set('photo_after_data', c.toDataURL('image/jpeg', 0.9), false);
+            }
+        })(this)"
+        class="btn rose_btn">{{__('Зберегти')}}</button>
                     <button wire:click="$set('showAddModal', false)" id="window_close" class="window_close">
                         <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" clip-path="url(#clipPath_6)">
                             <defs>
@@ -173,7 +199,7 @@ wire:ignore.self
                     </button>
                 </div>
                 <div class="_flex-display _justify-content-between _align-center orientation-selector" style="margin: 15px 0; gap: 10px;">
-<div class="form-group mb-3">
+{{--<div class="form-group mb-3">
                     <label for="patient_id"><b>{{ __('Пацієнт') }}</b></label>
                     <select wire:model="patient_id" class="form-control">
                         <option value="">-- {{ __('Оберіть пацієнта') }} --</option>
@@ -183,8 +209,8 @@ wire:ignore.self
                             </option>
                         @endforeach
                     </select>
-                    @error('patient_id') <span class="text-danger" style="font-size: 12px;">{{ $message }}</span> @enderror
-                </div>
+                    @error('patient_id') <span class="error" style="font-size: 12px;">{{ $message }}</span> @enderror
+                </div>--}}
                 <div class="mb-3" style="width: 50%;">
                     <label for="file_document"><b>{{ __('Файл згоди / документ') }}</b></label>
                     <div wire:ignore x-data="{ fileName: '' }">
@@ -201,20 +227,19 @@ wire:ignore.self
 
                             <!-- Кастомна кнопка та текст українською -->
                             <div class="d-flex align-items-center gap-2 style-file-upload">
-                                <button type="button" 
-                                        <button onclick="document.getElementById('photo-input').click()" class="_flex-display _justify-content-center _align-center btn white_rose_btn add_btn add_photo"
-                                    x-on:click="$refs.fileInput.click()">
-                                    <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.000000" height="14.000000" fill="none">
-            <rect id="ic:round-plus" width="14.000000" height="14.000000" x="0.000000" y="0.000000" fill="rgb(255,255,255)" fill-opacity="0" />
-            <path id="Vector" d="M13 8L8 8L8 13C8 13.2652 7.89464 13.5196 7.70711 13.7071C7.51957 13.8946 7.26522 14 7 14C6.73478 14 6.48043 13.8946 6.29289 13.7071C6.10536 13.5196 6 13.2652 6 13L6 8L1 8C0.734784 8 0.48043 7.89464 0.292893 7.70711C0.105357 7.51957 0 7.26522 0 7C0 6.73478 0.105357 6.48043 0.292893 6.29289C0.48043 6.10536 0.734784 6 1 6L6 6L6 1C6 0.734784 6.10536 0.480429 6.29289 0.292893C6.48043 0.105357 6.73478 -8.88178e-16 7 0C7.26522 -8.88178e-16 7.51957 0.105357 7.70711 0.292893C7.89464 0.480429 8 0.734784 8 1L8 6L13 6C13.2652 6 13.5196 6.10536 13.7071 6.29289C13.8946 6.48043 14 6.73478 14 7C14 7.26522 13.8946 7.51957 13.7071 7.70711C13.5196 7.89464 13.2652 8 13 8Z" fill="rgb(243,150,162)" fill-rule="nonzero" />
+    <button type="button" 
+            class="_flex-display _justify-content-center _align-center btn white_rose_btn add_btn add_photo"
+            x-on:click="$refs.fileInput.click()">
+        <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" width="14.000000" height="14.000000" fill="none">
+            <rect width="14.000000" height="14.000000" x="0.000000" y="0.000000" fill="rgb(255,255,255)" fill-opacity="0" />
+            <path d="M13 8L8 8L8 13C8 13.2652 7.89464 13.5196 7.70711 13.7071C7.51957 13.8946 7.26522 14 7 14C6.73478 14 6.48043 13.8946 6.29289 13.7071C6.10536 13.5196 6 13.2652 6 13L6 8L1 8C0.734784 8 0.48043 7.89464 0.292893 7.70711C0.105357 7.51957 0 7.26522 0 7C0 6.73478 0.105357 6.48043 0.292893 6.29289C0.48043 6.10536 0.734784 6 1 6L6 6L6 1C6 0.734784 6.10536 0.480429 6.29289 0.292893C6.48043 0.105357 6.73478 -8.88178e-16 7 0C7.26522 -8.88178e-16 7.51957 0.105357 7.70711 0.292893C7.89464 0.480429 8 0.734784 8 1L8 6L13 6C13.2652 6 13.5196 6.10536 13.7071 6.29289C13.8946 6.48043 14 6.73478 14 7C14 7.26522 13.8946 7.51957 13.7071 7.70711C13.5196 7.89464 13.2652 8 13 8Z" fill="rgb(243,150,162)" fill-rule="nonzero" />
         </svg> {{__('Додати файл')}}
-                                </button>
-
-                                <span class="text-muted small" x-text="fileName ? fileName : '{{ __('Файл не обрано') }}'"></span>
-                            </div>
+    </button>
+    <span class="text-muted error" x-text="fileName ? fileName : '{{ __('Файл не обрано') }}'"></span>
+</div>
                         </div>
                     
-                    <!-- Відображення успішно обраного файлу -->
+                    
                     @if ($file_document && !is_string($file_document))
                         <div class="text-success small mt-1" style="font-size: 12px; word-break: break-all;">
                             ✓ {{ __('Обрано:') }} {{ $file_document->getClientOriginalName() }}
@@ -278,24 +303,24 @@ wire:ignore.self
                 </div>
 
                 <div class="_flex-display _justify-content-between" style="margin: 15px 0; gap: 10px;">
-                    <div class="_flex-display _justify-content-between orientation-selector" style="width:45%;">
+                    <div class="_flex-display _justify-content-between orientation-selector" style="width:45%;position:relative;">
                         <input wire:model.live="accept_umov" id="check_umov" type="checkbox" name="check_politik" class="form-check-input @error('accept_umov') is-invalid @enderror">
                         <span class="checkmark"></span>
                         <span class="check_title" style="width: calc(100% - 36px);font-size: 12px; line-height: 1;">
                             {{__('Я погоджуюсь з умовами розміщення клінічного кейсу.')}}
                         </span>
                         @error('accept_umov')
-                            <div class="text-danger small mt-1">{{ $message }}</div>
+                            <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="_flex-display _justify-content-between orientation-selector" style="width:45%;">
+                    <div class="_flex-display _justify-content-between orientation-selector" style="width:45%;position:relative;">
                         <input wire:model.live="accept_zgoda" id="check_zgoda" type="checkbox" name="check_zgoda" class="form-check-input @error('accept_zgoda') is-invalid @enderror">
                         <span class="checkmark"></span>
                         <span class="check_title" style="width: calc(100% - 36px);font-size: 12px; line-height: 1;">
                             {{__('Я підтверджую, що додане фото цього кейсу належить пацієнту, який оформив згоду, додану до цього кейсу.')}}
                         </span>
                         @error('accept_zgoda')
-                            <div class="text-danger small mt-1">{{ $message }}</div>
+                            <div class="error">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -306,7 +331,7 @@ wire:ignore.self
                     placeholder="{{__('Процедура')}}"
                     class="add_desc_photo"
                     style="padding:0 10px;background:none">
-                    @error('procedure') <span class="error">{{ $message }}</span> @enderror
+                    @error('procedure') <span class="error" style="position:absolute;top:45px;">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="search_field search_field_input" style="max-width: 100%;border:0;">
@@ -319,5 +344,37 @@ wire:ignore.self
                 </div>
             </div>
         </div>
+       
     @endif
+    <script>
+    window.saveCroppedAndSubmit = async function (btnEl) {
+        const beforeImg = document.getElementById('imageToCropBefore');
+        const afterImg = document.getElementById('imageToCropAfter');
+
+        // Шукаємо кореневий елемент Livewire-компонента
+        const wireEl = btnEl ? btnEl.closest('[wire\\:id]') : null;
+        const component = wireEl && window.Livewire ? window.Livewire.find(wireEl.getAttribute('wire:id')) : null;
+
+        if (!component) {
+            console.error('Livewire component not found');
+            return;
+        }
+
+        if (beforeImg && beforeImg.cropper) {
+            const canvasBefore = beforeImg.cropper.getCroppedCanvas({ imageSmoothingQuality: 'high' });
+            if (canvasBefore) {
+                await component.set('photo_before_data', canvasBefore.toDataURL('image/jpeg', 0.9), false);
+            }
+        }
+
+        if (afterImg && afterImg.cropper) {
+            const canvasAfter = afterImg.cropper.getCroppedCanvas({ imageSmoothingQuality: 'high' });
+            if (canvasAfter) {
+                await component.set('photo_after_data', canvasAfter.toDataURL('image/jpeg', 0.9), false);
+            }
+        }
+
+        await component.call('addPhoto');
+    };
+</script>
 </div>

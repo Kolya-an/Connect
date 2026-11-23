@@ -22,11 +22,19 @@ class AvatarUpload extends Component
 
     public function updatedPhoto()
     {
-        $this->validate([
-            'photo' => 'image|max:4096', // максимум 4 МБ
-        ]);
+        $this->validate(
+            [
+                'photo' => 'file|mimes:jpg,jpeg,png,webp|max:4096',
+            ],
+            [
+                'photo.file'  => __('Некоректний файл.'),
+                'photo.mimes' => __('Дозволені формати: JPG, JPEG, PNG, WEBP.'),
+                'photo.max'   => __('Максимальний розмір файлу — 4 МБ.'),
+            ]
+        );
 
         $this->savePhoto();
+        $this->reset('photo');
     }
 
     private function savePhoto()

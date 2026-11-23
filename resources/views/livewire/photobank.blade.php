@@ -3,7 +3,7 @@
         <div class="container">
             <div class="search_banner">
                 <div class="search_banner_title">
-                    <h3>{{__('Ми зібрали фото робіт майстрів в одному місці.')}} <span>{{__('Обирай та записуйся!')}}</span></h3>
+                    <h3>{{__('Ми зібрали банк клінічних кейсів в одному місці.')}} <span>{{__('Обирай та записуйся!')}}</span></h3>
                     <svg xmlns="http://www.w3.org/2000/svg" width="319" height="12" viewBox="0 0 319 12" fill="none">
                         <path d="M1 10.5L318 2" stroke="#F396A2" stroke-width="3"/>
                     </svg>

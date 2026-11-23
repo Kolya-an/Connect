@@ -6,15 +6,36 @@
     <div class="spec_register1_right_photos">
         <h5>{{__('Ліцензія') }}</h5>
         @if ($licensyPhoto)
-        <div  class="photo_item_img" wire:click="deleteLicensy"> 
-            <img src="{{ asset('uploads/' . $licensyPhoto) }}" alt="Licensy Photo">
-            <div class="_flex-display _justify-content-center _align-center delete_image _display_none">
-                <svg width="23" height="29" viewBox="0 0 23 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1.58333 25.3333C1.58333 26.1732 1.91696 26.9786 2.51083 27.5725C3.10469 28.1664 3.91015 28.5 4.75 28.5H17.4167C18.2565 28.5 19.062 28.1664 19.6558 27.5725C20.2497 26.9786 20.5833 26.1732 20.5833 25.3333V6.33333H1.58333V25.3333ZM4.75 9.5H17.4167V25.3333H4.75V9.5ZM16.625 1.58333L15.0417 0H7.125L5.54167 1.58333H0V4.75H22.1667V1.58333H16.625Z" fill="white"/>
-                </svg>
-            </div>
-        </div>
+    @php
+        $isLicensePdf = \Illuminate\Support\Str::endsWith(strtolower($licensyPhoto), '.pdf');
+        $licenseUrl = asset('uploads/' . $licensyPhoto);
+    @endphp
+
+    <div class="photo_item_img" style="position: relative;">
+        @if ($isLicensePdf)
+            <a href="{{ $licenseUrl }}" target="_blank" rel="noopener noreferrer"
+               class="_flex-display _flex-column _justify-content-center _align-center"
+               style="width: 100%; height: 100%; background: #f8f5f6; text-decoration: none; color: #333; padding: 10px;">
+                <span style="font-size: 13px; font-weight: 700; color: #d92d20; background: #fee4e2; padding: 4px 8px; border-radius: 4px;">
+                    PDF
+                </span>
+                <span style="font-size: 11px; margin-top: 6px; word-break: break-all; text-align: center;">
+                    {{ basename($licensyPhoto) }}
+                </span>
+            </a>
+        @else
+            <img src="{{ $licenseUrl }}" alt="Licensy Photo" style="width: 100%; height: 100%; object-fit: cover;">
         @endif
+
+        <div wire:click="deleteLicensy"
+             class="_flex-display _justify-content-center _align-center delete_image _display_none"
+             title="Видалити">
+            <svg width="23" height="29" viewBox="0 0 23 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.58333 25.3333C1.58333 26.1732 1.91696 26.9786 2.51083 27.5725C3.10469 28.1664 3.91015 28.5 4.75 28.5H17.4167C18.2565 28.5 19.062 28.1664 19.6558 27.5725C20.2497 26.9786 20.5833 26.1732 20.5833 25.3333V6.33333H1.58333V25.3333ZM4.75 9.5H17.4167V25.3333H4.75V9.5ZM16.625 1.58333L15.0417 0H7.125L5.54167 1.58333H0V4.75H22.1667V1.58333H16.625Z" fill="white"/>
+            </svg>
+        </div>
+    </div>
+@endif
         <button onclick="document.getElementById('licensy-input').click()" class="_flex-display _justify-content-center _align-center btn white_rose_btn add_btn add_photo">
             <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.000000" height="14.000000" fill="none">
                 <rect id="ic:round-plus" width="14.000000" height="14.000000" x="0.000000" y="0.000000" fill="rgb(255,255,255)" fill-opacity="0" />
@@ -24,5 +45,10 @@
         
         <!-- Використовуємо окрему властивість licensyFile -->
         <input type="file" id="licensy-input" style="display: none;" wire:model="licensyFile" class="hidden" accept="image/*">
+        @error('licensyFile')
+            <div style="color: #d92d20; font-size: 13px; margin-top: 6px;">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 </div>

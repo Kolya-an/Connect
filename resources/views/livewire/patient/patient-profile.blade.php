@@ -53,11 +53,6 @@
                     placeholder="{{__('Введіть адресу')}}"
                 />
             </div>
-            @if($latitude && $longitude)
-                <p style="color: #999; font-size: 11px; margin-top: 5px;">
-                    Координати: {{ round($latitude, 6) }}, {{ round($longitude, 6) }}
-                </p>
-            @endif
         </div>
         <div class="spec_register1_left_block  spec_register1_left_block_sex">
             <h5>{{__('Ваша стать')}}</h5>

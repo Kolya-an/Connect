@@ -22,11 +22,19 @@ class Passport extends Component
 
     public function updatedPassportFile()
     {
-        $this->validate([
-            'passportFile' => 'image|max:4096', // максимум 4 МБ
-        ]);
+        $this->validate(
+            [
+                'passportFile' => 'file|mimes:jpg,jpeg,png,webp|max:4096',
+            ],
+            [
+                'passportFile.file'  => __('Некоректний файл.'),
+                'passportFile.mimes' => __('Дозволені формати: JPG, JPEG, PNG, WEBP, PDF.'),
+                'passportFile.max'   => __('Максимальний розмір файлу — 4 МБ.'),
+            ]
+        );
 
         $this->savePassport();
+        $this->reset('passportFile');
     }
 
     private function savePassport()

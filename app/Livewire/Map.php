@@ -34,6 +34,7 @@ class Map extends Component
     protected $listeners = ['setUserLocation'];
     #[Url(as: 'sort')]
     public $sortQuery;
+    public $empty_result = false;
 
     public function mount()
     {
@@ -68,6 +69,17 @@ class Map extends Component
 
         $this->userLat = null;
         $this->userLng = null;
+
+        $this->empty_result = request()->query('empty_result') ? true : false;
+
+        // Якщо передано empty_result, одразу робимо список порожнім
+        if ($this->empty_result) {
+            $this->doctorsList = collect();
+            // Якщо потрібно також встановити дефолтні координати міста, щоб мапа не «ламалась»
+         //   $this->userLat = 48.0565; // Приклад центру (або дефолתי значення)
+          //  $this->userLng = 31.0952;
+            return;
+        }
 
         // 1. ПОПЫТКА УСТАНОВИТЬ КООРДИНАТЫ ГОРОДА
         if ($this->city) {
@@ -210,13 +222,29 @@ class Map extends Component
     }
     public function emitDoctors()
     {
+        if ($this->empty_result || !$this->userLat || !$this->userLng) {
+            $this->doctorsList = collect();
+            $this->dispatch('updateMapMarkers', doctors: []);
+            return;
+        }   
         if (!$this->userLat || !$this->userLng) {
             $this->dispatch('updateMapMarkers', doctors: []);
             return;
         }
 
         $doctors = Doctor::withCount('reviews') // Добавляет поле reviews_count
-        ->with('user', 'promotions', 'services', 'photos')
+        ->with([
+            'user', 
+            'promotions', 
+            'services', 
+            'photos' => function ($query) {
+                // Фільтруємо фотографії: залишаємо лише ті, у яких зв'язок consent має статус declined
+                $query->whereHas('consent', function ($q) {
+                    $q->where('status', 'declined');
+                });
+            }
+        ])
+        ->where('active', 1)
             ->when($this->serviceId, function ($q) {
                 $q->whereHas('services', function ($q) {
                     $q->where('service_id', $this->serviceId);

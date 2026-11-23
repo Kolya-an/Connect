@@ -3,7 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="index, follow">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('page.title', config('app.name'))</title>
     <meta name="description" content="@yield('page.description', $pageDescription ?? '')">
@@ -42,7 +42,7 @@
                         <livewire:header-service />
                     </li>
                     <li><a href="{{route('about')}}">{{__('Про сервіс')}}</a></li>
-                    <li><a href="{{route('photobank')}}">{{__('Банк кейсів')}}</a></li>
+                    <li><a href="{{route('photobank')}}">{{__('Банк клінічних кейсів')}}</a></li>
                     <li><a href="{{route('news')}}">{{__('Новини')}}</a></li>
                 </ul>
             </div>
@@ -134,7 +134,7 @@
                 <livewire:header-service />
             </li>
             <li><a href="{{route('about')}}">{{__('Про сервіс')}}</a></li>
-            <li><a href="{{route('photobank')}}">{{__('Фотобанк')}}</a></li>
+            <li><a href="{{route('photobank')}}">{{__('Банк клінічних кейсів')}}</a></li>
             <li><a href="{{route('news')}}">{{__('Новини')}}</a></li>
         </ul>
     </div>

@@ -6,42 +6,36 @@ use Livewire\Component;
 
 class SubscribeForm extends Component
 {
-    // Публичное свойство для хранения значения поля email
     public string $email = '';
     public bool $accept_politik = false;
-
-    // Публичное свойство для сообщения об успехе
     public ?string $successMessage = null;
 
-    /**
-     * Правила валидации
-     */
     protected $rules = [
-        'email' => 'required|email|unique:subscribers,email', // Проверьте, что таблица называется 'subscribers'
+        'email' => 'required|email|unique:subscribers,email',
+        'accept_politik' => 'accepted', // Обов'язкове правило для чекбокса згоди
     ];
 
-    /**
-     * Метод, вызываемый при отправке формы
-     */
+    protected function messages()
+    {
+        return [
+            'accept_politik.accepted' => 'Ви повинні прочитати та прийняти Політику приватності.',
+        ];
+    }
+
     public function subscribe()
     {
-        // 1. Валидация данных
         $this->validate();
 
         try {
-            // 2. Сохранение email в базе данных
-            // Предполагается, что у вас есть модель Subscriber и соответствующая таблица 'subscribers'
             \App\Models\Subscriber::create([
                 'email' => $this->email,
             ]);
 
-            // 3. Сброс поля и установка сообщения об успехе
-            $this->reset('email');
-            $this->successMessage = __('Вы успешно подписались на новости!'); // Используйте локализацию
+            $this->reset(['email', 'accept_politik']); // Скидаємо також чекбокс після успіху
+            $this->successMessage = __('Ви успішно підписалися на новини!');
 
         } catch (\Exception $e) {
-            // Можно добавить логирование ошибки
-            $this->addError('email', __('Произошла ошибка при подписке. Попробуйте позже.'));
+            $this->addError('email', __('Сталася помилка під час передплати. Спробуйте пізніше.'));
         }
     }
 

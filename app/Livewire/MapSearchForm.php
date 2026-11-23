@@ -124,7 +124,7 @@ class MapSearchForm extends Component
             return;
         }
 
-        $this->services = Service::where('name', 'like', '%' . $this->query . '%')
+        $this->services = Service::where('name', 'like', '%' . trim($this->query) . '%')
             ->limit(5)
             ->get();
 
@@ -151,18 +151,18 @@ class MapSearchForm extends Component
     }
 
     public function updatedSearch($value)
-    {
-        if (trim($value) !== '' && $value !== $this->city) {
-            $this->showDropdown = true;
-        } else {
-            $this->showDropdown = false;
-        }
+{
+    // Завжди оновлюємо значення city тим, що користувач вводить у поле пошуку
+    $this->city = trim($value);
 
-        // Если поле очищено, сбрасываем выбранный город
-        if (trim($value) === '') {
-            $this->city = '';
-        }
+    if (trim($value) !== '') {
+        $this->showDropdown = true;
+    } else {
+        $this->showDropdown = false;
+        $this->city = ''; // Якщо поле порожнє, повністю очищаємо місто
     }
+}
+
     public function hideDropdown()
     {
         // Не сбрасываем $search, чтобы поле ввода осталось заполненным
@@ -204,24 +204,67 @@ class MapSearchForm extends Component
         // Опционально: можно отправить событие для фокусировки карты на этом докторе
         // $this->dispatch('doctorSelected', doctorId: $doctorId);
     }
+
+
+
     public function searchDoctors()
-    {
-        // ПЕРЕДАЕМ ID ВРАЧА В ПАРАМЕТРЫ ПЕРЕНАПРАВЛЕНИЯ
-        return redirect()->route('map', [
-            'service_id' => $this->serviceId,
-            'radius'     => $this->radius,
-            'rating'     => $this->rating,
-            'sex'        => $this->sex,
-            'city'       => $this->city,
-            'priceFrom'  => $this->priceFrom,
-            'priceTo'    => $this->priceTo,
-            'area'       => $this->area,
-            'doctor_id'  => $this->selectedDoctorId,
-            'discount'   => $this->discount ? 1 : 0,
-            'gift'       => $this->gift ? 1 : 0,
-            'at_home'    => $this->at_home ? 1 : 0
-        ]);
+{
+    $serviceId = $this->serviceId;
+
+    // 1. Перевірка послуги (якщо введено текстом, а не вибрано)
+    if (!$serviceId && trim($this->query) !== '') {
+        $service = Service::where('name', 'like', '%' . trim($this->query) . '%')->first();
+        if ($service) {
+            $serviceId = $service->id;
+        } else {
+            return redirect()->route('map', [
+                'empty_result' => 1,
+                'query' => $this->query,
+                'city' => $this->city ?: $this->search,
+            ]);
+        }
     }
+
+    // 2. Синхронізація та перевірка міста з поля введення ($search), якщо $city не заповнено
+    $targetCity = trim($this->city);
+    
+    if (empty($targetCity) && !empty($this->search)) {
+        $targetCity = trim($this->search);
+    }
+
+    if (!empty($targetCity)) {
+        // Шукаємо введене місто в масиві $allCities (без урахування регістру)
+        $cityFound = collect($this->allCities)->first(function ($cityName) use ($targetCity) {
+            return mb_strtolower($cityName) === mb_strtolower($targetCity);
+        });
+
+        if ($cityFound) {
+            $this->city = $cityFound; // Встановлюємо правильну назву з масиву
+        } else {
+            // Місто введено, але його немає в базі/списку -> повертаємо порожній результат
+            return redirect()->route('map', [
+                'empty_result' => 1,
+                'city' => $targetCity,
+            ]);
+        }
+    }
+
+    // 3. Перенаправлення на сторінку карти з коректним містом
+    return redirect()->route('map', [
+        'service_id' => $serviceId,
+        'radius'     => $this->radius,
+        'rating'     => $this->rating,
+        'sex'        => $this->sex,
+        'city'       => $this->city, // Передаємо заповнене місто
+        'priceFrom'  => $this->priceFrom,
+        'priceTo'    => $this->priceTo,
+        'area'       => $this->area,
+        'doctor_id'  => $this->selectedDoctorId,
+        'discount'   => $this->discount ? 1 : 0,
+        'gift'       => $this->gift ? 1 : 0,
+        'at_home'    => $this->at_home ? 1 : 0
+    ]);
+}
 
     public function hideDoctorDropdown()
     {
@@ -303,7 +346,7 @@ class MapSearchForm extends Component
         $filteredCities = collect($this->allCities)
             ->filter(function ($city) {
                 // Фильтруем по свойству $search, используя его как запрос
-                return stripos($city, $this->search) !== false;
+                return mb_stripos($city, $this->search) !== false;
             })
             ->values()
             ->take(10);

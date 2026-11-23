@@ -100,10 +100,12 @@ class Promotions extends Component
             'description' => 'nullable|string',
             'old_price' => 'nullable|numeric',
             'new_price' => 'nullable|numeric',
-            'date_from' => 'nullable|date',
-            'date_to' => 'nullable|date|after_or_equal:date_from',
+            'date_from' => 'required|nullable|date',
+            'date_to' => 'required|nullable|date|after_or_equal:date_from',
         ], [
             'title.required' => 'Назва обовʼязкова',
+            'date_from.required' => 'Дата початку обовʼязкова',
+            'date_to.required' => 'Дата завершення обовʼязкова',
             'date_to.after_or_equal' => 'Дата завершення повинна бути пізніше або рівна даті початку',
         ]);
 

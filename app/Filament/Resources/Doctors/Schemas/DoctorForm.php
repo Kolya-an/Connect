@@ -230,6 +230,7 @@ class DoctorForm
                             ->label('Фото до/після')
                             ->relationship('photos')
                             ->collapsed()
+                            ->addable(false)
                             ->addActionLabel('Додати фото')
                             ->reorderableWithButtons()
                             ->itemLabel(function (array $state): ?string {
@@ -315,7 +316,7 @@ class DoctorForm
                                                 ->label('Продукт')
                                                 ->columnSpan(2),
                                             Toggle::make('list')
-                                                ->label('Показувати')
+                                                ->label('Показувати в клінічних кейсах')
                                                 ->default(false)
                                                 ->columnSpan(2),
                                         ])->columnSpan(2),

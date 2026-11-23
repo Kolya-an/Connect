@@ -69,9 +69,16 @@ class Extra extends Component
     }
     public function updatedPhoto()
     {
-        $this->validate([
-            'photo' => 'image|max:2048', // до 2 МБ
-        ]);
+        $this->validate(
+            [
+                'photo' => 'file|mimes:jpg,jpeg,png,webp,pdf|max:4096',
+            ],
+            [
+                'photo.file'  => __('Некоректний файл.'),
+                'photo.mimes' => __('Дозволені формати: JPG, JPEG, PNG, WEBP, PDF.'),
+                'photo.max'   => __('Максимальний розмір файлу — 4 МБ.'),
+            ]
+        );
 
 
         $filename = time() . '_' . $this->photo->getClientOriginalName();
@@ -83,6 +90,7 @@ class Extra extends Component
 
         $this->photos[] = $path;
         $this->saveCertificatePhotos();
+        $this->reset('photo');
     }
     public function removeCertificateImage($path)
     {

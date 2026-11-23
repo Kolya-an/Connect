@@ -43,12 +43,14 @@ class BeforeAfter extends Component
     protected function rules()
     {
         return [
-            'patient_id'        => 'required|exists:users,id',
+           // 'patient_id'        => 'required|exists:users,id',
             'procedure'         => 'required|string|max:255',
             'product'           => 'nullable|string|max:255',
             'photo_before_data' => 'required',
             'photo_after_data'  => 'required',
             'file_document'     => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240', // До 10MB
+            'accept_umov'       => 'accepted',  
+            'accept_zgoda'      => 'accepted',
         ];
     }
 
@@ -89,9 +91,13 @@ class BeforeAfter extends Component
     }
 
     public function addPhoto()
-{
-    
+{logger('ADD PHOTO: METHOD CALLED');
+
     $this->validate();
+
+    logger('ADD PHOTO: VALIDATION PASSED');
+    
+   // $this->validate();
 
     $doctor = Doctor::where('user_id', Auth::id())->first();
 
@@ -109,10 +115,11 @@ class BeforeAfter extends Component
         $documentPath = $this->file_document->store('consents_docs', 'public_uploads');
     }
 
-    $pacientModel = Pacient::where('user_id', $this->patient_id)->first();
+    //$pacientModel = Pacient::where('user_id', $this->patient_id)->first();
 
     $photo = $doctor->photos()->create([
-        'patient_id'   => $pacientModel?->id,
+       // 'patient_id'   => $pacientModel?->id,
+       'patient_id'   => null,
         'photo_before' => $pathBefore,
         'photo_after'  => $pathAfter,
         'photo'        => $pathBefore,
@@ -126,7 +133,8 @@ class BeforeAfter extends Component
     $doctorName = trim(($doctor->user?->name ?? '') . ' ' . ($doctor->second_name ?? ''));
 
     $signature = UserSignature::create([
-        'user_id'     => $this->patient_id,
+      //  'user_id'     => $this->patient_id,
+      'user_id'     => null,
         'doctor_id'   => $doctor->id,
         'photo_id'    => $photo->id,
         'title'       => 'Згода на публікацію фотографій',
@@ -142,13 +150,15 @@ class BeforeAfter extends Component
         'user_signature_id' => $signature->id,
         'token'             => $token,
         'status'            => ConsentStatus::PENDING,
-        'file_document'     => $documentPath, // 👈 Зберігаємо шлях у нову колонку file_document
+        'file_document'     => $documentPath, 
     ]);
 
     // Скидаємо поля форми
-    $this->reset(['photo_before_data', 'photo_after_data', 'procedure', 'product', 'patient_id', 'file_document']);
+    $this->reset(['photo_before_data', 'photo_after_data', 'procedure', 'product', 
+    //'patient_id', 
+    'file_document']);
     $this->showAddModal = false;
-    $this->loadPhotos(); // 👈 Виправлено о друкарську помилку ($thisloadPhotos -> $this->loadPhotos)
+    $this->loadPhotos(); 
 
     session()->flash('message', 'Фото та документ успішно додано!');
 }

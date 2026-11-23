@@ -96,11 +96,66 @@
                                 }
                             }
 
-                            const info = `<a href="/doctors/${doc.user_id}"><b>${doc.user.name} ${doc.second_name}</b></a>
-                            <br>${doc.address}<br>{{__("Рейтинг")}}: ${doc.rating}
-                            <br>${giftIcon} ${actionIcon}${promotionsHtml}`;
-                            marker.bindPopup(info);
-                            markersLayer.addLayer(marker);
+                            doctors.forEach(doc => {
+    console.log('Doctor:', doc.user_id, 'Promotions:', doc.promotions); // DEBUG
+
+    const marker = L.marker([doc.latitude, doc.longitude]);
+    const giftIcon = doc.gift === 1 ? '&#127873;' : '';
+    
+    // Перевірка активних акцій
+    const hasActivePromotions = doc.promotions && doc.promotions.some(promo => {
+        const now = new Date();
+        const dateFrom = new Date(promo.date_from);
+        const dateTo = new Date(promo.date_to);
+        return now >= dateFrom && now <= dateTo;
+    });
+
+    const actionIcon = hasActivePromotions ? '&#37;' : '';
+
+    // Додаємо назви акцій, у яких map=1 і входять в діапазон дат
+    let promotionsHtml = '';
+    if (doc.promotions) {
+        const now = new Date();
+        const mapPromotions = doc.promotions.filter(promo => {
+            const dateFrom = new Date(promo.date_from);
+            const dateTo = new Date(promo.date_to);
+            return promo.map == 1 && now >= dateFrom && now <= dateTo;
+        });
+
+        if (mapPromotions.length > 0) {
+            promotionsHtml = '<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee;">';
+            mapPromotions.forEach(promo => {
+                promotionsHtml += '<div style="margin-bottom: 4px;"><b style="color: #f396a2;">' + promo.title + '</b>';
+                if (promo.new_price && promo.old_price) {
+                    promotionsHtml += '<br><span style="text-decoration: line-through; color: #999;">' + promo.old_price + '₴</span> <b>' + promo.new_price + '₴</b>';
+                }
+                promotionsHtml += '</div>';
+            });
+            promotionsHtml += '</div>';
+        }
+    }
+
+    // --- БЕЗПЕЧНА ОБРОБКА ПОЛІВ (ЗАХИСТ ВІД ТЕКСТОВОГО "null") ---
+    const userName = (doc.user && doc.user.name && doc.user.name !== 'null') ? doc.user.name : '';
+    const userSecondName = (doc.second_name && doc.second_name !== 'null') ? doc.second_name : '';
+    const fullName = `${userName} ${userSecondName}`.trim() || 'Спеціаліст';
+
+    // Адреса (якщо null або рядок "null", не виводимо)
+    const address = (doc.address && doc.address !== 'null') ? doc.address : '';
+    const addressHtml = address ? `<br>${address}` : '';
+
+    // Рейтинг (якщо null, "null" або відсутній — ставимо 0 або приховуємо)
+    const rating = (doc.rating !== null && doc.rating !== undefined && doc.rating !== 'null') ? doc.rating : '0';
+    const ratingHtml = `<br>{{__("Рейтинг")}}: ${rating}`;
+
+    const info = `<a href="/doctors/${doc.user_id}"><b>${fullName}</b></a>
+    ${addressHtml}
+    ${ratingHtml}
+    <br>${giftIcon} ${actionIcon}${promotionsHtml}`;
+
+    marker.bindPopup(info);
+    markersLayer.addLayer(marker);
+});
                         });
                     });
                     // --- 2. ПОЛУЧЕНИЕ НАЧАЛЬНЫХ КООРДИНАТ ИЗ LIVEWIRE (НОВЫЙ БЛОК) ---
@@ -202,7 +257,7 @@
                     </div>
                 </div>
                 <div class="doctors">
-                    @if(count($doctors) == 0)
+                    @if($empty_result || count($doctors) == 0)
                         <p>{{__('Немає лікарів у цьому радіусі')}}.</p>
                     @else
                         @foreach($doctors as $doc)
@@ -239,12 +294,8 @@
                                 <div class="_flex-display _justify-content-between _align-top doctor_right_title _maxwidth768">
                                     <div class="doctor_right_name">
                                         <h5>{{ $doc->second_name }} {{ $doc->user->name }}</h5>
-                                        <p>@foreach($doc->types as $key=>$type)
-                                                {{$type}}
-                                                @if($key <  count($doc->types)-1)
-                                                    {{', '}}
-                                                @endif
-                                            @endforeach</p>
+                                        
+                                        <p>{{ collect($doc->types)->implode(', ') }}</p>
                                     </div>
                                     <div class="_flex-display _align-center top_docs-city">
                                         <svg width="11" height="13" viewBox="0 0 11 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -348,12 +399,11 @@
                             <div class="_flex-display _justify-content-between doctor_right_title _minwidth769">
                                 <div class="doctor_right_name">
                                     <h5>{{ $doc->second_name }} {{ $doc->user->name }}</h5>
-                                    <p>@foreach($doc->types as $key=>$type)
-                                            {{$type}}
-                                            @if($key <  count($doc->types)-1)
-                                                {{', '}}
-                                            @endif
-                                        @endforeach</p>
+                                    <p>
+                                        @foreach(($doc->types ?? []) as $key => $type)
+                                            {{ $type }}{{ $key < count($doc->types) - 1 ? ', ' : '' }}
+                                        @endforeach
+                                    </p>            
                                 </div>
                                 {{--<div class="_flex-display _align-top top_docs-city">
                                     <svg width="11" height="13" viewBox="0 0 11 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -398,6 +448,11 @@
                                 </div>
                                 @endif
                             </div>
+                            @php
+                                $declinedPhotos = $doc->photos->filter(function($photo) {
+                                    return optional($photo->consent)->status === 'declined';
+                                });
+                            @endphp
                             @if($doc->photos->count())
                                 <div class="_flex-display _justify-content-between _align-stretch doctor_right_images">
                                     @foreach($doc->photos->take(3) as $photo)
@@ -410,7 +465,9 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                    <a class="_flex-display _justify-content-center _align-center more_images" href="{{ route('doctor.profile', ['id' => $doc->user_id, 'tab' => 4]) }}"><span>{{__('Більше фото')}}</span></a>
+                                    @if($doc->photos->count() > 3)
+                                        <a class="_flex-display _justify-content-center _align-center more_images" href="{{ route('doctor.profile', ['id' => $doc->user_id, 'tab' => 4]) }}"><span>{{__('Більше фото')}}</span></a>
+                                    @endif
                                 </div>
                             @endif
                             <div class="_flex-display _justify-content-between _align-center doctors_buttons">
